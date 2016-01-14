@@ -11,7 +11,7 @@ var users = require('./routes/users');
 var lists = require('./routes/lists');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/repairsystem', function(err) {
+mongoose.connect('mongodb://localhost/ticflow', function(err) {
   if (err) {
     console.log('connection error', err);
   } else {

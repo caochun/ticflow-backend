@@ -1,5 +1,5 @@
 {
-  "name": "expr_server",
+  "name": "ticflow-backend",
   "version": "0.0.0",
   "private": true,
   "scripts": {

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var eventproxy = require('eventproxy');
 
-mongoose.connect('mongodb://localhost/repairsystem');
+mongoose.connect('mongodb://localhost/ticflow');
 
 var User = require('../models/User.js');
 
