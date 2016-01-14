@@ -46,6 +46,16 @@ router.get('/uncompleted', function (req, res) {
 	});
 });
 
+router.get('/:id', function (req, res) {
+	List.findOne({_id: req.params.id}, function (err, list) {
+		if (err) {
+			return res.status(400).send("err in get /lists/:_id");
+		} else {
+			return res.status(200).json(list);
+		}
+	});
+});
+
 router.post('/:id', function (req, res) {
 	List.findOneAndUpdate({_id: req.params.id}, req.body, function (err, list) {
 		if (err) {
