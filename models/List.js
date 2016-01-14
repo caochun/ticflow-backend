@@ -2,10 +2,12 @@ var mongoose = require('mongoose');
 
 var ListSchema = new mongoose.Schema({
 
-	clientName: String,
-	clientAddress: String,
-	clientPhoneNumber: String,
-	clientUnit: String,
+	client: {
+		name: String,
+		address: String,
+		phone_no: String,
+		unit: String,
+	},
 
 	date: {
 		type: Date,

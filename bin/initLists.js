@@ -6,17 +6,17 @@ mongoose.connect('mongodb://localhost/repairsystem');
 var List = require('../models/List.js');
 
 var lists = [
-  {clientName: "nameA", clientAddress: "addressA", clientPhoneNumber: "110", clientUnit: "unitA", 
+  {client: {name: "nameA", address: "addressA", phone_no: "110", unit: "unitA"},
     date: "2015/09/23", machineType: "A", fixType: "A", serviceType: "A", reporter: "reporterA", engineer:"engineerA", completed: false},
-  {clientName: "nameB", clientAddress: "addressB", clientPhoneNumber: "120", clientUnit: "unitB", 
+  {client: {name: "nameB", address: "addressB", phone_no: "120", unit: "unitB"},
     date: "2015/08/23", machineType: "B", fixType: "B", serviceType: "B", reporter: "reporterB", engineer:"engineerB", completed: false},
-  {clientName: "nameC", clientAddress: "addressC", clientPhoneNumber: "119", clientUnit: "unitC", 
+  {client: {name: "nameC", address: "addressC", phone_no: "119", unit: "unitC"},
     date: "2015/07/23", machineType: "C", fixType: "C", serviceType: "C", reporter: "reporterC", engineer:"engineerA", completed: true},
-  {clientName: "nameD", clientAddress: "addressD", clientPhoneNumber: "114", clientUnit: "unitD", 
+  {client: {name: "nameD", address: "addressD", phone_no: "114", unit: "unitD"},
     date: "2015/06/23", machineType: "D", fixType: "D", serviceType: "D", reporter: "reporterD", engineer:"engineerB", completed: true},
-  {clientName: "nameE", clientAddress: "addressE", clientPhoneNumber: "911", clientUnit: "unitE", 
+  {client: {name: "nameE", address: "addressE", phone_no: "911", unit: "unitE"},
     date: "2015/05/23", machineType: "E", fixType: "E", serviceType: "E", reporter: "reporterE", engineer:"undispatched", completed: false},
-  {clientName: "nameF", clientAddress: "addressF", clientPhoneNumber: "888", clientUnit: "unitF", 
+  {client: {name: "nameF", address: "addressF", phone_no: "888", unit: "unitF"},
     date: "2015/04/23", machineType: "F", fixType: "F", serviceType: "F", reporter: "reporterF", engineer:"undispatched", completed: false},
 ];
 
