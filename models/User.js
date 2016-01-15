@@ -12,8 +12,7 @@ var UserSchema = new mongoose.Schema({
 
 	role: {
 		type: String,
-		enum: ['saler', 'engineer', 'manager', 'admin', 'undefined'],
-		default: 'undefined',
+		enum: ['saler', 'engineer', 'manager', 'admin'],
 	},
 });
 

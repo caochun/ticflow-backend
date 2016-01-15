@@ -5,9 +5,7 @@ var mongoose = require('mongoose');
 var List = require('../models/List.js');
 
 router.post('/', function (req, res) {
-	var list = req.body.list;
-
-	List.create(list, function (err, list) {
+	List.create(req.body, function (err, list) {
 		if (err) {
 			return res.status(400).send("err in post /lists");
 		} else {
@@ -17,7 +15,7 @@ router.post('/', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-	List.find(function (err, lists) {
+	List.find(req.query, function (err, lists) {
 		if (err) {
 			return res.status(400).send("err in get /lists");
 		} else {
@@ -26,40 +24,20 @@ router.get('/', function (req, res) {
 	});
 });
 
-router.get('/undispatched', function (req, res) {
-	List.find({engineer: 'undispatched'}, function (err, listsUndispatched) {
+router.post('/:_id', function (req, res) {
+	List.findByIdAndUpdate(req.params._id, req.body, function (err, list) {
 		if (err) {
-			return res.status(400).send("err in get /lists/undispatched");
-		} else {
-			return res.status(200).json(listsUndispatched);
-		}
-	});
-});
-
-router.get('/uncompleted', function (req, res) {
-	List.find({engineer: req.query.id, completed: false}, function (err, listsUncompleted) {
-		if (err) {
-			return res.status(400).send("err in get /lists/uncompleted");
-		} else {
-			return res.status(200).json(listsUncompleted);
-		}
-	});
-});
-
-router.get('/:id', function (req, res) {
-	List.findOne({_id: req.params.id}, function (err, list) {
-		if (err) {
-			return res.status(400).send("err in get /lists/:_id");
+			return res.status(400).send("err in put /lists/:_id");
 		} else {
 			return res.status(200).json(list);
 		}
 	});
 });
 
-router.post('/:id', function (req, res) {
-	List.findOneAndUpdate({_id: req.params.id}, req.body, function (err, list) {
+router.get('/:_id', function (req, res) {
+	List.findById(req.params._id, function (err, list) {
 		if (err) {
-			return res.status(400).send("err in put /lists/:_id");
+			return res.status(400).send("err in get /lists/:_id");
 		} else {
 			return res.status(200).json(list);
 		}
