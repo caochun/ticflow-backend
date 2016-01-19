@@ -16,7 +16,7 @@ router.post('/signin', function (req, res) {
 });
 
 router.post('/signup', function (req, res) {
-	User.create(req.body, function (err) {
+	User.create(req.body, function (err, user) {
 		if (err) {
 			return res.status(400).send("err in post /users/signup");
 		} else {
