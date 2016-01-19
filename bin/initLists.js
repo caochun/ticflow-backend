@@ -47,7 +47,7 @@ List.remove(function (err) {
       });
     }
     ep.after('createList', lists.length, function (createdLists) {
-      console.log(createdLists);
+      console.log(JSON.stringify(createdLists));
       mongoose.connection.close();
     });
   }

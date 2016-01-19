@@ -29,7 +29,7 @@ User.remove(function (err) {
       });
     }
     ep.after('createUser', users.length, function (createdUsers) {
-      console.log(createdUsers);
+      console.log(JSON.stringify(createdUsers));
       mongoose.connection.close();
     });
   }
