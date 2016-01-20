@@ -42,12 +42,12 @@ List.remove(function (err) {
         if (err) {
           console.log(err);
         } else {
+          console.log(createdList);
           ep.emit('createList', createdList);
         }
       });
     }
     ep.after('createList', lists.length, function (createdLists) {
-      console.log(JSON.stringify(createdLists));
       mongoose.connection.close();
     });
   }

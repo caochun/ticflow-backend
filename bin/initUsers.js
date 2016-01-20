@@ -24,12 +24,12 @@ User.remove(function (err) {
         if (err) {
           console.log(err);
         } else {
+          console.log(createdUser);
           ep.emit('createUser', createdUser);
         }
       });
     }
     ep.after('createUser', users.length, function (createdUsers) {
-      console.log(JSON.stringify(createdUsers));
       mongoose.connection.close();
     });
   }
