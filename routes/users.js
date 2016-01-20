@@ -35,6 +35,16 @@ router.post('/remove/:_id', function (req, res) {
 	});
 });
 
+router.post('/update/:_id', function (req, res) {
+	User.findByIdAndUpdate(req.params._id, req.body, function (err, user) {
+		if (err) {
+			return res.status(400).send("err in post /users/update/:id");
+		} else {
+			return res.status(200).json(user);
+		}
+	});
+});
+
 router.get('/', function (req, res) {
 	User.find(req.query, function (err, users) {
 		if (err) {
