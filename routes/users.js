@@ -25,6 +25,16 @@ router.post('/signup', function (req, res) {
 	});
 });
 
+router.post('/remove/:_id', function (req, res) {
+	User.findByIdAndRemove(req.params._id, function (err, user) {
+		if (err) {
+			return res.status(400).send("err in post /users/remove/:id");
+		} else {
+			return res.status(200).json(user);
+		}
+	});
+});
+
 router.get('/', function (req, res) {
 	User.find(req.query, function (err, users) {
 		if (err) {
