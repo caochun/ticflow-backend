@@ -34,6 +34,8 @@ var ListSchema = new mongoose.Schema({
 		default: false,
 	},
 
+	completeTime: Date,
+
 	feedback: { //反馈信息
 		type: String,
 		default: '',
