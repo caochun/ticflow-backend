@@ -15,7 +15,13 @@ router.post('/', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-	List.find(req.query, function (err, lists) {
+	var page = (req.query.page === undefined) ? 0 : req.query.page;
+	var limit = (req.query.limit === undefined) ? 10 : req.query.limit;
+
+	delete req.query.page;
+	delete req.query.limit;
+
+	List.find(req.query).skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
 		if (err) {
 			return res.status(400).send("err in get /lists");
 		} else {
@@ -30,6 +36,22 @@ router.post('/:_id', function (req, res) {
 			return res.status(400).send("err in put /lists/:_id");
 		} else {
 			return res.status(200).json(list);
+		}
+	});
+});
+
+router.get('/totalvalue', function (req, res) {
+	List.find(req.query, function (err, lists) {
+		if (err) {
+			console.log("err");
+			return res.status(400).send("err in get /lists/totalValue");
+		} else {
+			var totalValue = 0;
+			lists.forEach(function (entry) {
+				totalValue += entry.value;
+			});
+			console.log(totalValue);
+			return res.status(200).json(totalValue);
 		}
 	});
 });
