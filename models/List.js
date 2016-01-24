@@ -9,8 +9,8 @@ var ListSchema = new mongoose.Schema({
 		unit: String,
 	},
 
-	deliver: String, //送货
-	debug: String, //安调
+	deliver: String, //送货服务
+	debug: String, //安装调试
 	visit: String, //上门服务
 	install: String, //安装单
 	warehouse: String, //库房安装
@@ -29,6 +29,8 @@ var ListSchema = new mongoose.Schema({
 		default: Date.now,
 	},
 
+	//serveTime: Date,
+
 	completed: { //完成情况
 		type: Boolean,
 		default: false,
@@ -38,7 +40,6 @@ var ListSchema = new mongoose.Schema({
 
 	feedback: { //反馈信息
 		type: String,
-		default: '',
 	},
 
 	checked: {
