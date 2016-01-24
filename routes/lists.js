@@ -43,15 +43,23 @@ router.post('/:_id', function (req, res) {
 router.get('/totalvalue', function (req, res) {
 	List.find(req.query, function (err, lists) {
 		if (err) {
-			console.log("err");
 			return res.status(400).send("err in get /lists/totalValue");
 		} else {
 			var totalValue = 0;
 			lists.forEach(function (entry) {
 				totalValue += entry.value;
 			});
-			console.log(totalValue);
 			return res.status(200).json(totalValue);
+		}
+	});
+});
+
+router.get('/clientinfo', function (req, res) {
+	List.find().sort({date: -1}).select('client').exec(function (err, lists) {
+		if (err) {
+			return res.status(400).send("err in get /lists/clientinfo");
+		} else {
+			return res.status(200).json(lists);
 		}
 	});
 });

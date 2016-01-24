@@ -16,19 +16,19 @@ var lists = [
   },
   { client: { name: 'nameC', address: 'addressC', phone_no: '119', unit: 'unitC'},
     deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-    saler: 'salerA', value: 30, engineer: 'engineerA', completed: true, checked: false
+    saler: 'salerA', value: 30, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: false
   },
   { client: { name: 'nameD', address: 'addressD', phone_no: '114', unit: 'unitD'},
     deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-    saler: 'salerA', value: 40, engineer: 'engineerA', completed: true, checked: false
+    saler: 'salerA', value: 40, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: false
   },
   { client: { name: 'nameE', address: 'addressE', phone_no: '911', unit: 'unitE'},
     deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-    saler: 'salerA', value: 50, engineer: 'engineerA', completed: true, checked: true
+    saler: 'salerA', value: 50, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: true
   },
   { client: { name: 'nameF', address: 'addressF', phone_no: '888', unit: 'unitF'},
     deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-    saler: 'salerA', value: 60, engineer: 'engineerA', completed: true, checked: true
+    saler: 'salerA', value: 60, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: true
   },
 ];
 
