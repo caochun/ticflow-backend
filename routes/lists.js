@@ -40,6 +40,16 @@ router.post('/:_id', function (req, res) {
 	});
 });
 
+router.get('/number', function (req, res) {
+	List.find(req.query, function (err, lists) {
+		if (err) {
+			return res.status(400).send("err in get /lists/number");
+		} else {
+			return res.status(200).json(lists.length);
+		}
+	});
+});
+
 router.get('/totalvalue', function (req, res) {
 	List.find(req.query, function (err, lists) {
 		if (err) {
