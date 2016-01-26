@@ -6,30 +6,42 @@ mongoose.connect('mongodb://localhost/ticflow');
 var List = require('../models/List.js');
 
 var lists = [
-  // { client: { name: 'nameA', address: 'addressA', phone_no: '110', unit: 'unitA'},
-  //   deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-  //   saler: 'salerA', value: 10, engineer: 'engineerA', completed: false, checked: false
-  // },
-  // { client: { name: 'nameB', address: 'addressB', phone_no: '120', unit: 'unitB'},
-  //   deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-  //   saler: 'salerA', value: 20, engineer: 'engineerA', completed: false, checked: false
-  // },
-  // { client: { name: 'nameC', address: 'addressC', phone_no: '119', unit: 'unitC'},
-  //   deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-  //   saler: 'salerA', value: 30, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: false
-  // },
-  // { client: { name: 'nameD', address: 'addressD', phone_no: '114', unit: 'unitD'},
-  //   deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-  //   saler: 'salerA', value: 40, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: false
-  // },
-  // { client: { name: 'nameE', address: 'addressE', phone_no: '911', unit: 'unitE'},
-  //   deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-  //   saler: 'salerA', value: 50, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: true
-  // },
-  // { client: { name: 'nameF', address: 'addressF', phone_no: '888', unit: 'unitF'},
-  //   deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
-  //   saler: 'salerA', value: 60, engineer: 'engineerA', completed: true, completeTime: new Date(), feedback:'OK', checked: true
-  // },
+  { client: { name: 'nameA', address: 'addressA', phone_no: '100', unit: 'unitA'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA',
+  },
+  { client: { name: 'nameB', address: 'addressB', phone_no: '101', unit: 'unitB'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA',
+  },
+  { client: { name: 'nameC', address: 'addressC', phone_no: '102', unit: 'unitC'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+  },
+  { client: { name: 'nameD', address: 'addressD', phone_no: '103', unit: 'unitD'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+  },
+  { client: { name: 'nameE', address: 'addressE', phone_no: '104', unit: 'unitE'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+    completed: true, completeTime: new Date(), feedback:'OK',
+  },
+  { client: { name: 'nameF', address: 'addressF', phone_no: '105', unit: 'unitF'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+    completed: true, completeTime: new Date(), feedback:'OK',
+  },
+  { client: { name: 'nameG', address: 'addressG', phone_no: '106', unit: 'unitG'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2016/01"
+  },
+  { client: { name: 'nameH', address: 'addressH', phone_no: '107', unit: 'unitH'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2016/01"
+  },
 ];
 
 List.remove(function (err) {

@@ -3,10 +3,10 @@ var mongoose = require('mongoose');
 var ListSchema = new mongoose.Schema({
 
 	client: { //客户信息
+		unit: String,
 		name: String,
 		address: String,
 		phone_no: String,
-		unit: String,
 	},
 
 	deliver: String, //送货服务
@@ -24,12 +24,21 @@ var ListSchema = new mongoose.Schema({
 	
 	engineer: String, //工程师
 
+	attached: String, //附件  //TODO
+
 	date: { //报修日期
 		type: Date,
 		default: Date.now,
 	},
 
-	//serveTime: Date,
+	accepted: { //是否接单
+		type: Boolean,
+		default: false,
+	},
+
+	acceptTime: Date, //接单时间
+
+	serveTime: Date, //上门时间
 
 	completed: { //完成情况
 		type: Boolean,
@@ -46,6 +55,10 @@ var ListSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+
+	checkTime: Date,
+
+	checkMonth: String,
 });
 
 module.exports = mongoose.model('List', ListSchema);

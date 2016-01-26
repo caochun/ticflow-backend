@@ -21,13 +21,39 @@ router.get('/', function (req, res) {
 	delete req.query.page;
 	delete req.query.limit;
 
-	List.find(req.query).skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
-		if (err) {
-			return res.status(400).send("err in get /lists");
-		} else {
-			return res.status(200).json(lists);
-		}
-	});
+	if (req.query.accepted == 'false') {
+		List.find(req.query).skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
+			if (err) {
+				return res.status(400).send("err in get /lists");
+			} else {
+				return res.status(200).json(lists);
+			}
+		});
+	} else if (req.query.accepted == 'true' && req.query.completed == 'false') {
+		List.find(req.query).skip(page * limit).limit(limit).sort({acceptTime: -1}).exec(function (err, lists) {
+			if (err) {
+				return res.status(400).send("err in get /lists");
+			} else {
+				return res.status(200).json(lists);
+			}
+		});
+	} else if (req.query.accepted == 'true' && req.query.completed == 'true' && req.query.checked == 'false') {
+		List.find(req.query).skip(page * limit).limit(limit).sort({completeTime: -1}).exec(function (err, lists) {
+			if (err) {
+				return res.status(400).send("err in get /lists");
+			} else {
+				return res.status(200).json(lists);
+			}
+		});
+	} else if (req.query.accepted == 'true' && req.query.completed == 'true' && req.query.checked == 'true') {
+		List.find(req.query).skip(page * limit).limit(limit).sort({checkTime: -1}).exec(function (err, lists) {
+			if (err) {
+				return res.status(400).send("err in get /lists");
+			} else {
+				return res.status(200).json(lists);
+			}
+		});
+	}
 });
 
 router.post('/:_id', function (req, res) {
@@ -36,16 +62,6 @@ router.post('/:_id', function (req, res) {
 			return res.status(400).send("err in put /lists/:_id");
 		} else {
 			return res.status(200).json(list);
-		}
-	});
-});
-
-router.get('/number', function (req, res) {
-	List.find(req.query, function (err, lists) {
-		if (err) {
-			return res.status(400).send("err in get /lists/number");
-		} else {
-			return res.status(200).json(lists.length);
 		}
 	});
 });
