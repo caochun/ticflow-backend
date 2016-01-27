@@ -28,7 +28,7 @@ router.post('/create', function (req, res) {
 router.post('/remove/:_id', function (req, res) {
 	User.findByIdAndRemove(req.params._id, function (err, user) {
 		if (err) {
-			return res.status(400).send("err in post /users/remove/:id");
+			return res.status(400).send("err in post /users/remove/:_id");
 		} else {
 			return res.status(200).json(user);
 		}
@@ -38,7 +38,7 @@ router.post('/remove/:_id', function (req, res) {
 router.post('/update/:_id', function (req, res) {
 	User.findByIdAndUpdate(req.params._id, req.body, function (err, user) {
 		if (err) {
-			return res.status(400).send("err in post /users/update/:id");
+			return res.status(400).send("err in post /users/update/:_id");
 		} else {
 			return res.status(200).json(user);
 		}
