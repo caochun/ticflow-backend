@@ -35,12 +35,22 @@ var lists = [
   { client: { name: 'nameG', address: 'addressG', phone_no: '106', unit: 'unitG'},
     deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
     saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
-    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2016/01"
+    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2015-07"
   },
   { client: { name: 'nameH', address: 'addressH', phone_no: '107', unit: 'unitH'},
     deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
     saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
-    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2016/01"
+    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2015-01"
+  },
+  { client: { name: 'nameI', address: 'addressI', phone_no: '107', unit: 'unitI'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2014-07"
+  },
+  { client: { name: 'nameJ', address: 'addressJ', phone_no: '107', unit: 'unitJ'},
+    deliver: '', debug: '', visit: '', install: '', warehouse: '', outgoing: '', serial_no: '',
+    saler: 'salerA', value: 10, engineer: 'engineerA', accepted: true, acceptTime: new Date(), serveTime: new Date(),
+    completed: true, completeTime: new Date(), feedback:'OK', checked: true, checkTime: new Date(), checkMonth: "2014-01"
   },
 ];
 

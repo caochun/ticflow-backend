@@ -37,7 +37,7 @@ router.get('/', function (req, res) {
 				return res.status(200).json(lists);
 			}
 		});
-	} else if (req.query.accepted == 'true' && req.query.completed == 'true' && req.query.checked == 'false') {
+	} else if (req.query.completed == 'true' && req.query.checked == 'false') {
 		List.find(req.query).skip(page * limit).limit(limit).sort({completeTime: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
@@ -45,7 +45,7 @@ router.get('/', function (req, res) {
 				return res.status(200).json(lists);
 			}
 		});
-	} else if (req.query.accepted == 'true' && req.query.completed == 'true' && req.query.checked == 'true') {
+	} else if (req.query.checked == 'true') {
 		List.find(req.query).skip(page * limit).limit(limit).sort({checkTime: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
@@ -86,6 +86,16 @@ router.get('/clientinfo', function (req, res) {
 			return res.status(400).send("err in get /lists/clientinfo");
 		} else {
 			return res.status(200).json(lists);
+		}
+	});
+});
+
+router.get('/months', function (req, res) {
+	List.find({checked: true}).distinct('checkMonth', function (err, checkMonths) {
+		if (err) {
+			return res.status(400).send("err in get /lists/months");
+		} else {
+			return res.status(200).json(checkMonths);
 		}
 	});
 });
