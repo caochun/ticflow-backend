@@ -46,7 +46,7 @@ router.post('/update/:_id', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-	User.find(req.query).sort({role: -1, id: 1}).exec(function (err, users) {
+	User.find(req.query).sort({role: -1, id: -1}).exec(function (err, users) {
 		if (err) {
 			return res.status(400).send("err in get /users");
 		} else {
