@@ -22,7 +22,7 @@ router.get('/', function (req, res) {
 	delete req.query.limit;
 
 	if (req.query.accepted == 'false') {
-		List.find(req.query).skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
+		List.find(req.query).select('client saler engineer date').skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
 			} else {
@@ -30,7 +30,7 @@ router.get('/', function (req, res) {
 			}
 		});
 	} else if (req.query.accepted == 'true' && req.query.completed == 'false') {
-		List.find(req.query).skip(page * limit).limit(limit).sort({acceptTime: -1}).exec(function (err, lists) {
+		List.find(req.query).select('client saler engineer acceptTime').skip(page * limit).limit(limit).sort({acceptTime: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
 			} else {
@@ -38,7 +38,7 @@ router.get('/', function (req, res) {
 			}
 		});
 	} else if (req.query.completed == 'true' && req.query.checked == 'false') {
-		List.find(req.query).skip(page * limit).limit(limit).sort({completeTime: -1}).exec(function (err, lists) {
+		List.find(req.query).select('client saler engineer completeTime').skip(page * limit).limit(limit).sort({completeTime: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
 			} else {
@@ -46,7 +46,7 @@ router.get('/', function (req, res) {
 			}
 		});
 	} else if (req.query.checked == 'true') {
-		List.find(req.query).skip(page * limit).limit(limit).sort({checkTime: -1}).exec(function (err, lists) {
+		List.find(req.query).select('client saler engineer checkTime').skip(page * limit).limit(limit).sort({checkTime: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
 			} else {

@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var lists = require('./routes/lists');
 var valuechanges = require('./routes/valuechanges');
+var upload = require('./routes/upload');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ticflow', function(err) {
@@ -36,6 +37,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/lists', lists);
 app.use('/valuechanges', valuechanges);
+app.use('/upload', upload);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

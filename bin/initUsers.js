@@ -6,12 +6,24 @@ mongoose.connect('mongodb://localhost/ticflow');
 var User = require('../models/User.js');
 
 var users = [
-  {id: "manager", password: "123", role: "manager"},
-  {id: "salerA", password: "123", role: "saler"},
-  {id: "salerB", password: "123", role: "saler"},
-  {id: "engineerA", password: "123", role: "engineer"},
-  {id: "engineerB", password: "123", role: "engineer"},
-  {id: "admin", password: "123", role: "admin"}
+  {id:"余文林", password: "123", role: "saler"},
+  {id:"周坚", password: "123", role:"saler"},
+  {id:"宋菁", password: "123", role:"saler"},
+  {id:"朱鸣", password: "123", role:"saler"},
+  {id:"李倍铭", password: "123", role:"saler"},
+  {id:"沈红扬", password: "123", role:"saler"},
+  {id:"苏井", password: "123", role:"saler"},
+  {id:"许万羽", password: "123", role:"saler"},
+  {id:"钱昊", password: "123", role:"saler"},
+  {id:"陆珺", password: "123", role:"saler"},
+  {id:"陈传玮", password: "123", role:"saler"},
+  {id:"王萍", password: "123", role:"manager"},
+  {id:"周志宇", password: "123", role:"engineer"},
+  {id:"姜国洲", password: "123", role:"engineer"},
+  {id:"彭维锋", password: "123", role:"engineer"},
+  {id:"徐飞", password: "123", role:"engineer"},
+  {id:"施海涛", password: "123", role:"engineer"},
+  {id:"周强", password: "123", role:"admin"}
 ];
 
 User.remove(function (err) {

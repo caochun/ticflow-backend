@@ -24,7 +24,11 @@ var ListSchema = new mongoose.Schema({
 	
 	engineer: String, //工程师
 
-	attached: String, //附件  //TODO
+	attached1: String, //附件1
+
+	attached2: String, //附件2
+
+	attached3: String, //附件3
 
 	date: { //报修日期
 		type: Date,
