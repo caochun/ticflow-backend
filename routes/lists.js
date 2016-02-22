@@ -56,6 +56,16 @@ router.get('/', function (req, res) {
 	}
 });
 
+router.post('/remove/:_id', function (req, res) {
+	List.findByIdAndRemove(req.params._id, function (err, list) {
+		if (err) {
+			return res.status(400).send("err in post /lists/remove/:_id");
+		} else {
+			return res.status(200).json(list);
+		}
+	});
+});
+
 router.post('/:_id', function (req, res) {
 	List.findByIdAndUpdate(req.params._id, req.body, function (err, list) {
 		if (err) {
