@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -35,6 +36,25 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(require('express-session')({
+    secret: 'jsx_online',// 建议使用 128 个字符的随机字符串
+    cookie: { maxAge: 30 * 60 *60 * 1000 },
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(flash());
+
+app.use(function (req,res,next) {
+    var err = req.flash('error');
+    res.locals.error = err.length ? err: null;
+
+    var success = req.flash('success');
+    res.locals.success = success.length ? success : null;
+
+    next();
+});
 
 app.use('/', routes);
 app.use('/users', users);

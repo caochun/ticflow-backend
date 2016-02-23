@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var ejs = require('ejs');
+var eventproxy = require('eventproxy');
 
 var User = require('../models/User.js');
+var List = require('../models/List.js');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -10,16 +12,16 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/login', function (req, res, next) {
-  res.render('login', {message: ""});
+  res.render('login');
 });
 
 router.post('/login', function (req, res, next) {
   User.findOne(req.body, function (err, user) {
     if (user === null) {
-      //req.flash('error', "用户名或密码错误！");
+      req.flash('error', "用户名或密码错误！");
       return res.redirect('/login');
     } else if (user.role !== 'manager') {
-      //req.flash('error', "非派单员不能登录！");
+      req.flash('error', "非派单员不能登录！");
       return res.redirect('/login');
     } else {
       return res.redirect('/homepage');
@@ -28,7 +30,74 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get('/homepage', function (req, res, next) {
-  res.render('homepage');
+  var ep = new eventproxy();
+
+  var units = [];
+  var names = [];
+  var addresses = [];
+  var phone_nos = [];
+  var salers = [];
+  var engineers = [];
+  List.find().sort({date: -1}).select('client').exec(function (err, lists) {
+    lists.forEach(function (entry) {
+      if (units.indexOf(entry.client.unit) == -1)
+        units.push(entry.client.unit);
+      if (names.indexOf(entry.client.name) == -1)
+        names.push(entry.client.name);
+      if (addresses.indexOf(entry.client.address) == -1)
+        addresses.push(entry.client.address);
+      if (phone_nos.indexOf(entry.client.phone_no) == -1)
+        phone_nos.push(entry.client.phone_no);
+    });
+    ep.emit('client');
+  });
+
+  User.find({role: 'saler'}).sort({id: -1}).exec(function (err, users) {
+    users.forEach(function (entry) {
+      if (salers.indexOf(entry.id) == -1)
+        salers.push(entry.id);
+    });
+    ep.emit('saler');
+  });
+
+  User.find({role: 'engineer'}).sort({id: -1}).exec(function (err, users) {
+    users.forEach(function (entry) {
+      if (engineers.indexOf(entry.id) == -1)
+        engineers.push(entry.id);
+    });
+    ep.emit('engineer');
+  });
+
+  ep.all('client', 'saler', 'engineer', function () {
+    res.render('homepage', {units: units, names: names, addresses: addresses, phone_nos: phone_nos,
+      salers: salers, engineers: engineers});
+  });
+});
+
+router.post('/homepage', function (req, res, next) {
+  var list = {
+    client: {
+      unit: req.body.unit,
+      name: req.body.name,
+      address: req.body.address,
+      phone_no: req.body.phone_no,
+    },
+    deliver: req.body.deliver,
+    debug: req.body.debug,
+    visit: req.body.visit,
+    install: req.body.install,
+    warehouse: req.body.warehouse,
+    outgoing: req.body.outgoing,
+
+    saler: req.body.saler,
+    value: req.body.value,
+    engineer: req.body.engineer,
+  };
+
+  List.create(list, function (err, list) {
+    req.flash('success', "创建成功！");
+    return res.redirect('/homepage');
+  });
 });
 
 module.exports = router;
