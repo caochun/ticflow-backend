@@ -24,12 +24,18 @@ router.post('/login', function (req, res, next) {
       req.flash('error', "非派单员不能登录！");
       return res.redirect('/login');
     } else {
+      req.session.user = user;
       return res.redirect('/homepage');
     }
   });
 });
 
 router.get('/homepage', function (req, res, next) {
+  if (!req.session.user) {
+    req.flash('error', "请先登录！");
+    return res.redirect('/login');
+  }
+
   var ep = new eventproxy();
 
   var units = [];
@@ -98,6 +104,11 @@ router.post('/homepage', function (req, res, next) {
     req.flash('success', "创建成功！");
     return res.redirect('/homepage');
   });
+});
+
+router.get('/logout', function (req, res, next) {
+  req.session.user = null;
+  res.redirect('/login');
 });
 
 module.exports = router;

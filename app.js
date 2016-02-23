@@ -53,6 +53,8 @@ app.use(function (req,res,next) {
     var success = req.flash('success');
     res.locals.success = success.length ? success : null;
 
+    res.locals.user = req.session.user;
+
     next();
 });
 
