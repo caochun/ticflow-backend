@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>派单员登录</title>
+        <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+        <link rel='stylesheet' href='/stylesheets/style.css'/>
+    </head>
+
+    <body>
+        <div align="center">
+            <img src="/cover.png" alt="logo" width="512" height="384">
+        </div>
+        <div class="container-fluid">
+            <div class="jumbotron" align="center">
+                <h2>
+                    欢迎使用杰世欣Online网页版
+                </h2>
+                <p>仅派单员可以使用</p>
+            </div>
+            <div class="row">
+                <form class="form center-block form-horizontal" method="post" style="width:40%">
+                    <%= message %>
+                    <div class="form-group">
+                        <label for="id" class="col-sm-2 control-label">用户名</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" name="id" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 control-label">密码</label>
+
+                        <div class="col-sm-10">
+                            <input type="password" name="password" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">登录</button>
+                        </div>
+                    </div>
+                    <p class="text-center text-muted">
+                        © 版权所有 南京杰世欣商务
+                    </p>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
