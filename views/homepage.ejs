@@ -20,9 +20,9 @@
               </div>
             <% } %>
             <div class="form-group">
-                <label for="unit" class="col-sm-2 control-label">客户单位</label>
+                <label for="client.unit" class="col-sm-2 control-label">客户单位</label>
                 <div class="col-sm-10">
-                    <input name="unit" class="form-control" list="unit" required="true">
+                    <input name="client.unit" class="form-control" list="unit" required="true">
                     <datalist id="unit">
                       <% units.forEach(function (unit) { %>
                         <option value=
@@ -33,9 +33,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">客户姓名</label>
+                <label for="client.name" class="col-sm-2 control-label">客户姓名</label>
                 <div class="col-sm-10">
-                    <input name="name" class="form-control" list="name" required="true">
+                    <input name="client.name" class="form-control" list="name" required="true">
                     <datalist id="name">
                       <% names.forEach(function (name) { %>
                         <option value=
@@ -46,9 +46,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="address" class="col-sm-2 control-label">客户地址</label>
+                <label for="client.address" class="col-sm-2 control-label">客户地址</label>
                 <div class="col-sm-10">
-                    <input name="address" class="form-control" list="address" required="true">
+                    <input name="client.address" class="form-control" list="address" required="true">
                     <datalist id="address">
                       <% addresses.forEach(function (address) { %>
                         <option value=
@@ -59,9 +59,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="phone_no" class="col-sm-2 control-label">客户电话</label>
+                <label for="client.phone_no" class="col-sm-2 control-label">客户电话</label>
                 <div class="col-sm-10">
-                    <input name="phone_no" class="form-control" list="phone_no" required="true">
+                    <input name="client.phone_no" class="form-control" list="phone_no" required="true">
                     <datalist id="phone_no">
                       <% phone_nos.forEach(function (phone_no) { %>
                         <option value=

@@ -81,26 +81,8 @@ router.get('/homepage', function (req, res, next) {
 });
 
 router.post('/homepage', function (req, res, next) {
-  var list = {
-    client: {
-      unit: req.body.unit,
-      name: req.body.name,
-      address: req.body.address,
-      phone_no: req.body.phone_no,
-    },
-    deliver: req.body.deliver,
-    debug: req.body.debug,
-    visit: req.body.visit,
-    install: req.body.install,
-    warehouse: req.body.warehouse,
-    outgoing: req.body.outgoing,
-
-    saler: req.body.saler,
-    value: req.body.value,
-    engineer: req.body.engineer,
-  };
-
-  List.create(list, function (err, list) {
+  
+  List.create(req.body, function (err, list) {
     req.flash('success', "创建成功！");
     return res.redirect('/homepage');
   });
