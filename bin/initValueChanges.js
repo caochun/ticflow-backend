@@ -3,7 +3,7 @@ var eventproxy = require('eventproxy');
 
 mongoose.connect('mongodb://localhost/ticflow');
 
-var ValueChange = require('../models/Valuechange.js');
+var ValueChange = require('../models/ValueChange.js');
 
 ValueChange.remove(function (err) {
   if (err) {
