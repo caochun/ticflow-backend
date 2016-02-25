@@ -61,50 +61,43 @@
             <div class="form-group">
                 <label for="client.address" class="col-sm-2 control-label">客户地址</label>
                 <div class="col-sm-10">
-                    <input name="client.address" class="form-control" list="address" required="true">
-                    <datalist id="address">
-                      <% addresses.forEach(function (address) { %>
-                        <option value=
-                          <%= address %>
-                        >
-                      <% }); %>
-                    </datalist>
+                    <textarea wrap="virtual" rows="2" name="client.address" class="form-control" list="address" required="true"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="deliver" class="col-sm-2 control-label">送货服务</label>
                 <div class="col-sm-10">
-                    <input name="deliver" class="form-control">
+                    <textarea wrap="virtual" rows="5" name="deliver" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="debug" class="col-sm-2 control-label">安装调试</label>
                 <div class="col-sm-10">
-                    <input name="debug" class="form-control">
+                    <textarea wrap="virtual" rows="4" name="debug" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="visit" class="col-sm-2 control-label">上门服务</label>
                 <div class="col-sm-10">
-                    <input name="visit" class="form-control">
+                    <textarea wrap="virtual" rows="4" name="visit" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="install" class="col-sm-2 control-label">安装单</label>
                 <div class="col-sm-10">
-                    <input name="install" class="form-control">
+                    <textarea wrap="virtual" rows="4" name="install" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="warehouse" class="col-sm-2 control-label">库房安装</label>
                 <div class="col-sm-10">
-                    <input name="warehouse" class="form-control">
+                    <textarea wrap="virtual" rows="4" name="warehouse" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <label for="outgoing" class="col-sm-2 control-label">出库单号</label>
                 <div class="col-sm-10">
-                    <input name="outgoing" class="form-control">
+                    <textarea wrap="virtual" rows="2" name="outgoing" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
