@@ -7,6 +7,14 @@
 
         <script src="/javascripts/jquery.js"></script>
         <script src="/javascripts/bootstrap.js"></script>
+        <script>
+          $(document).ready(function(){
+            $("#btnExport").click(function (e) {
+              window.open('data:application/vnd.ms-excel,' + $('#dvData').html());
+              e.preventDefault();
+            });
+          });
+        </script>
     </head>
 
     <body>
@@ -140,8 +148,55 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary">创建</button>
                     <a class="btn btn-primary" href="/logout">注销(<%= user.id %>)</a>
+                    <button type="button" class="btn btn-primary" id="btnExport">导出</button>
                 </div>
             </div>
+
+            <div id="dvData" style="display: none">
+              <table>
+                  <tr>
+                    <th>审核时间</th>
+                    <th>客户单位</th>
+                    <th>客户姓名</th>
+                    <th>客户电话</th>
+                    <th>客户地址</th>
+                    <th>送货服务</th>
+                    <th>安装调试</th>
+                    <th>上门服务</th>
+                    <th>安装单</th>
+                    <th>库房安装</th>
+                    <th>出库单号</th>
+                    <th>序列号</th>
+                    <th>反馈信息</th>
+                    <th>销售员</th>
+                    <th>工程师</th>
+                    <th>分值</th>
+                  </tr>
+
+                <% lists.forEach(function (list) { %>
+                  <tr>
+                    <td><%= list.checkTime.getFullYear() + "/" + ('0' + (list.checkTime.getMonth() + 1)).slice(-2)
+                        + "/" + ('0' + (list.checkTime.getDate())).slice(-2) %></td>
+                    <td><%= list.client.unit %></td>
+                    <td><%= list.client.name %></td>
+                    <td><%= list.client.phone_no %></td>
+                    <td><%= list.client.address %></td>
+                    <td><%= list.deliver %></td>
+                    <td><%= list.debug %></td>
+                    <td><%= list.visit %></td>
+                    <td><%= list.install %></td>
+                    <td><%= list.warehouse %></td>
+                    <td><%= list.outgoing %></td>
+                    <td><%= list.serial_no %></td>
+                    <td><%= list.feedback %></td>
+                    <td><%= list.saler %></td>
+                    <td><%= list.engineer %></td>
+                    <td><%= list.value %></td>
+                  </tr>
+                <% }); %>
+              </table>
+            </div>
+            
             <p class="text-center text-muted">
                 © 版权所有 南京杰世欣计算机科技有限公司
             </p>

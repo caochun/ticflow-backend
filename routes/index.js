@@ -75,13 +75,17 @@ router.get('/homepage', function (req, res, next) {
   });
 
   ep.all('client', 'saler', 'engineer', function () {
-    res.render('homepage', {units: units, names: names, addresses: addresses, phone_nos: phone_nos,
-      salers: salers, engineers: engineers});
+    var now = new Date();
+    var month = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2);
+
+    List.find({checkMonth: month}).sort({checkTime: 1}).exec(function (err, lists) {
+      res.render('homepage', {units: units, names: names, addresses: addresses, phone_nos: phone_nos,
+        salers: salers, engineers: engineers, lists: lists});
+    });
   });
 });
 
 router.post('/homepage', function (req, res, next) {
-  
   List.create(req.body, function (err, list) {
     req.flash('success', "创建成功！");
     return res.redirect('/homepage');
@@ -90,7 +94,7 @@ router.post('/homepage', function (req, res, next) {
 
 router.get('/logout', function (req, res, next) {
   req.session.user = null;
-  res.redirect('/login');
+  return res.redirect('/login');
 });
 
 module.exports = router;
