@@ -8,18 +8,76 @@
         <script src="/javascripts/jquery.js"></script>
         <script src="/javascripts/bootstrap.js"></script>
         <script>
-          $(document).ready(function(){
-            $("#btnExport").click(function (e) {
-              window.open('data:application/vnd.ms-excel,' + $('#dvData').html());
-              e.preventDefault();
+            $(document).ready(function(){
+                $("#btnExport").click(function (e) {
+                    $.get("/lists/checked", function (lists) {
+                        var dvHtml = "<table>" + 
+                            "<tr>" + 
+                                "<th>" + "审核时间" + "</th>" +
+                                "<th>" + "客户单位" + "</th>" +
+                                "<th>" + "客户姓名" + "</th>" +
+                                "<th>" + "客户电话" + "</th>" +
+                                "<th>" + "客户地址" + "</th>" +
+                                "<th>" + "送货服务" + "</th>" +
+                                "<th>" + "安装调试" + "</th>" +
+                                "<th>" + "上门服务" + "</th>" +
+                                "<th>" + "安装单" + "</th>" +
+                                "<th>" + "库房安装" + "</th>" +
+                                "<th>" + "出库单号" + "</th>" +
+                                "<th>" + "序列号" + "</th>" +
+                                "<th>" + "反馈信息" + "</th>" +
+                                "<th>" + "销售员" + "</th>" +
+                                "<th>" + "工程师" + "</th>" +
+                                "<th>" + "分值" + "</th>" +
+                            "</tr>";
+                        lists.forEach(function (entry) {
+                            dvHtml += "<tr>" + 
+                                "<td>" + entry.checkTime.substring(0, 10) + "</td>" +
+                                "<td>" + entry.client.unit + "</td>" + 
+                                "<td>" + entry.client.name + "</td>" + 
+                                "<td>" + entry.client.phone_no + "</td>" + 
+                                "<td>" + entry.client.address + "</td>" + 
+                                "<td>" + entry.deliver + "</td>" + 
+                                "<td>" + entry.debug + "</td>" + 
+                                "<td>" + entry.visit + "</td>" + 
+                                "<td>" + entry.install + "</td>" + 
+                                "<td>" + entry.warehouse + "</td>" + 
+                                "<td>" + entry.outgoing + "</td>" + 
+                                "<td>" + entry.serial_no + "</td>" + 
+                                "<td>" + entry.feedback + "</td>" + 
+                                "<td>" + entry.saler + "</td>" + 
+                                "<td>" + entry.engineer + "</td>" + 
+                                "<td>" + entry.value + "</td>" + 
+                            "</tr>";
+                        });
+                        dvHtml += "</table>";
+                        window.open('data:application/vnd.ms-excel,' + dvHtml);
+                    })
+                });
             });
-          });
         </script>
     </head>
 
+    <header>
+        <nav class="navbar navbar-fixed-top navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand">
+                        <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+                        <span>&nbsp杰世欣Online&nbsp</span>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/manager">新建报修单</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
     <body>
-      <div class="container-fluid">
-        <div class="row">
+        <div class="container-fluid">
           <form class="form center-block form-horizontal" method="post" style="width:40%">
             <% if (success) { %>
               <div class="alert alert-success alert-dismissable">
@@ -151,57 +209,11 @@
                     <button type="button" class="btn btn-primary" id="btnExport">导出</button>
                 </div>
             </div>
-
-            <div id="dvData" style="display: none">
-              <table>
-                  <tr>
-                    <th>审核时间</th>
-                    <th>客户单位</th>
-                    <th>客户姓名</th>
-                    <th>客户电话</th>
-                    <th>客户地址</th>
-                    <th>送货服务</th>
-                    <th>安装调试</th>
-                    <th>上门服务</th>
-                    <th>安装单</th>
-                    <th>库房安装</th>
-                    <th>出库单号</th>
-                    <th>序列号</th>
-                    <th>反馈信息</th>
-                    <th>销售员</th>
-                    <th>工程师</th>
-                    <th>分值</th>
-                  </tr>
-
-                <% lists.forEach(function (list) { %>
-                  <tr>
-                    <td><%= list.checkTime.getFullYear() + "/" + ('0' + (list.checkTime.getMonth() + 1)).slice(-2)
-                        + "/" + ('0' + (list.checkTime.getDate())).slice(-2) %></td>
-                    <td><%= list.client.unit %></td>
-                    <td><%= list.client.name %></td>
-                    <td><%= list.client.phone_no %></td>
-                    <td><%= list.client.address %></td>
-                    <td><%= list.deliver %></td>
-                    <td><%= list.debug %></td>
-                    <td><%= list.visit %></td>
-                    <td><%= list.install %></td>
-                    <td><%= list.warehouse %></td>
-                    <td><%= list.outgoing %></td>
-                    <td><%= list.serial_no %></td>
-                    <td><%= list.feedback %></td>
-                    <td><%= list.saler %></td>
-                    <td><%= list.engineer %></td>
-                    <td><%= list.value %></td>
-                  </tr>
-                <% }); %>
-              </table>
-            </div>
             
             <p class="text-center text-muted">
                 © 版权所有 南京杰世欣计算机科技有限公司
             </p>
           </form>
         </div>
-      </div>
     </body>
 </html>

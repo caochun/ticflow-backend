@@ -6,6 +6,7 @@ mongoose.connect('mongodb://localhost/ticflow');
 var User = require('../models/User.js');
 
 var users = [
+  {id:"关婷", password: "123", role: "treasurer"},
   {id:"余文林", password: "123", role: "saler"},
   {id:"周坚", password: "123", role:"saler"},
   {id:"宋菁", password: "123", role:"saler"},

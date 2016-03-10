@@ -20,18 +20,21 @@ router.post('/login', function (req, res, next) {
     if (user === null) {
       req.flash('error', "用户名或密码错误！");
       return res.redirect('/login');
-    } else if (user.role !== 'manager') {
-      req.flash('error', "非派单员不能登录！");
-      return res.redirect('/login');
-    } else {
+    } else if (user.role === 'manager') {
       req.session.user = user;
-      return res.redirect('/homepage');
+      return res.redirect('/manager');
+    } else if (user.role === 'treasurer') {
+      req.session.user = user;
+      return res.redirect('/treasurer');
+    } else {
+      req.flash('error', "非派单员或财务员不能登录！");
+      return res.redirect('/login');
     }
   });
 });
 
-router.get('/homepage', function (req, res, next) {
-  if (!req.session.user) {
+router.get('/manager', function (req, res, next) {
+  if (!req.session.user || req.session.user.role !== 'manager') {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
@@ -75,21 +78,24 @@ router.get('/homepage', function (req, res, next) {
   });
 
   ep.all('client', 'saler', 'engineer', function () {
-    var now = new Date();
-    var month = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2);
-
-    List.find({checkMonth: month}).sort({checkTime: 1}).exec(function (err, lists) {
-      res.render('homepage', {units: units, names: names, addresses: addresses, phone_nos: phone_nos,
-        salers: salers, engineers: engineers, lists: lists});
-    });
+      res.render('manager', {units: units, names: names, addresses: addresses, phone_nos: phone_nos,
+        salers: salers, engineers: engineers});
   });
 });
 
-router.post('/homepage', function (req, res, next) {
+router.post('/manager', function (req, res, next) {
   List.create(req.body, function (err, list) {
     req.flash('success', "创建成功！");
-    return res.redirect('/homepage');
+    return res.redirect('/manager');
   });
+});
+
+router.get('/treasurer', function (req, res, next) {
+  if (!req.session.user || req.session.user.role !== 'treasurer') {
+    req.flash('error', "请先登录！");
+    return res.redirect('/login');
+  }
+  res.render('treasurer');
 });
 
 router.get('/logout', function (req, res, next) {

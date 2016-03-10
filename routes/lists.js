@@ -56,6 +56,19 @@ router.get('/', function (req, res) {
 	}
 });
 
+router.get('/checked', function (req, res) {
+	var now = new Date();
+  var month = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2);
+  
+	List.find({checkMonth: month}).sort({checkTime: 1}).exec(function (err, lists) {
+		if (err) {
+				return res.status(400).send("err in get /lists/checked");
+			} else {
+				return res.status(200).json(lists);
+			}
+	});
+});
+
 router.post('/remove/:_id', function (req, res) {
 	List.findByIdAndRemove(req.params._id, function (err, list) {
 		if (err) {
