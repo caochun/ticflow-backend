@@ -8,6 +8,125 @@
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
 
+      <script>
+        $(document).ready(function(){
+          $("#type").change(function () {
+            if ($(this).val() === "profit") {
+              $("#dvSaler").show();
+              $("#dvDetail1").show();
+              $("#detail1 option").each(function () {
+                this.selected = (this.text == "利润");
+              });
+              $("#dvDetail2").hide();
+              $("#dvUsage").hide();
+            } else if ($(this).val() === "admin") {
+              $("#dvSaler").hide();
+              $("#dvDetail1").hide();
+              $("#dvDetail2").show();
+              $("#dvUsage").hide();
+            } else { // "manager"
+              $("#dvSaler").hide();
+              $("#dvDetail1").hide();
+              $("#dvDetail2").hide();
+              $("#dvUsage").show();
+            }
+          });
+
+          $("#btnCreate").click(function (e) {
+            if ($("#type").val() === "profit") {
+              var month = $("#month").val();
+              var saler = $("#saler").val();
+              var detail = $("#detail1").val();
+              var money = $("#money").val();
+              var comment = $("#comment").val();
+              if (!month) {
+                alert("请输入月份！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2})$/.test(month)) {
+                alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+                return;
+              }
+              if (!saler) {
+                alert("请选择销售人员！");
+                return;
+              }
+              if (!money) {
+                alert("请输入金额！");
+                return;
+              }
+              if (isNaN(money)) {
+                alert("金额不合法！");
+                return;
+              }
+
+              $.post("/profit", {month: month, saler: saler, detail: detail, money: money, comment: comment}, function (profit) {
+                alert("创建成功！");
+              });
+
+            } else if ($("#type").val() === "admin") {
+              var month = $("#month").val();
+              var detail = $("#detail2").val();
+              var money = $("#money").val();
+              var comment = $("#comment").val();
+              if (!month) {
+                alert("请输入月份！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2})$/.test(month)) {
+                alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+                return;
+              }
+              if (!detail) {
+                alert("请选择项目！");
+                return;
+              }
+              if (!money) {
+                alert("请输入金额！");
+                return;
+              }
+              if (isNaN(money)) {
+                alert("金额不合法！");
+                return;
+              }
+              $.post("/adminfee", {month: month, detail: detail, money: money, comment: comment}, function (adminfee) {
+                alert("创建成功！");
+              });
+
+            }
+            else {
+              var month = $("#month").val();
+              var usage = $("#usage").val();
+              var money = $("#money").val();
+              var comment = $("#comment").val();
+              if (!month) {
+                alert("请输入月份！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2})$/.test(month)) {
+                alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+                return;
+              }
+              if (!usage) {
+                alert("请输入用途！");
+                return;
+              }
+              if (!money) {
+                alert("请输入金额！");
+                return;
+              }
+              if (isNaN(money)) {
+                alert("金额不合法！");
+                return;
+              }
+              $.post("/managefee", {month: month, usage: usage, money: money, comment: comment}, function (managefee) {
+                alert("创建成功！");
+              });
+            }
+          });
+        });
+      </script>
+
     </head>
 
     <header>
@@ -22,10 +141,10 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li><a href="/treasurer">新建财报</a></li>
-              <li><a href="/treasurer">毛利统计</a></li>
-              <li><a href="/treasurer">行政管理费用统计</a></li>
-              <li><a href="/treasurer">总经办支出</a></li>
-              <li><a href="/treasurer">合计</a></li>
+              <li><a href="/profits">毛利统计</a></li>
+              <li><a href="/adminfees">行政管理费用统计</a></li>
+              <li><a href="/managefees">总经办支出</a></li>
+              <li><a href="/total">合计</a></li>
             </ul>
           </div>
         </div>
@@ -34,7 +153,101 @@
 
     <body>
       <div class="container-fluid">
-        
+        <form class="form center-block form-horizontal" method="post" style="width:50%">
+          <div class="form-group">
+            <label class="col-sm-4 control-label">类型</label>
+            <div class="col-sm-8">
+              <select id="type" class="form-control" required="true">
+                <option value="profit">毛利</option>
+                <option value="admin">行政管理费用</option>
+                <option value="manager">总经办支出</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">月份</label>
+            <div class="col-sm-8">
+              <input id="month" class="form-control" value=<%= month%> required="true">
+            </div>
+          </div>
+          <div id="dvSaler" class="form-group">
+            <label class="col-sm-4 control-label">销售人员</label>
+            <div class="col-sm-8">
+              <select id="saler" class="form-control">
+                <option value="">请选择</option>
+                <% salers.forEach(function (saler) { %>
+                  <option value=
+                    <%= saler %>
+                  >
+                    <%= saler %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+          <div id="dvDetail1" class="form-group">
+            <label class="col-sm-4 control-label">项目</label>
+            <div class="col-sm-8">
+              <select id="detail1" class="form-control">
+                <option value="profit">利润</option>
+                <option value="travel">差旅费</option>
+                <option value="entertainment">招待费</option>
+                <option value="bidding">投标费</option>
+                <option value="brokerage">佣金</option>
+                <option value="others">其他</option>
+              </select>
+            </div>
+          </div>
+          <div id="dvDetail2" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">项目</label>
+            <div class="col-sm-8">
+              <select id="detail2" class="form-control">
+                <option value="">请选择</option>
+                <option value="rent">房租</option>
+                <option value="property">物业费</option>
+                <option value="social">社保</option>
+                <option value="tax">税款</option>
+                <option value="utilities">水电费</option>
+                <option value="salary">工资</option>
+                <option value="telebill">电话费</option>
+                <option value="carriage">运费</option>
+                <option value="company">公司运营费</option>
+                <option value="birthday">聚餐及生日</option>
+                <option value="gas">加油卡</option>
+                <option value="interest">银行利息</option>
+                <option value="reserved">公积金</option>
+                <option value="others">其他</option>
+              </select>
+            </div>
+          </div>
+          <div id="dvUsage" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">用途</label>
+            <div class="col-sm-8">
+              <input id="usage" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">金额</label>
+            <div class="col-sm-8">
+              <input id="money" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">备注</label>
+            <div class="col-sm-8">
+              <input id="comment" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">
+              <button type="button" class="btn btn-primary" id="btnCreate">创建</button>
+              <a class="btn btn-primary" href="/logout">注销(<%= user.id %>)</a>
+            </div>
+          </div>
+          <p class="col-sm-offset-3 text-center text-muted">
+            © 版权所有 南京杰世欣计算机科技有限公司
+          </p>
+        </form>
       </div>
     </body>
 </html>

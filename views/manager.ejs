@@ -1,219 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>新建报修单</title>
-        <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
-        <link rel='stylesheet' href='/stylesheets/style.css'/>
+  <head>
+    <title>新建报修单</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
 
-        <script src="/javascripts/jquery.js"></script>
-        <script src="/javascripts/bootstrap.js"></script>
-        <script>
-            $(document).ready(function(){
-                $("#btnExport").click(function (e) {
-                    $.get("/lists/checked", function (lists) {
-                        var dvHtml = "<table>" + 
-                            "<tr>" + 
-                                "<th>" + "审核时间" + "</th>" +
-                                "<th>" + "客户单位" + "</th>" +
-                                "<th>" + "客户姓名" + "</th>" +
-                                "<th>" + "客户电话" + "</th>" +
-                                "<th>" + "客户地址" + "</th>" +
-                                "<th>" + "送货服务" + "</th>" +
-                                "<th>" + "安装调试" + "</th>" +
-                                "<th>" + "上门服务" + "</th>" +
-                                "<th>" + "安装单" + "</th>" +
-                                "<th>" + "库房安装" + "</th>" +
-                                "<th>" + "出库单号" + "</th>" +
-                                "<th>" + "序列号" + "</th>" +
-                                "<th>" + "反馈信息" + "</th>" +
-                                "<th>" + "销售员" + "</th>" +
-                                "<th>" + "工程师" + "</th>" +
-                                "<th>" + "分值" + "</th>" +
-                            "</tr>";
-                        lists.forEach(function (entry) {
-                            dvHtml += "<tr>" + 
-                                "<td>" + entry.checkTime.substring(0, 10) + "</td>" +
-                                "<td>" + entry.client.unit + "</td>" + 
-                                "<td>" + entry.client.name + "</td>" + 
-                                "<td>" + entry.client.phone_no + "</td>" + 
-                                "<td>" + entry.client.address + "</td>" + 
-                                "<td>" + entry.deliver + "</td>" + 
-                                "<td>" + entry.debug + "</td>" + 
-                                "<td>" + entry.visit + "</td>" + 
-                                "<td>" + entry.install + "</td>" + 
-                                "<td>" + entry.warehouse + "</td>" + 
-                                "<td>" + entry.outgoing + "</td>" + 
-                                "<td>" + entry.serial_no + "</td>" + 
-                                "<td>" + entry.feedback + "</td>" + 
-                                "<td>" + entry.saler + "</td>" + 
-                                "<td>" + entry.engineer + "</td>" + 
-                                "<td>" + entry.value + "</td>" + 
-                            "</tr>";
-                        });
-                        dvHtml += "</table>";
-                        window.open('data:application/vnd.ms-excel,' + dvHtml);
-                    })
-                });
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/bootstrap.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#btnExport").click(function (e) {
+          $.get("/lists/checked", function (lists) {
+            var dvHtml = "<table>" + 
+              "<tr>" + 
+                "<th>" + "审核时间" + "</th>" +
+                "<th>" + "客户单位" + "</th>" +
+                "<th>" + "客户姓名" + "</th>" +
+                "<th>" + "客户电话" + "</th>" +
+                "<th>" + "客户地址" + "</th>" +
+                "<th>" + "送货服务" + "</th>" +
+                "<th>" + "安装调试" + "</th>" +
+                "<th>" + "上门服务" + "</th>" +
+                "<th>" + "安装单" + "</th>" +
+                "<th>" + "库房安装" + "</th>" +
+                "<th>" + "出库单号" + "</th>" +
+                "<th>" + "序列号" + "</th>" +
+                "<th>" + "反馈信息" + "</th>" +
+                "<th>" + "销售员" + "</th>" +
+                "<th>" + "工程师" + "</th>" +
+                "<th>" + "分值" + "</th>" +
+              "</tr>";
+            lists.forEach(function (entry) {
+              dvHtml += "<tr>" + 
+                "<td>" + entry.checkTime.substring(0, 10) + "</td>" +
+                "<td>" + entry.client.unit + "</td>" + 
+                "<td>" + entry.client.name + "</td>" + 
+                "<td>" + entry.client.phone_no + "</td>" + 
+                "<td>" + entry.client.address + "</td>" + 
+                "<td>" + entry.deliver + "</td>" + 
+                "<td>" + entry.debug + "</td>" + 
+                "<td>" + entry.visit + "</td>" + 
+                "<td>" + entry.install + "</td>" + 
+                "<td>" + entry.warehouse + "</td>" + 
+                "<td>" + entry.outgoing + "</td>" + 
+                "<td>" + entry.serial_no + "</td>" + 
+                "<td>" + entry.feedback + "</td>" + 
+                "<td>" + entry.saler + "</td>" + 
+                "<td>" + entry.engineer + "</td>" + 
+                "<td>" + entry.value + "</td>" + 
+              "</tr>";
             });
-        </script>
-    </head>
+            dvHtml += "</table>";
+            window.open('data:application/vnd.ms-excel,' + dvHtml);
+          })
+        });
+      });
+    </script>
+  </head>
 
-    <header>
-        <nav class="navbar navbar-fixed-top navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand">
-                        <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
-                        <span>&nbsp杰世欣Online&nbsp</span>
-                    </a>
-                </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/manager">新建报修单</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <body>
-        <div class="container-fluid">
-          <form class="form center-block form-horizontal" method="post" style="width:40%">
-            <% if (success) { %>
-              <div class="alert alert-success alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <%= success %>
-              </div>
-            <% } %>
-            <div class="form-group">
-                <label for="client.unit" class="col-sm-2 control-label">客户单位</label>
-                <div class="col-sm-10">
-                    <input name="client.unit" class="form-control" list="unit" required="true">
-                    <datalist id="unit">
-                      <% units.forEach(function (unit) { %>
-                        <option value=
-                          <%= unit %>
-                        >
-                      <% }); %>
-                    </datalist>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="client.name" class="col-sm-2 control-label">客户姓名</label>
-                <div class="col-sm-10">
-                    <input name="client.name" class="form-control" list="name" required="true">
-                    <datalist id="name">
-                      <% names.forEach(function (name) { %>
-                        <option value=
-                          <%= name %>
-                        >
-                      <% }); %>
-                    </datalist>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="client.phone_no" class="col-sm-2 control-label">客户电话</label>
-                <div class="col-sm-10">
-                    <input name="client.phone_no" class="form-control" list="phone_no" required="true">
-                    <datalist id="phone_no">
-                      <% phone_nos.forEach(function (phone_no) { %>
-                        <option value=
-                          <%= phone_no %>
-                        >
-                      <% }); %>
-                    </datalist>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="client.address" class="col-sm-2 control-label">客户地址</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="2" name="client.address" class="form-control" list="address" required="true"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="deliver" class="col-sm-2 control-label">送货服务</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="5" name="deliver" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="debug" class="col-sm-2 control-label">安装调试</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="4" name="debug" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="visit" class="col-sm-2 control-label">上门服务</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="4" name="visit" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="install" class="col-sm-2 control-label">安装单</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="4" name="install" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="warehouse" class="col-sm-2 control-label">库房安装</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="4" name="warehouse" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="outgoing" class="col-sm-2 control-label">出库单号</label>
-                <div class="col-sm-10">
-                    <textarea wrap="virtual" rows="2" name="outgoing" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="saler" class="col-sm-2 control-label">销售人员</label>
-                <div class="col-sm-10">
-                    <select name="saler" class="form-control" required="true">
-                      <option value="">请选择</option>
-                      <% salers.forEach(function (saler) { %>
-                        <option value=
-                          <%= saler %>
-                        >
-                          <%= saler %>
-                        </option>
-                      <% }); %>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="value" class="col-sm-2 control-label">分值</label>
-                <div class="col-sm-10">
-                    <input name="value" class="form-control" required="true">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="engineer" class="col-sm-2 control-label">工程师</label>
-                <div class="col-sm-10">
-                    <select name="engineer" class="form-control" required="true">
-                      <option value="">请选择</option>
-                      <% engineers.forEach(function (engineer) { %>
-                        <option value=
-                          <%= engineer %>
-                        >
-                          <%= engineer %>
-                        </option>
-                      <% }); %>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary">创建</button>
-                    <a class="btn btn-primary" href="/logout">注销(<%= user.id %>)</a>
-                    <button type="button" class="btn btn-primary" id="btnExport">导出</button>
-                </div>
-            </div>
-            
-            <p class="text-center text-muted">
-                © 版权所有 南京杰世欣计算机科技有限公司
-            </p>
-          </form>
+  <header>
+    <nav class="navbar navbar-fixed-top navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand">
+            <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            <span>&nbsp杰世欣Online&nbsp</span>
+          </a>
         </div>
-    </body>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/manager">新建报修单</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <body>
+    <div class="container-fluid">
+      <form class="form center-block form-horizontal" method="post" style="width:50%">
+        <% if (success) { %>
+          <div class="col-sm-offset-2 alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= success %>
+          </div>
+        <% } %>
+        <div class="form-group">
+          <label for="client.unit" class="col-sm-4 control-label">客户单位</label>
+          <div class="col-sm-8">
+            <input name="client.unit" class="form-control" list="unit" required="true">
+            <datalist id="unit">
+              <% units.forEach(function (unit) { %>
+                <option value=
+                  <%= unit %>
+                >
+              <% }); %>
+            </datalist>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="client.name" class="col-sm-4 control-label">客户姓名</label>
+          <div class="col-sm-8">
+            <input name="client.name" class="form-control" list="name" required="true">
+            <datalist id="name">
+              <% names.forEach(function (name) { %>
+                <option value=
+                  <%= name %>
+                >
+              <% }); %>
+            </datalist>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="client.phone_no" class="col-sm-4 control-label">客户电话</label>
+          <div class="col-sm-8">
+            <input name="client.phone_no" class="form-control" list="phone_no" required="true">
+            <datalist id="phone_no">
+              <% phone_nos.forEach(function (phone_no) { %>
+                <option value=
+                  <%= phone_no %>
+                >
+              <% }); %>
+            </datalist>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="client.address" class="col-sm-4 control-label">客户地址</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="2" name="client.address" class="form-control" list="address" required="true"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="deliver" class="col-sm-4 control-label">送货服务</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="5" name="deliver" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="debug" class="col-sm-4 control-label">安装调试</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="4" name="debug" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="visit" class="col-sm-4 control-label">上门服务</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="4" name="visit" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="install" class="col-sm-4 control-label">安装单</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="4" name="install" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="warehouse" class="col-sm-4 control-label">库房安装</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="4" name="warehouse" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="outgoing" class="col-sm-4 control-label">出库单号</label>
+          <div class="col-sm-8">
+            <textarea wrap="virtual" rows="2" name="outgoing" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="saler" class="col-sm-4 control-label">销售人员</label>
+          <div class="col-sm-8">
+            <select name="saler" class="form-control" required="true">
+              <option value="">请选择</option>
+              <% salers.forEach(function (saler) { %>
+                <option value=
+                  <%= saler %>
+                >
+                  <%= saler %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="value" class="col-sm-4 control-label">分值</label>
+          <div class="col-sm-8">
+            <input name="value" class="form-control" required="true">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="engineer" class="col-sm-4 control-label">工程师</label>
+          <div class="col-sm-8">
+            <select name="engineer" class="form-control" required="true">
+              <option value="">请选择</option>
+              <% engineers.forEach(function (engineer) { %>
+                <option value=
+                  <%= engineer %>
+                >
+                  <%= engineer %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-8">
+            <button type="submit" class="btn btn-primary">创建</button>
+            <a class="btn btn-primary" href="/logout">注销(<%= user.id %>)</a>
+            <button type="button" class="btn btn-primary" id="btnExport">导出</button>
+          </div>
+        </div>
+        
+        <p class="col-sm-offset-3 text-center text-muted">
+          © 版权所有 南京杰世欣计算机科技有限公司
+        </p>
+      </form>
+    </div>
+  </body>
 </html>

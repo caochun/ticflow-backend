@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>行政管理费用统计</title>
+      <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+      <link rel='stylesheet' href='/stylesheets/style.css'/>
+
+      <script src="/javascripts/jquery.js"></script>
+      <script src="/javascripts/bootstrap.js"></script>
+
+      <script>
+        $(document).ready(function(){
+          $("#btnGenerate").click(function (e) {
+            var month = $("#month").val();
+            if (!month) {
+              alert("请输入月份！");
+              return;
+            }
+            if (!/^(\d{4}-\d{2})$/.test(month)) {
+              alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+              return;
+            }
+            window.location.href = "/adminfees?month=" + month;
+          });
+        });
+      </script>
+
+    </head>
+
+    <header>
+      <nav class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand">
+                <span>&nbsp杰世欣Online&nbsp</span>
+                <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="/treasurer">新建财报</a></li>
+              <li><a href="/profits">毛利统计</a></li>
+              <li><a href="/adminfees">行政管理费用统计</a></li>
+              <li><a href="/managefees">总经办支出</a></li>
+              <li><a href="/total">合计</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <body>
+      <div class="container-fluid">
+        <div class="page-header">
+          <form class="form-inline">
+            <div class="form-group">
+              <label><h4>月份 : &nbsp; </h4></label>
+              <input id="month" type="text" class="form-control" value=<%= month %>>
+              <button type="button" class="btn btn-primary" id="btnGenerate">生成</button>
+            </div>
+          </form>
+        </div>
+        <table class="table table-bordered">
+          <tr class="info">
+            <th>房租</th>
+            <th>物业费</th>
+            <th>社保</th>
+            <th>税款</th>
+            <th>水电费</th>
+            <th>工资</th>
+            <th>电话费</th>
+            <th>运费</th>
+            <th>公司运营费</th>
+            <th>聚餐及生日</th>
+            <th>加油卡</th>
+            <th>银行利息</th>
+            <th>公积金</th>
+            <th>总经理支出</th>
+            <th>其他</th>
+            <th>合计</th>
+          </tr>
+          <tr>
+            <td><%= cell[0] %></td>
+            <td><%= cell[1] %></td>
+            <td><%= cell[2] %></td>
+            <td><%= cell[3] %></td>
+            <td><%= cell[4] %></td>
+            <td><%= cell[5] %></td>
+            <td><%= cell[6] %></td>
+            <td><%= cell[7] %></td>
+            <td><%= cell[8] %></td>
+            <td><%= cell[9] %></td>
+            <td><%= cell[10] %></td>
+            <td><%= cell[11] %></td>
+            <td><%= cell[12] %></td>
+            <td><%= cell[13] %></td>
+            <td><%= cell[14] %></td>
+            <td><%= cell[15] %></td>
+          </tr>
+        </table>
+        <p class="text-center text-muted">
+          © 版权所有 南京杰世欣计算机科技有限公司
+        </p>
+      </div>
+    </body>
+</html>

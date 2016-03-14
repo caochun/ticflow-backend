@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>总经办支出</title>
+      <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+      <link rel='stylesheet' href='/stylesheets/style.css'/>
+
+      <script src="/javascripts/jquery.js"></script>
+      <script src="/javascripts/bootstrap.js"></script>
+
+      <script>
+        $(document).ready(function(){
+          $("#btnGenerate").click(function (e) {
+            var month = $("#month").val();
+            if (!month) {
+              alert("请输入月份！");
+              return;
+            }
+            if (!/^(\d{4}-\d{2})$/.test(month)) {
+              alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+              return;
+            }
+            window.location.href = "/managefees?month=" + month;
+          });
+        });
+      </script>
+
+    </head>
+
+    <header>
+      <nav class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand">
+                <span>&nbsp杰世欣Online&nbsp</span>
+                <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="/treasurer">新建财报</a></li>
+              <li><a href="/profits">毛利统计</a></li>
+              <li><a href="/adminfees">行政管理费用统计</a></li>
+              <li><a href="/managefees">总经办支出</a></li>
+              <li><a href="/total">合计</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <body>
+      <div class="container-fluid">
+        <div class="page-header">
+          <form class="form-inline">
+            <div class="form-group">
+              <label><h4>月份 : &nbsp; </h4></label>
+              <input id="month" type="text" class="form-control" value=<%= month %>>
+              <button type="button" class="btn btn-primary" id="btnGenerate">生成</button>
+            </div>
+          </form>
+        </div>
+        <table class="table table-bordered">
+          <tr class="info">
+            <th>用途</th>
+            <th>金额</th>
+            <th>备注</th>
+          </tr>
+          <% managefees.forEach(function (managefee) { %>
+          <tr>
+            <td><%= managefee.usage %></td>
+            <td><%= managefee.money %></td>
+            <td><%= managefee.comment %></td>
+          </tr>
+          <% }); %>
+        </table>
+        <p class="text-center text-muted">
+          © 版权所有 南京杰世欣计算机科技有限公司
+        </p>
+      </div>
+    </body>
+</html>
