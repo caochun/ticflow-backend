@@ -60,7 +60,7 @@
                 return;
               }
 
-              $.post("/profit", {month: month, saler: saler, detail: detail, money: money, comment: comment}, function (profit) {
+              $.post("/profits", {month: month, saler: saler, detail: detail, money: money, comment: comment}, function (profit) {
                 alert("创建成功！");
               });
 
@@ -89,7 +89,7 @@
                 alert("金额不合法！");
                 return;
               }
-              $.post("/adminfee", {month: month, detail: detail, money: money, comment: comment}, function (adminfee) {
+              $.post("/adminfees", {month: month, detail: detail, money: money, comment: comment}, function (adminfee) {
                 alert("创建成功！");
               });
 
@@ -119,7 +119,7 @@
                 alert("金额不合法！");
                 return;
               }
-              $.post("/managefee", {month: month, usage: usage, money: money, comment: comment}, function (managefee) {
+              $.post("/managefees", {month: month, usage: usage, money: money, comment: comment}, function (managefee) {
                 alert("创建成功！");
               });
             }

@@ -7,7 +7,16 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var flash = require('connect-flash');
 
+//web router
 var routes = require('./routes/index');
+var manager = require('./routes/manager');
+var treasurer = require('./routes/treasurer');
+var profits = require('./routes/profits');
+var adminfees = require('./routes/adminfees');
+var managefees = require('./routes/managefees');
+var total = require('./routes/total');
+
+//app router
 var users = require('./routes/users');
 var lists = require('./routes/lists');
 var valuechanges = require('./routes/valuechanges');
@@ -59,6 +68,13 @@ app.use(function (req,res,next) {
 });
 
 app.use('/', routes);
+app.use('/manager', manager);
+app.use('/treasurer', treasurer);
+app.use('/profits', profits);
+app.use('/adminfees', adminfees);
+app.use('/managefees', managefees);
+app.use('/total', total);
+
 app.use('/users', users);
 app.use('/lists', lists);
 app.use('/valuechanges', valuechanges);

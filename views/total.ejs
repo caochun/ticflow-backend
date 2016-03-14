@@ -10,7 +10,27 @@
 
       <script>
         $(document).ready(function(){
-
+          $("#btnGenerate").click(function (e) {
+            var month = $("#month").val();
+            var factor = $("#factor").val();
+            if (!month) {
+              alert("请输入月份！");
+              return;
+            }
+            if (!/^(\d{4}-\d{2})$/.test(month)) {
+              alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+              return;
+            }
+            if (!factor) {
+              alert("请输入利润系数！");
+              return;
+            }
+            if (isNaN(factor)) {
+              alert("利润系数不合法！");
+              return;
+            }
+            window.location.href = "/total?month=" + month + "&factor=" + factor;
+          });
         });
       </script>
 
@@ -62,10 +82,10 @@
             <th>月度利润</th>
           </tr>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><%= gross %></td>
+            <td><%= (gross * factor).toFixed(2) %></td>
+            <td><%= expend %></td>
+            <td><%= gross * factor - expend %></td>
           </tr>
         </table>
         <p class="text-center text-muted">
