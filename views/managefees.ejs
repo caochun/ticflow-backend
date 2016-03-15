@@ -23,6 +23,14 @@
             window.location.href = "/managefees?month=" + month;
           });
         });
+
+        function myDelete(_id) {
+          //alert(_id);
+          $.post("/managefees/delete/" + _id, function (managefee) {
+            window.location.href = "/managefees";
+            alert("删除成功！");
+          })
+        }
       </script>
 
     </head>
@@ -62,15 +70,23 @@
         </div>
         <table class="table table-bordered">
           <tr class="info">
+            <th>月份</th>
             <th>用途</th>
             <th>金额</th>
             <th>备注</th>
+            <th>创建时间</th>
+            <th>操作</th>
           </tr>
           <% managefees.forEach(function (managefee) { %>
+          <% var date = new Date(managefee.create_at);
+             var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2); %>
           <tr>
+            <td><%= month %></td>
             <td><%= managefee.usage %></td>
             <td><%= managefee.money %></td>
             <td><%= managefee.comment %></td>
+            <td><%= dateStr %></td>
+            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+managefee._id+"')"%>">删除</button></td>
           </tr>
           <% }); %>
         </table>

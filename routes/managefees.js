@@ -30,4 +30,14 @@ router.post('/', function (req, res, next) {
   });
 });
 
+router.post('/delete/:_id', function (req, res, next) {
+  ManageFee.findByIdAndRemove(req.params._id, function (err, managefee) {
+    if (err) {
+      return res.status(400).send("err in post /managefees/delete/:_id");
+    } else {
+      return res.status(200).json(managefee);
+    }
+  });
+});
+
 module.exports = router;

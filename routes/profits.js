@@ -81,10 +81,30 @@ router.get('/', function (req, res, next) {
   });
 });
 
+router.get('/detail', function (req, res, next) {
+  Profit.find(req.query).sort({create_at: -1}).exec(function (err, profits) {
+    if (err) {
+      return res.status(400).send("err in get /profits/detail");
+    } else {
+      return res.status(200).json(profits);
+    }
+  });
+});
+
 router.post('/', function (req, res, next) {
   Profit.create(req.body, function (err, profit) {
     if (err) {
-      return res.status(400).send("err in post /profit");
+      return res.status(400).send("err in post /profits");
+    } else {
+      return res.status(200).json(profit);
+    }
+  });
+});
+
+router.post('/delete/:_id', function (req, res, next) {
+  Profit.findByIdAndRemove(req.params._id, function (err, profit) {
+    if (err) {
+      return res.status(400).send("err in post /profits/delete/:_id");
     } else {
       return res.status(200).json(profit);
     }

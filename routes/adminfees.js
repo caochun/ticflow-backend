@@ -67,18 +67,28 @@ router.get('/', function (req, res, next) {
     });
     ep.emit('adminfee');
   });
-  ep.on('adminfee', function () {
-    ManageFee.find({month: req.query.month}).exec(function (err, managefees) {
-      managefees.forEach(function (managefee) {
-        cell[13] += managefee.money;
-      });
-      ep.emit('managefee');
+
+  ManageFee.find({month: req.query.month}).exec(function (err, managefees) {
+    managefees.forEach(function (managefee) {
+      cell[13] += managefee.money;
     });
+    ep.emit('managefee');
   });
-  ep.on('managefee', function () {
+
+  ep.all('adminfee', 'managefee', function () {
     cell.push(cell[0] + cell[1] + cell[2] + cell[3] + cell[4] + cell[5] + cell[6] + cell[7] +
       cell[8] + cell[9] + cell[10] + cell[11] + cell[12] + cell[13] + cell[14]);
     res.render('adminfees', {month: req.query.month, cell: cell});
+  });
+});
+
+router.get('/detail', function (req, res, next) {
+  AdminFee.find(req.query).sort({create_at: -1}).exec(function (err, adminfees) {
+    if (err) {
+      return res.status(400).send("err in get /adminfees/detail");
+    } else {
+      return res.status(200).json(adminfees);
+    }
   });
 });
 
@@ -86,6 +96,16 @@ router.post('/', function (req, res, next) {
   AdminFee.create(req.body, function (err, adminfee) {
     if (err) {
       return res.status(400).send("err in post /adminfee");
+    } else {
+      return res.status(200).json(adminfee);
+    }
+  });
+});
+
+router.post('/delete/:_id', function (req, res, next) {
+  AdminFee.findByIdAndRemove(req.params._id, function (err, adminfee) {
+    if (err) {
+      return res.status(400).send("err in post /adminfees/delete/:_id");
     } else {
       return res.status(200).json(adminfee);
     }

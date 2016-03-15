@@ -22,7 +22,107 @@
             }
             window.location.href = "/adminfees?month=" + month;
           });
+
+          var myTable = document.getElementById("myTable");
+          for (var j = 0; j < myTable.rows[1].cells.length - 1; j++) {
+            myTable.rows[1].cells[j].onclick = (function (j) {
+              return function () {
+                var query = {month: window.location.href.split('?')[1].substring(6, 13)};
+                var ch;
+                switch (j) {
+                  case 0:
+                    query.detail = 'rent';
+                    ch = '房租';
+                    break;
+                  case 1:
+                    query.detail = 'property';
+                    ch = '物业费';
+                    break;
+                  case 2:
+                    query.detail = 'social';
+                    ch = '社保';
+                    break;
+                  case 3:
+                    query.detail = 'tax';
+                    ch = '税款';
+                    break;
+                  case 4:
+                    query.detail = 'utilities';
+                    ch = '水电费';
+                    break;
+                  case 5:
+                    query.detail = 'salary';
+                    ch = '工资';
+                    break;
+                  case 6:
+                    query.detail = 'telebill';
+                    ch = '电话费';
+                    break;
+                  case 7:
+                    query.detail = 'carrage';
+                    ch = '运费';
+                    break;
+                  case 8:
+                    query.detail = 'company';
+                    ch = '公司运营费';
+                    break;
+                  case 9:
+                    query.detail = 'birthday';
+                    ch = '聚餐及生日';
+                    break;
+                  case 10:
+                    query.detail = 'gas';
+                    ch = '加油卡';
+                    break;
+                  case 11:
+                    query.detail = 'interest';
+                    ch = '银行利息';
+                    break;
+                  case 12:
+                    query.detail = 'reserved';
+                    ch = '公积金';
+                    break;
+                  case 14:
+                    query.detail = 'others';
+                    ch = '其他';
+                    break;
+                }
+                //alert(JSON.stringify(query));
+                $.get("/adminfees/detail", query, function (adminfees) {
+                  var dvHtml = "<tr class=\"info\">" +
+                    "<th>月份</th>" +
+                    "<th>项目</th>" +
+                    "<th>金额</th>" +
+                    "<th>备注</th>" +
+                    "<th>创建时间</th>" +
+                    "<th>操作</th>" +
+                  "</tr>";
+                  adminfees.forEach(function (adminfee) {
+                    var date = new Date(adminfee.create_at);
+                    var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+                    dvHtml += "<tr>" + 
+                      "<td>" + query.month + "</td>" +
+                      "<td>" + ch + "</td>" + 
+                      "<td>" + adminfee.money + "</td>" + 
+                      "<td>" + adminfee.comment + "</td>" + 
+                      "<td>" + dateStr + "</td>" +
+                      "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + adminfee._id + "')\">删除</button></td>" +
+                    "</tr>";
+                  });
+                  $("#detailTable").html(dvHtml);
+                });
+              };
+            }(j));
+          }
         });
+
+        function myDelete(_id) {
+          //alert(_id);
+          $.post("/adminfees/delete/" + _id, function (adminfee) {
+            window.location.href = "/adminfees";
+            alert("删除成功！");
+          })
+        }
       </script>
 
     </head>
@@ -60,7 +160,7 @@
             </div>
           </form>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="myTable">
           <tr class="info">
             <th>房租</th>
             <th>物业费</th>
@@ -97,6 +197,8 @@
             <td><%= cell[14] %></td>
             <td><%= cell[15] %></td>
           </tr>
+        </table>
+        <table class="table table-bordered" id="detailTable">
         </table>
         <p class="text-center text-muted">
           © 版权所有 南京杰世欣计算机科技有限公司

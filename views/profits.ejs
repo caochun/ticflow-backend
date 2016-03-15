@@ -31,7 +31,80 @@
             }
             window.location.href = "/profits?month=" + month + "&factor=" + factor;
           });
+
+          var myTable = document.getElementById("myTable");
+          for (var i = 1; i < myTable.rows.length - 1; i++) {
+            for (var j = 1; j < myTable.rows[i].cells.length - 2; j++) {
+              myTable.rows[i].cells[j].onclick = (function (i, j) {
+                return function () {
+                  var query = {month: window.location.href.split('?')[1].substring(6, 13),
+                    saler: myTable.rows[i].cells[0].innerHTML};
+                  var ch;
+                  switch (j) {
+                    case 1:
+                      query.detail = 'profit';
+                      ch = '利润';
+                      break;
+                    case 2:
+                      query.detail = 'travel';
+                      ch = '差旅费';
+                      break;
+                    case 3:
+                      query.detail = 'entertainment';
+                      ch = '招待费';
+                      break;
+                    case 4:
+                      query.detail = 'bidding';
+                      ch = '投标费';
+                      break;
+                    case 5:
+                      query.detail = 'brokerage';
+                      ch = '佣金';
+                      break;
+                    case 6:
+                      query.detail = 'others';
+                      ch = '其他';
+                      break;
+                  }
+                  //alert(JSON.stringify(query));
+                  $.get("/profits/detail", query, function (profits) {
+                    var dvHtml = "<tr class=\"info\">" +
+                      "<th>月份</th>" +
+                      "<th>销售人员</th>" +
+                      "<th>项目</th>" +
+                      "<th>金额</th>" +
+                      "<th>备注</th>" +
+                      "<th>创建时间</th>" +
+                      "<th>操作</th>" +
+                    "</tr>";
+                    profits.forEach(function (profit) {
+                      var date = new Date(profit.create_at);
+                      var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+                      dvHtml += "<tr>" + 
+                        "<td>" + query.month + "</td>" +
+                        "<td>" + query.saler + "</td>" + 
+                        "<td>" + ch + "</td>" + 
+                        "<td>" + profit.money + "</td>" + 
+                        "<td>" + profit.comment + "</td>" + 
+                        "<td>" + dateStr + "</td>" +
+                        "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + profit._id + "')\">删除</button></td>" +
+                      "</tr>";
+                    });
+                    $("#detailTable").html(dvHtml);
+                  });
+                };
+              }(i, j));
+            }
+          }
         });
+
+        function myDelete(_id) {
+          //alert(_id);
+          $.post("/profits/delete/" + _id, function (profit) {
+            window.location.href = "/profits";
+            alert("删除成功！");
+          })
+        }
       </script>
 
     </head>
@@ -74,7 +147,7 @@
             </div>
           </form>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="myTable">
           <tr class="info">
             <th>姓名</th>
             <th>利润（系统毛利）</th>
@@ -110,6 +183,8 @@
             <td><%= total[6] %></td>
             <td><%= total[7].toFixed(2) %></td>
           </tr>
+        </table>
+        <table class="table table-bordered" id="detailTable">
         </table>
         <p class="text-center text-muted">
           © 版权所有 南京杰世欣计算机科技有限公司
