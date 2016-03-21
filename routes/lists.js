@@ -112,7 +112,7 @@ router.get('/totalvalue', function (req, res) {
 });
 
 router.get('/clientinfo', function (req, res) {
-	List.find().sort({date: -1}).select('client').exec(function (err, lists) {
+	List.find().sort({'client.name': 1}).select('client').exec(function (err, lists) {
 		if (err) {
 			return res.status(400).send("err in get /lists/clientinfo");
 		} else {
