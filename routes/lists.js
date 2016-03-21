@@ -53,6 +53,14 @@ router.get('/', function (req, res) {
 				return res.status(200).json(lists);
 			}
 		});
+	} else {
+		List.find(req.query).select('client saler engineer date').skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
+			if (err) {
+				return res.status(400).send("err in get /lists");
+			} else {
+				return res.status(200).json(lists);
+			}
+		});
 	}
 });
 
