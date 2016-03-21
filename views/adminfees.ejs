@@ -25,6 +25,7 @@
 
           var myTable = document.getElementById("myTable");
           for (var j = 0; j < myTable.rows[1].cells.length - 1; j++) {
+            if (j == 13) continue; //总经理支出
             myTable.rows[1].cells[j].onclick = (function (j) {
               return function () {
                 var query = {month: window.location.href.split('?')[1].substring(6, 13)};
