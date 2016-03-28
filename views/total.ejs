@@ -9,29 +9,29 @@
       <script src="/javascripts/bootstrap.js"></script>
 
       <script>
-        $(document).ready(function(){
-          $("#btnGenerate").click(function (e) {
-            var month = $("#month").val();
-            var factor = $("#factor").val();
-            if (!month) {
-              alert("请输入月份！");
-              return;
-            }
-            if (!/^(\d{4}-\d{2})$/.test(month)) {
-              alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
-              return;
-            }
-            if (!factor) {
-              alert("请输入利润系数！");
-              return;
-            }
-            if (isNaN(factor)) {
-              alert("利润系数不合法！");
-              return;
-            }
-            window.location.href = "/total?month=" + month + "&factor=" + factor;
-          });
-        });
+        // $(document).ready(function(){
+        //   $("#btnGenerate").click(function (e) {
+        //     var month = $("#month").val();
+        //     var factor = $("#factor").val();
+        //     if (!month) {
+        //       alert("请输入月份！");
+        //       return;
+        //     }
+        //     if (!/^(\d{4}-\d{2})$/.test(month)) {
+        //       alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+        //       return;
+        //     }
+        //     if (!factor) {
+        //       alert("请输入利润系数！");
+        //       return;
+        //     }
+        //     if (isNaN(factor)) {
+        //       alert("利润系数不合法！");
+        //       return;
+        //     }
+        //     window.location.href = "/total?month=" + month + "&factor=" + factor;
+        //   });
+        // });
       </script>
 
     </head>
@@ -52,6 +52,7 @@
               <li><a href="/adminfees">行政管理费用统计</a></li>
               <li><a href="/managefees">总经办支出</a></li>
               <li><a href="/total">合计</a></li>
+              <li><a href="/cashflow">现金流水</a></li>
             </ul>
           </div>
         </div>
@@ -70,22 +71,20 @@
             <div class="form-group pull-right">
               <label><h4>利润系数 : &nbsp; </h4></label>
               <input id="factor" type="text" class="form-control" value=<%= factor %>>
-              <button type="button" class="btn btn-primary" id="btnGenerate">生成</button>
+              <!-- <button type="button" class="btn btn-primary" id="btnGenerate">生成</button> -->
             </div>
           </form>
         </div>
         <table class="table table-bordered">
           <tr class="info">
             <th>月度毛利</th>
-            <th>月度纯利</th>
             <th>行政管理费用</th>
             <th>月度利润</th>
           </tr>
           <tr>
             <td><%= gross %></td>
-            <td><%= (gross * factor).toFixed(2) %></td>
             <td><%= expend %></td>
-            <td><%= gross * factor - expend %></td>
+            <td><%= gross - expend %></td>
           </tr>
         </table>
         <p class="text-center text-muted">

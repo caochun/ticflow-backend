@@ -5,24 +5,32 @@ var eventproxy = require('eventproxy');
 
 var User = require('../models/User.js');
 var Profit = require('../models/Profit.js');
+var Factor = require('../models/Factor.js');
 
 router.get('/', function (req, res, next) {
   if (!req.session.user || req.session.user.role !== 'treasurer') {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
-  if (!req.query.month) {
+  if (!req.query.month && !req.query.factor) {
     var now = new Date();
     var month = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2);
-    return res.redirect('/profits?month=' + month + '&factor=0.85');
+    Factor.findOne({id: "default"}, function (err, factor) {
+      return res.redirect('/profits?month=' + month + '&factor=' + factor.value);
+    });
   }
   var ep = new eventproxy();
+  Factor.findOneAndUpdate({id: "default"}, {value: req.query.factor}, function (err, factor) {
+    ep.emit('factor');
+  });
   var salers = [];
-  User.find({role: 'saler'}).sort({id: -1}).exec(function (err, users) {
-    users.forEach(function (entry) {
-        salers.push(entry.id);
+  ep.on('factor', function () {
+    User.find({role: 'saler'}).sort({id: -1}).exec(function (err, users) {
+      users.forEach(function (entry) {
+          salers.push(entry.id);
+      });
+      ep.emit('salers');
     });
-    ep.emit('salers');
   });
   var cells = [];
   ep.on('salers', function () {

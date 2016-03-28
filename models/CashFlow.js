@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 
-var ProfitSchema = new mongoose.Schema({ //毛利
+var CashFlowSchema = new mongoose.Schema({ //现金流水
   month: String,
-  saler: String,
   detail: {
     type: String,
-    enum: ['profit', 'travel', 'entertainment', 'bidding', 'brokerage', 'others'],
+    enum: ['income', 'expense'],
   },
   money: Number,
   comment: String,
@@ -19,4 +18,4 @@ var ProfitSchema = new mongoose.Schema({ //毛利
   },
 });
 
-module.exports = mongoose.model('Profit', ProfitSchema);
+module.exports = mongoose.model('CashFlow', CashFlowSchema);

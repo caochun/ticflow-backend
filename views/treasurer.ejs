@@ -19,16 +19,28 @@
               });
               $("#dvDetail2").hide();
               $("#dvUsage").hide();
+              $("#dvDetail3").hide();
             } else if ($(this).val() === "admin") {
               $("#dvSaler").hide();
               $("#dvDetail1").hide();
               $("#dvDetail2").show();
               $("#dvUsage").hide();
-            } else { // "manager"
+              $("#dvDetail3").hide();
+            } else if ($(this).val() === "manager") {
               $("#dvSaler").hide();
               $("#dvDetail1").hide();
               $("#dvDetail2").hide();
               $("#dvUsage").show();
+              $("#dvDetail3").hide();
+            } else { //cashflow
+              $("#dvSaler").hide();
+              $("#dvDetail1").hide();
+              $("#dvDetail2").hide();
+              $("#dvUsage").hide();
+              $("#dvDetail3").show();
+              $("#detail3 option").each(function () {
+                this.selected = (this.text == "支出");
+              });
             }
           });
 
@@ -61,6 +73,8 @@
               }
 
               $.post("/profits", {month: month, saler: saler, detail: detail, money: money, comment: comment}, function (profit) {
+                $("#money").val("");
+                $("#comment").val("");
                 alert("创建成功！");
               });
 
@@ -90,11 +104,12 @@
                 return;
               }
               $.post("/adminfees", {month: month, detail: detail, money: money, comment: comment}, function (adminfee) {
+                $("#detail2").val("");
+                $("#money").val("");
+                $("#comment").val("");
                 alert("创建成功！");
               });
-
-            }
-            else {
+            } else if ($("#type").val() === "manager") {
               var month = $("#month").val();
               var usage = $("#usage").val();
               var money = $("#money").val();
@@ -120,6 +135,39 @@
                 return;
               }
               $.post("/managefees", {month: month, usage: usage, money: money, comment: comment}, function (managefee) {
+                $("#usage").val("");
+                $("#money").val("");
+                $("#comment").val("");
+                alert("创建成功！");
+              });
+            } else { //cashflow
+              var month = $("#month").val();
+              var detail = $("#detail3").val();
+              var money = $("#money").val();
+              var comment = $("#comment").val();
+              if (!month) {
+                alert("请输入月份！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2})$/.test(month)) {
+                alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+                return;
+              }
+              if (!detail) {
+                alert("请选择项目！");
+                return;
+              }
+              if (!money) {
+                alert("请输入金额！");
+                return;
+              }
+              if (isNaN(money)) {
+                alert("金额不合法！");
+                return;
+              }
+              $.post("/cashflow", {month: month, detail: detail, money: money, comment: comment}, function (cashflow) {
+                $("#money").val("");
+                $("#comment").val("");
                 alert("创建成功！");
               });
             }
@@ -145,6 +193,7 @@
               <li><a href="/adminfees">行政管理费用统计</a></li>
               <li><a href="/managefees">总经办支出</a></li>
               <li><a href="/total">合计</a></li>
+              <li><a href="/cashflow">现金流水</a></li>
             </ul>
           </div>
         </div>
@@ -161,6 +210,7 @@
                 <option value="profit">毛利</option>
                 <option value="admin">行政管理费用</option>
                 <option value="manager">总经办支出</option>
+                <option value="cashflow">现金流水</option>
               </select>
             </div>
           </div>
@@ -224,6 +274,15 @@
             <label class="col-sm-4 control-label">用途</label>
             <div class="col-sm-8">
               <input id="usage" class="form-control">
+            </div>
+          </div>
+          <div id="dvDetail3" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">项目</label>
+            <div class="col-sm-8">
+              <select id="detail3" class="form-control">
+                <option value="expense">支出</option>
+                <option value="income">收入</option>
+              </select>
             </div>
           </div>
           <div class="form-group">

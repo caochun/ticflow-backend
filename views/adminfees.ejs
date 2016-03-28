@@ -120,8 +120,8 @@
         function myDelete(_id) {
           //alert(_id);
           $.post("/adminfees/delete/" + _id, function (adminfee) {
-            window.location.href = "/adminfees";
             alert("删除成功！");
+            window.location.href = "/adminfees";
           })
         }
       </script>
@@ -144,6 +144,7 @@
               <li><a href="/adminfees">行政管理费用统计</a></li>
               <li><a href="/managefees">总经办支出</a></li>
               <li><a href="/total">合计</a></li>
+              <li><a href="/cashflow">现金流水</a></li>
             </ul>
           </div>
         </div>

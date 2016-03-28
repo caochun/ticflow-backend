@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var AdminFeeSchema = new mongoose.Schema({
+var AdminFeeSchema = new mongoose.Schema({ //行政管理费用
   month: String,
   detail: {
     type: String,
@@ -11,6 +11,10 @@ var AdminFeeSchema = new mongoose.Schema({
   create_at: {
     type: Date,
     default: Date.now,
+  },
+  dlt: {
+    type: Boolean,
+    default: false,
   },
 });
 

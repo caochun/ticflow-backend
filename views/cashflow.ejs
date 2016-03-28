@@ -20,15 +20,15 @@
               alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
               return;
             }
-            window.location.href = "/managefees?month=" + month;
+            window.location.href = "/cashflow?month=" + month;
           });
         });
 
         function myDelete(_id) {
           //alert(_id);
-          $.post("/managefees/delete/" + _id, function (managefee) {
+          $.post("/cashflow/delete/" + _id, function (cashflow) {
             alert("删除成功！");
-            window.location.href = "/managefees";
+            window.location.href = "/cashflow";
           })
         }
       </script>
@@ -72,22 +72,23 @@
         <table class="table table-bordered">
           <tr class="info">
             <th>月份</th>
-            <th>用途</th>
+            <th>项目</th>
             <th>金额</th>
             <th>备注</th>
             <th>创建时间</th>
             <th>操作</th>
           </tr>
-          <% managefees.forEach(function (managefee) { %>
-          <% var date = new Date(managefee.create_at);
-             var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2); %>
+          <% cashflow.forEach(function (entry) { %>
+          <% var date = new Date(entry.create_at);
+             var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+             var detail = entry.detail === "expense" ? "支出" : "收入"; %>
           <tr>
             <td><%= month %></td>
-            <td><%= managefee.usage %></td>
-            <td><%= managefee.money %></td>
-            <td><%= managefee.comment %></td>
+            <td><%= detail %></td>
+            <td><%= entry.money %></td>
+            <td><%= entry.comment %></td>
             <td><%= dateStr %></td>
-            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+managefee._id+"')"%>">删除</button></td>
+            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+entry._id+"')"%>">删除</button></td>
           </tr>
           <% }); %>
         </table>

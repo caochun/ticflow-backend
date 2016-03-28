@@ -15,6 +15,7 @@ var profits = require('./routes/profits');
 var adminfees = require('./routes/adminfees');
 var managefees = require('./routes/managefees');
 var total = require('./routes/total');
+var cashflow = require('./routes/cashflow');
 
 //app router
 var users = require('./routes/users');
@@ -74,6 +75,7 @@ app.use('/profits', profits);
 app.use('/adminfees', adminfees);
 app.use('/managefees', managefees);
 app.use('/total', total);
+app.use('/cashflow', cashflow);
 
 app.use('/users', users);
 app.use('/lists', lists);
