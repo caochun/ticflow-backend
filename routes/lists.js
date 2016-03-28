@@ -54,6 +54,12 @@ router.get('/', function (req, res) {
 			}
 		});
 	} else {
+		var clientname = req.query['client.name'];
+		if (clientname) {
+			var regexp = new RegExp("^" + clientname);
+			req.query['client.name'] = regexp;
+		}
+
 		List.find(req.query).select('client saler engineer date').skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
