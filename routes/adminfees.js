@@ -18,50 +18,65 @@ router.get('/', function (req, res, next) {
   }
   var ep = new eventproxy();
   var cell = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var flag = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
   AdminFee.find({month: req.query.month}).exec(function (err, adminfees) {
     adminfees.forEach(function (adminfee) {
       switch (adminfee.detail) {
         case 'rent':
           cell[0] += adminfee.money;
+          flag[0] = flag[0] || adminfee.dlt;
           break;
         case 'property':
           cell[1] += adminfee.money;
+          flag[1] = flag[1] || adminfee.dlt;
           break;
         case 'social':
           cell[2] += adminfee.money;
+          flag[2] = flag[2] || adminfee.dlt;
           break;
         case 'tax':
           cell[3] += adminfee.money;
+          flag[3] = flag[3] || adminfee.dlt;
           break;
         case 'utilities':
           cell[4] += adminfee.money;
+          flag[4] = flag[4] || adminfee.dlt;
           break;
         case 'salary':
           cell[5] += adminfee.money;
+          flag[5] = flag[5] || adminfee.dlt;
           break;
         case 'telebill':
           cell[6] += adminfee.money;
+          flag[6] = flag[6] || adminfee.dlt;
           break;
         case 'carriage':
           cell[7] += adminfee.money;
+          flag[7] = flag[7] || adminfee.dlt;
           break;
         case 'company':
           cell[8] += adminfee.money;
+          flag[8] = flag[8] || adminfee.dlt;
           break;
         case 'birthday':
           cell[9] += adminfee.money;
+          flag[9] = flag[9] || adminfee.dlt;
           break;
         case 'gas':
           cell[10] += adminfee.money;
+          flag[10] = flag[10] || adminfee.dlt;
           break;
         case 'interest':
           cell[11] += adminfee.money;
+          flag[11] = flag[11] || adminfee.dlt;
           break;
         case 'reserved':
           cell[12] += adminfee.money;
+          flag[12] = flag[12] || adminfee.dlt;
           break;
         case 'others':
           cell[14] += adminfee.money;
+          flag[14] = flag[14] || adminfee.dlt;
           break;
       }
     });
@@ -78,7 +93,10 @@ router.get('/', function (req, res, next) {
   ep.all('adminfee', 'managefee', function () {
     cell.push(cell[0] + cell[1] + cell[2] + cell[3] + cell[4] + cell[5] + cell[6] + cell[7] +
       cell[8] + cell[9] + cell[10] + cell[11] + cell[12] + cell[13] + cell[14]);
-    res.render('adminfees', {month: req.query.month, cell: cell});
+    for (var i = 0; i < 15; i++) {
+      flag[i] = flag[i] && (req.session.user.role === 'admin');
+    }
+    res.render('adminfees', {month: req.query.month, cell: cell, flag: flag});
   });
 });
 

@@ -33,37 +33,49 @@ router.get('/', function (req, res, next) {
     });
   });
   var cells = [];
+  var flags = [];
   ep.on('salers', function () {
     for (var i = 0; i < salers.length; i++) {
       ep.on('saler' + i, (function (i) {
         return function () {
           Profit.find({month: req.query.month, saler: salers[i]}).exec(function (err, profits) {
             var cell = [0, 0, 0, 0, 0, 0];
+            var flag = [false, false, false, false, false, false];
             profits.forEach(function (profit) {
               switch (profit.detail) {
                 case 'profit':
                   cell[0] += profit.money;
+                  flag[0] = flag[0] || profit.dlt;
                   break;
                 case 'travel':
                   cell[1] += profit.money;
+                  flag[1] = flag[1] || profit.dlt;
                   break;
                 case 'entertainment':
                   cell[2] += profit.money;
+                  flag[2] = flag[2] || profit.dlt;
                   break;
                 case 'bidding':
                   cell[3] += profit.money;
+                  flag[3] = flag[3] || profit.dlt;
                   break;
                 case 'brokerage':
                   cell[4] += profit.money;
+                  flag[4] = flag[4] || profit.dlt;
                   break;
                 case 'others':
                   cell[5] += profit.money;
+                  flag[5] = flag[5] || profit.dlt;
                   break;
               }
             });
             cell.push(cell[0] - cell[1] - cell[2] - cell[3] - cell[4] - cell[5]);
             cell.push(cell[6] * req.query.factor);
             cells.push(cell);
+            for (var j = 0; j < 6; j ++) {
+              flag[j] = flag[j] && (req.session.user.role === 'admin');
+            }
+            flags.push(flag);
             ep.emit('saler' + (i + 1));
             ep.emit('cell');
           });
@@ -84,7 +96,7 @@ router.get('/', function (req, res, next) {
         total[6] += cell[6];
         total[7] += cell[7];
       });
-      res.render('profits', {salers: salers, cells: cells, total: total, month: req.query.month, factor: req.query.factor});
+      res.render('profits', {salers: salers, cells: cells, flags: flags, total: total, month: req.query.month, factor: req.query.factor});
     });
   });
 });
