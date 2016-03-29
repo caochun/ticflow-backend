@@ -13,6 +13,7 @@ var ProfitSchema = new mongoose.Schema({ //毛利
     type: Date,
     default: Date.now,
   },
+  serial_number: String,
   dlt: {
     type: Boolean,
     default: false,

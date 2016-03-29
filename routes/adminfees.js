@@ -5,6 +5,7 @@ var eventproxy = require('eventproxy');
 
 var AdminFee = require('../models/AdminFee.js');
 var ManageFee = require ('../models/ManageFee.js');
+var SerialNumber = require('../models/SerialNumber.js');
 
 router.get('/', function (req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
@@ -111,12 +112,35 @@ router.get('/detail', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  AdminFee.create(req.body, function (err, adminfee) {
-    if (err) {
-      return res.status(400).send("err in post /adminfee");
+  var now = new Date();
+  var date = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2);
+
+  var number = 0;
+  var ep = new eventproxy();
+
+  SerialNumber.findOne({id: "adminfee", date: date}, function (err, serialnumber) {
+    if (!serialnumber) {
+      number = 1;
+      SerialNumber.create({id: "adminfee", date: date, value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
     } else {
-      return res.status(200).json(adminfee);
+      number = serialnumber.value + 1;
+      SerialNumber.findOneAndUpdate({id: "adminfee", date: date}, {value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
     }
+  });
+
+  ep.on('number', function () {
+    req.body.serial_number = "XZ" + date + ("00" + number).slice(-3);
+    AdminFee.create(req.body, function (err, adminfee) {
+      if (err) {
+        return res.status(400).send("err in post /adminfees");
+      } else {
+        return res.status(200).json(adminfee);
+      }
+    });
   });
 });
 

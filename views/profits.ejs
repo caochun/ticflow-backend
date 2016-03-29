@@ -70,6 +70,7 @@
                   $.get("/profits/detail", query, function (profits) {
                     var dvHtml = "<tr class=\"info\">" +
                       "<th>月份</th>" +
+                      "<th>编号</th>" +
                       "<th>销售人员</th>" +
                       "<th>项目</th>" +
                       "<th>金额</th>" +
@@ -82,6 +83,7 @@
                       var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
                       dvHtml += "<tr>" + 
                         "<td>" + query.month + "</td>" +
+                        "<td>" + profit.serial_number + "</td>" +
                         "<td>" + query.saler + "</td>" + 
                         "<td>" + ch + "</td>" + 
                         "<td>" + profit.money + "</td>" + 

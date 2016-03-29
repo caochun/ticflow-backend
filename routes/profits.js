@@ -6,6 +6,7 @@ var eventproxy = require('eventproxy');
 var User = require('../models/User.js');
 var Profit = require('../models/Profit.js');
 var Factor = require('../models/Factor.js');
+var SerialNumber = require('../models/SerialNumber.js');
 
 router.get('/', function (req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
@@ -112,12 +113,35 @@ router.get('/detail', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  Profit.create(req.body, function (err, profit) {
-    if (err) {
-      return res.status(400).send("err in post /profits");
+  var now = new Date();
+  var date = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2);
+
+  var number = 0;
+  var ep = new eventproxy();
+
+  SerialNumber.findOne({id: "profit", date: date}, function (err, serialnumber) {
+    if (!serialnumber) {
+      number = 1;
+      SerialNumber.create({id: "profit", date: date, value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
     } else {
-      return res.status(200).json(profit);
+      number = serialnumber.value + 1;
+      SerialNumber.findOneAndUpdate({id: "profit", date: date}, {value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
     }
+  });
+
+  ep.on('number', function () {
+    req.body.serial_number = "XS" + date + ("00" + number).slice(-3);
+    Profit.create(req.body, function (err, profit) {
+      if (err) {
+        return res.status(400).send("err in post /profits");
+      } else {
+        return res.status(200).json(profit);
+      }
+    });
   });
 });
 

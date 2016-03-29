@@ -88,6 +88,7 @@
         <table class="table table-bordered">
           <tr class="info">
             <th>月份</th>
+            <th>编号</th>
             <th>项目</th>
             <th>金额</th>
             <th>备注</th>
@@ -100,6 +101,7 @@
              var detail = entry.detail === "expense" ? "支出" : "收入"; %>
           <tr>
             <td><%= month %></td>
+            <td><%= entry.serial_number %></td>
             <td><%= detail %></td>
             <td><%= entry.money %></td>
             <td><%= entry.comment %></td>

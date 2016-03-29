@@ -9,6 +9,7 @@ var ManageFeeSchema = new mongoose.Schema({ //总经办支出
     type: Date,
     default: Date.now,
   },
+  serial_number: String,
   dlt: {
     type: Boolean,
     default: false,

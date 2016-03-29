@@ -12,6 +12,7 @@ var CashFlowSchema = new mongoose.Schema({ //现金流水
     type: Date,
     default: Date.now,
   },
+  serial_number: String,
   dlt: {
     type: Boolean,
     default: false,

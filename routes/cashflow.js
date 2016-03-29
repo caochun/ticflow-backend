@@ -4,6 +4,7 @@ var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
 var CashFlow = require ('../models/CashFlow.js');
+var SerialNumber = require('../models/SerialNumber.js');
 
 router.get('/', function (req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
@@ -21,12 +22,35 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  CashFlow.create(req.body, function (err, cashflow) {
-    if (err) {
-      return res.status(400).send("err in post /cashflow");
+  var now = new Date();
+  var date = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2);
+
+  var number = 0;
+  var ep = new eventproxy();
+
+  SerialNumber.findOne({id: "cashflow", date: date}, function (err, serialnumber) {
+    if (!serialnumber) {
+      number = 1;
+      SerialNumber.create({id: "cashflow", date: date, value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
     } else {
-      return res.status(200).json(cashflow);
+      number = serialnumber.value + 1;
+      SerialNumber.findOneAndUpdate({id: "cashflow", date: date}, {value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
     }
+  });
+
+  ep.on('number', function () {
+    req.body.serial_number = "XJ" + date + ("00" + number).slice(-3);
+    CashFlow.create(req.body, function (err, cashflow) {
+      if (err) {
+        return res.status(400).send("err in post /cashflow");
+      } else {
+        return res.status(200).json(cashflow);
+      }
+    });
   });
 });
 

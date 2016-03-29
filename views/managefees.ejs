@@ -89,6 +89,7 @@
         <table class="table table-bordered">
           <tr class="info">
             <th>月份</th>
+            <th>编号</th>
             <th>用途</th>
             <th>金额</th>
             <th>备注</th>
@@ -100,6 +101,7 @@
              var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2); %>
           <tr>
             <td><%= month %></td>
+            <td><%= managefee.serial_number %></td>
             <td><%= managefee.usage %></td>
             <td><%= managefee.money %></td>
             <td><%= managefee.comment %></td>

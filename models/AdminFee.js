@@ -12,6 +12,7 @@ var AdminFeeSchema = new mongoose.Schema({ //行政管理费用
     type: Date,
     default: Date.now,
   },
+  serial_number: String,
   dlt: {
     type: Boolean,
     default: false,
