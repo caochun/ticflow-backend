@@ -1,17 +1,42 @@
 var express = require('express');
 var router = express.Router();
+var eventproxy = require('eventproxy');
 
 var mongoose = require('mongoose');
 var List = require('../models/List.js');
+var SerialNumber = require('../models/SerialNumber.js');
 
 router.post('/', function (req, res) {
-	List.create(req.body, function (err, list) {
-		if (err) {
-			return res.status(400).send("err in post /lists");
-		} else {
-			return res.status(200).json(list);
-		}
-	});
+	var now = new Date();
+  var date = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2);
+
+  var number = 0;
+  var ep = new eventproxy();
+
+  SerialNumber.findOne({id: "list", date: date}, function (err, serialnumber) {
+    if (!serialnumber) {
+      number = 1;
+      SerialNumber.create({id: "list", date: date, value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
+    } else {
+      number = serialnumber.value + 1;
+      SerialNumber.findOneAndUpdate({id: "list", date: date}, {value: number}, function (err, serialnumber) {
+        ep.emit('number');
+      });
+    }
+  });
+
+  ep.on('number', function () {
+    req.body.serial_number = date + ("00" + number).slice(-3);
+    List.create(req.body, function (err, list) {
+      if (err) {
+        return res.status(400).send("err in post /lists");
+      } else {
+        return res.status(200).json(list);
+      }
+    });
+  });
 });
 
 router.get('/', function (req, res) {

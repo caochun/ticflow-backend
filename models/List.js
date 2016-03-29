@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var ListSchema = new mongoose.Schema({
+	serial_number: String,
 
 	client: { //客户信息
 		unit: String,
