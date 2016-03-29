@@ -6,7 +6,7 @@ var eventproxy = require('eventproxy');
 var CashFlow = require ('../models/CashFlow.js');
 
 router.get('/', function (req, res, next) {
-  if (!req.session.user || req.session.user.role !== 'treasurer') {
+  if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
@@ -31,13 +31,23 @@ router.post('/', function (req, res, next) {
 });
 
 router.post('/delete/:_id', function (req, res, next) {
-  CashFlow.findByIdAndRemove(req.params._id, function (err, cashflow) {
-    if (err) {
-      return res.status(400).send("err in post /cashflow/delete/:_id");
-    } else {
-      return res.status(200).json(cashflow);
-    }
-  });
+  if (req.session.user.role === 'treasurer') {
+    CashFlow.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, cashflow) {
+      if (err) {
+        return res.status(400).send("err in post /cashflow/delete/:_id");
+      } else {
+        return res.status(200).json(cashflow);
+      }
+    });
+  } else {
+    CashFlow.findByIdAndRemove(req.params._id, function (err, cashflow) {
+      if (err) {
+        return res.status(400).send("err in post /cashflow/delete/:_id");
+      } else {
+        return res.status(200).json(cashflow);
+      }
+    });
+  }
 });
 
 module.exports = router;

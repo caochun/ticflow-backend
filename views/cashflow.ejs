@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-      <title>总经办支出</title>
+      <title>现金流水</title>
       <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
       <link rel='stylesheet' href='/stylesheets/style.css'/>
 
@@ -25,9 +25,11 @@
         });
 
         function myDelete(_id) {
-          //alert(_id);
           $.post("/cashflow/delete/" + _id, function (cashflow) {
-            alert("删除成功！");
+            if ('<%= user.role %>' === 'treasurer')
+              alert("已发送删除申请！");
+            else
+              alert("删除成功！");
             window.location.href = "/cashflow";
           })
         }
@@ -46,12 +48,26 @@
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+              <% if (user.role === 'treasurer') { %>
               <li><a href="/treasurer">新建财报</a></li>
+              <% } %>
               <li><a href="/profits">毛利统计</a></li>
               <li><a href="/adminfees">行政管理费用统计</a></li>
               <li><a href="/managefees">总经办支出</a></li>
               <li><a href="/total">合计</a></li>
               <li><a href="/cashflow">现金流水</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <% if (user.role === 'treasurer') { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">财务 (<%= user.id %>)<span class="caret"></span></a>
+                <% } else { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理员 (<%= user.id %>)<span class="caret"></span></a>
+                <% } %>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">登出</a></li>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>
@@ -88,7 +104,15 @@
             <td><%= entry.money %></td>
             <td><%= entry.comment %></td>
             <td><%= dateStr %></td>
+            <% if (user.role === 'treasurer' && !entry.dlt) { %>
             <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+entry._id+"')"%>">删除</button></td>
+            <% } else if (user.role === 'treasurer' && entry.dlt) { %>
+            <td><button class="btn btn-danger btn-sm" disabled>删除</button></td>
+            <% } else if (user.role === 'admin' && entry.dlt) { %>
+            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+entry._id+"')"%>">通过</button></td>
+            <% } else { %>
+            <td><button class="btn btn-danger btn-sm" disabled>通过</button></td>
+            <% } %>
           </tr>
           <% }); %>
         </table>

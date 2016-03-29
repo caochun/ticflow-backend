@@ -11,7 +11,7 @@ var AdminFee = require('../models/AdminFee.js');
 var ManageFee = require ('../models/ManageFee.js');
 
 router.get('/', function (req, res, next) {
-  if (!req.session.user || req.session.user.role !== 'treasurer') {
+  if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }

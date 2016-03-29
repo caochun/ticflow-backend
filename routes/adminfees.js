@@ -7,7 +7,7 @@ var AdminFee = require('../models/AdminFee.js');
 var ManageFee = require ('../models/ManageFee.js');
 
 router.get('/', function (req, res, next) {
-  if (!req.session.user || req.session.user.role !== 'treasurer') {
+  if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
@@ -103,13 +103,23 @@ router.post('/', function (req, res, next) {
 });
 
 router.post('/delete/:_id', function (req, res, next) {
-  AdminFee.findByIdAndRemove(req.params._id, function (err, adminfee) {
-    if (err) {
-      return res.status(400).send("err in post /adminfees/delete/:_id");
-    } else {
-      return res.status(200).json(adminfee);
-    }
-  });
+  if (req.session.user.role === 'treasurer') {
+    AdminFee.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, adminfee) {
+      if (err) {
+        return res.status(400).send("err in post /adminfees/delete/:_id");
+      } else {
+        return res.status(200).json(adminfee);
+      }
+    });
+  } else {
+    AdminFee.findByIdAndRemove(req.params._id, function (err, adminfee) {
+      if (err) {
+        return res.status(400).send("err in post /adminfees/delete/:_id");
+      } else {
+        return res.status(200).json(adminfee);
+      }
+    });
+  }
 });
 
 module.exports = router;

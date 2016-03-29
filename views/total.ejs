@@ -7,33 +7,6 @@
 
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
-
-      <script>
-        // $(document).ready(function(){
-        //   $("#btnGenerate").click(function (e) {
-        //     var month = $("#month").val();
-        //     var factor = $("#factor").val();
-        //     if (!month) {
-        //       alert("请输入月份！");
-        //       return;
-        //     }
-        //     if (!/^(\d{4}-\d{2})$/.test(month)) {
-        //       alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
-        //       return;
-        //     }
-        //     if (!factor) {
-        //       alert("请输入利润系数！");
-        //       return;
-        //     }
-        //     if (isNaN(factor)) {
-        //       alert("利润系数不合法！");
-        //       return;
-        //     }
-        //     window.location.href = "/total?month=" + month + "&factor=" + factor;
-        //   });
-        // });
-      </script>
-
     </head>
 
     <header>
@@ -47,12 +20,26 @@
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+              <% if (user.role === 'treasurer') { %>
               <li><a href="/treasurer">新建财报</a></li>
+              <% } %>
               <li><a href="/profits">毛利统计</a></li>
               <li><a href="/adminfees">行政管理费用统计</a></li>
               <li><a href="/managefees">总经办支出</a></li>
               <li><a href="/total">合计</a></li>
               <li><a href="/cashflow">现金流水</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <% if (user.role === 'treasurer') { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">财务 (<%= user.id %>)<span class="caret"></span></a>
+                <% } else { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理员 (<%= user.id %>)<span class="caret"></span></a>
+                <% } %>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">登出</a></li>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>

@@ -24,8 +24,11 @@ router.post('/login', function (req, res, next) {
     } else if (user.role === 'treasurer') {
       req.session.user = user;
       return res.redirect('/treasurer');
+    } else if (user.role === 'admin') {
+      req.session.user = user;
+      return res.redirect('/profits');
     } else {
-      req.flash('error', "非派单员或财务员不能登录！");
+      req.flash('error', "仅派单员、管理员、财务可登陆");
       return res.redirect('/login');
     }
   });

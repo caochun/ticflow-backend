@@ -8,7 +8,7 @@ var Profit = require('../models/Profit.js');
 var Factor = require('../models/Factor.js');
 
 router.get('/', function (req, res, next) {
-  if (!req.session.user || req.session.user.role !== 'treasurer') {
+  if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
@@ -110,13 +110,23 @@ router.post('/', function (req, res, next) {
 });
 
 router.post('/delete/:_id', function (req, res, next) {
-  Profit.findByIdAndRemove(req.params._id, function (err, profit) {
-    if (err) {
-      return res.status(400).send("err in post /profits/delete/:_id");
-    } else {
-      return res.status(200).json(profit);
-    }
-  });
+  if (req.session.user.role === 'treasurer') {
+    Profit.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, profit) {
+      if (err) {
+        return res.status(400).send("err in post /profits/delete/:_id");
+      } else {
+        return res.status(200).json(profit);
+      }
+    });
+  } else {
+    Profit.findByIdAndRemove(req.params._id, function (err, profit) {
+      if (err) {
+        return res.status(400).send("err in post /profits/delete/:_id");
+      } else {
+        return res.status(200).json(profit);
+      }
+    });
+  }
 });
 
 module.exports = router;
