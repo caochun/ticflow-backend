@@ -49,7 +49,7 @@ router.get('/', function (req, res) {
   var clientname = req.query['client.name'];
 
 	if (!clientname) {
-		List.find(req.query).select('serial_number client saler engineer date').skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
+		List.find(req.query).select('serial_number client saler engineer date acceptTime completeTime checkTime').skip(page * limit).limit(limit).sort({date: -1}).exec(function (err, lists) {
 			if (err) {
 				return res.status(400).send("err in get /lists");
 			} else {
