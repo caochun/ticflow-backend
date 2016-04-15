@@ -7,17 +7,18 @@
 
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
+      <script src="/javascripts/bootbox.js"></script>
 
       <script>
         $(document).ready(function(){
           $("#btnGenerate").click(function (e) {
             var month = $("#month").val();
             if (!month) {
-              alert("请输入月份！");
+              bootbox.alert("请输入月份！");
               return;
             }
             if (!/^(\d{4}-\d{2})$/.test(month)) {
-              alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+              bootbox.alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
               return;
             }
             window.location.href = "/adminfees?month=" + month;
@@ -88,7 +89,6 @@
                     ch = '其他';
                     break;
                 }
-                //alert(JSON.stringify(query));
                 $.get("/adminfees/detail", query, function (adminfees) {
                   var dvHtml = "<tr class=\"info\">" +
                     "<th>月份</th>" +
@@ -128,13 +128,15 @@
         });
 
         function myDelete(_id) {
-          //alert(_id);
           $.post("/adminfees/delete/" + _id, function (adminfee) {
+            var str;
             if ('<%= user.role %>' === 'treasurer')
-              alert("已发送删除申请！");
+              str = "已发送删除申请！";
             else
-              alert("删除成功！");
-            window.location.href = "/adminfees";
+              str = "删除成功！";
+            bootbox.alert(str, function () {
+              window.location.href = "/adminfees";
+            });
           })
         }
       </script>
