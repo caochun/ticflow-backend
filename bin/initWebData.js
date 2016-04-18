@@ -7,6 +7,7 @@ var Profit = require('../models/Profit.js');
 var AdminFee = require('../models/AdminFee.js');
 var ManageFee = require('../models/ManageFee.js');
 var CashFlow = require('../models/CashFlow.js');
+var Prestore = require('../models/Prestore.js');
 var SerialNumber = require('../models/SerialNumber.js');
 var Factor = require('../models/Factor.js');
 
@@ -44,6 +45,14 @@ CashFlow.remove(function (err) {
   }
 });
 
+Prestore.remove(function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    ep.emit('prestore');
+  }
+});
+
 SerialNumber.remove(function (err) {
   if (err) {
     console.log(err);
@@ -67,6 +76,6 @@ Factor.remove(function (err) {
   }
 });
 
-ep.all('profit', 'adminfee', 'managefee', 'cashflow', 'serialnumber', 'factor', function () {
+ep.all('profit', 'adminfee', 'managefee', 'cashflow', 'prestore', 'serialnumber', 'factor', function () {
   mongoose.connection.close();
 });

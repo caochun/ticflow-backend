@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>预存记录</title>
+      <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+      <link rel='stylesheet' href='/stylesheets/style.css'/>
+
+      <script src="/javascripts/jquery.js"></script>
+      <script src="/javascripts/bootstrap.js"></script>
+      <script src="/javascripts/bootbox.js"></script>
+
+      <script>
+        $(document).ready(function(){
+          var myTable = document.getElementById("myTable");
+          for (var i = 1; i < myTable.rows.length; i++) {
+            myTable.rows[i].onclick = (function (i) {
+              return function () {
+                var query = {saler: myTable.rows[i].cells[0].innerHTML, client: myTable.rows[i].cells[1].innerHTML,
+                  contacter: myTable.rows[i].cells[2].innerHTML};
+                $.get("/prestore/detail", query, function (prestore) {
+                  var dvHtml = "<tr class=\"info\">" +
+                    "<th>日期</th>" +
+                    "<th>编号</th>" +
+                    "<th>销售人员</th>" +
+                    "<th>客户</th>" +
+                    "<th>联系人</th>" +
+                    "<th>项目</th>" +
+                    "<th>发票号码/单号</th>" +
+                    "<th>金额</th>" +
+                    "<th>备注</th>" +
+                    "<th>创建时间</th>" +
+                    "<th>操作</th>" +
+                  "</tr>";
+                  prestore.forEach(function (entry) {
+                    var date = new Date(entry.create_at);
+                    var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+                    var detail = entry.detail == "income" ? "预存" : "<span style=\"color: #d9534f;\">冲抵</span>";
+                    dvHtml += "<tr>" + 
+                      "<td>" + entry.date + "</td>" +
+                      "<td>" + entry.serial_number + "</td>" +
+                      "<td>" + entry.saler + "</td>" + 
+                      "<td>" + entry.client + "</td>" + 
+                      "<td>" + entry.contacter + "</td>" + 
+                      "<td>" + detail + "</td>" + 
+                      "<td>" + entry.invoice_number + "</td>" + 
+                      "<td>" + entry.money.toFixed(2) + "</td>" + 
+                      "<td>" + entry.comment + "</td>" + 
+                      "<td>" + dateStr + "</td>";
+                    if ('<%= user.role %>' === 'treasurer') {
+                      dvHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
+                    } else {
+                      dvHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
+                    }
+                    dvHtml += "</tr>";
+                  });
+                  $("#detailTable").html(dvHtml);
+                });
+              };
+            }(i));
+          }
+        });
+
+        function myDelete(_id) {
+          $.post("/prestore/delete/" + _id, function (prestore) {
+            bootbox.alert("删除成功！", function () {
+              window.location.href = "/prestore";
+            });
+          });
+        }
+      </script>
+
+    </head>
+
+    <header>
+      <nav class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand">
+                <span>&nbsp杰世欣Online&nbsp</span>
+                <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <% if (user.role === 'treasurer') { %>
+              <li><a href="/treasurer">新建财报</a></li>
+              <% } %>
+              <li><a href="/profits">毛利统计</a></li>
+              <li><a href="/adminfees">行政管理费用统计</a></li>
+              <li><a href="/managefees">总经办支出</a></li>
+              <li><a href="/total">合计</a></li>
+              <li><a href="/cashflow">现金流水</a></li>
+              <li><a href="/prestore">预存记录</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <% if (user.role === 'treasurer') { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">财务 (<%= user.id %>)<span class="caret"></span></a>
+                <% } else { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理员 (<%= user.id %>)<span class="caret"></span></a>
+                <% } %>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">登出</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <body>
+      <div class="container-fluid">
+        <table class="table table-bordered" id="myTable">
+          <tr class="info">
+            <th>销售人员</th>
+            <th>客户</th>
+            <th>联系人</th>
+            <th>余额</th>
+          </tr>
+          <% data.forEach(function (entry) { %>
+          <tr>
+            <td><%= entry.saler %></td>
+            <td><%= entry.client %></td>
+            <td><%= entry.contacter %></td>
+            <td><%= entry.account.toFixed(2) %></td>
+          </tr>
+          <% }); %>
+        </table>
+
+        <table class="table table-bordered" id="detailTable">
+        </table>
+
+        <p class="text-center text-muted">
+          © 版权所有 南京杰世欣计算机科技有限公司
+        </p>
+      </div>
+    </body>
+</html>

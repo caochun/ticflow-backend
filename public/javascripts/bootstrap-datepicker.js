@@ -191,7 +191,7 @@
 				month = d.getMonth(),
 				currentDate = this.date.valueOf();
 			this.picker.find('.datepicker-days th:eq(1)')
-						.text(DPGlobal.dates.months[month]+' '+year);
+						.text(year+' '+DPGlobal.dates.months[month]);
 			var prevMonth = new Date(year, month-1, 28,0,0,0,0),
 				day = DPGlobal.getDaysInMonth(prevMonth.getFullYear(), prevMonth.getMonth());
 			prevMonth.setDate(day);
@@ -371,8 +371,8 @@
 		dates:{
 			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			daysMin: ["日", "一", "二", "三", "四", "五", "六", "日"],
+			months: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
 			monthsShort: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 		},
 		isLeapYear: function (year) {

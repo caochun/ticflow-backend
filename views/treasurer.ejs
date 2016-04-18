@@ -15,7 +15,11 @@
         $(document).ready(function(){
           $("#type").change(function () {
             if ($(this).val() === "profit") {
+              $("#dvMonth").show();
+              $("#dvDate").hide();
               $("#dvSaler").show();
+              $("#dvClient").hide();
+              $("#dvContacter").hide();
               $("#dvDetail1").show();
               $("#detail1 option").each(function () {
                 this.selected = (this.text == "利润");
@@ -23,20 +27,38 @@
               $("#dvDetail2").hide();
               $("#dvUsage").hide();
               $("#dvDetail3").hide();
+              $("#dvDetail4").hide();
+              $("#dvInvoiceNumber").hide();
             } else if ($(this).val() === "admin") {
+              $("#dvMonth").show();
+              $("#dvDate").hide();
               $("#dvSaler").hide();
+              $("#dvClient").hide();
+              $("#dvContacter").hide();
               $("#dvDetail1").hide();
               $("#dvDetail2").show();
               $("#dvUsage").hide();
               $("#dvDetail3").hide();
+              $("#dvDetail4").hide();
+              $("#dvInvoiceNumber").hide();
             } else if ($(this).val() === "manager") {
+              $("#dvMonth").show();
+              $("#dvDate").hide();
               $("#dvSaler").hide();
+              $("#dvClient").hide();
+              $("#dvContacter").hide();
               $("#dvDetail1").hide();
               $("#dvDetail2").hide();
               $("#dvUsage").show();
               $("#dvDetail3").hide();
-            } else { //cashflow
+              $("#dvDetail4").hide();
+              $("#dvInvoiceNumber").hide();
+            } else if ($(this).val() === "cashflow") {
+              $("#dvMonth").show();
+              $("#dvDate").hide();
               $("#dvSaler").hide();
+              $("#dvClient").hide();
+              $("#dvContacter").hide();
               $("#dvDetail1").hide();
               $("#dvDetail2").hide();
               $("#dvUsage").hide();
@@ -44,6 +66,23 @@
               $("#detail3 option").each(function () {
                 this.selected = (this.text == "支出");
               });
+              $("#dvDetail4").hide();
+              $("#dvInvoiceNumber").hide();
+            } else { //prestore
+              $("#dvMonth").hide();
+              $("#dvDate").show();
+              $("#dvSaler").show();
+              $("#dvClient").show();
+              $("#dvContacter").show();
+              $("#dvDetail1").hide();
+              $("#dvDetail2").hide();
+              $("#dvUsage").hide();
+              $("#dvDetail3").hide();
+              $("#dvDetail4").show();
+              $("#detail4 option").each(function () {
+                this.selected = (this.text == "预存");
+              });
+              $("#dvInvoiceNumber").show();
             }
           });
 
@@ -51,6 +90,10 @@
             format: 'yyyy-mm',
             viewMode: "months", 
             minViewMode: "months"
+          });
+
+          $('#date').datepicker({
+            format: 'yyyy-mm-dd'
           });
 
           $("#btnCreate").click(function (e) {
@@ -149,7 +192,7 @@
                 $("#comment").val("");
                 bootbox.alert("创建成功！ 编号： " + managefee.serial_number);
               });
-            } else { //cashflow
+            } else if ($("#type").val() === "cashflow") {
               var month = $("#month").val();
               var detail = $("#detail3").val();
               var money = $("#money").val();
@@ -179,6 +222,53 @@
                 $("#comment").val("");
                 bootbox.alert("创建成功！ 编号： " + cashflow.serial_number);
               });
+            } else { //prestore
+              var date = $("#date").val();
+              var saler = $("#saler").val();
+              var client = $("#client").val();
+              var contacter = $("#contacter").val();
+              var detail = $("#detail4").val();
+              var invoice_number = $("#invoice_number").val();
+              var money = $("#money").val();
+              var comment = $("#comment").val();
+              if (!date) {
+                bootbox.alert("请输入日期！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2}-\d{2})$/.test(date)) {
+                bootbox.alert("日期格式不正确！请按\"yyyy-mm-dd\"格式填写");
+                return;
+              }
+              if (!saler) {
+                bootbox.alert("请选择销售人员！");
+                return;
+              }
+              if (!client) {
+                bootbox.alert("请输入客户！");
+                return;
+              }
+              if (!contacter) {
+                bootbox.alert("请输入联系人！");
+                return;
+              }
+              if (!invoice_number) {
+                bootbox.alert("请输入发票号码/单号！");
+                return;
+              }
+              if (!money) {
+                bootbox.alert("请输入金额！");
+                return;
+              }
+              if (isNaN(money)) {
+                bootbox.alert("金额不合法！");
+                return;
+              }
+              $.post("/prestore", {date: date, saler: saler, client: client, contacter: contacter, detail: detail, invoice_number: invoice_number, money: money, comment: comment}, function (prestore) {
+                $("#invoice_number").val("");
+                $("#money").val("");
+                $("#comment").val("");
+                bootbox.alert("创建成功！ 编号： " + prestore.serial_number);
+              });
             }
           });
         });
@@ -203,6 +293,7 @@
               <li><a href="/managefees">总经办支出</a></li>
               <li><a href="/total">合计</a></li>
               <li><a href="/cashflow">现金流水</a></li>
+              <li><a href="/prestore">预存记录</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -228,13 +319,20 @@
                 <option value="admin">行政管理费用</option>
                 <option value="manager">总经办支出</option>
                 <option value="cashflow">现金流水</option>
+                <option value="prestore">预存记录</option>
               </select>
             </div>
           </div>
-          <div class="form-group">
+          <div id="dvMonth" class="form-group">
             <label class="col-sm-4 control-label">月份</label>
             <div class="col-sm-8">
               <input id="month" class="form-control" value=<%= month%> required="true">
+            </div>
+          </div>
+          <div id="dvDate" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">日期</label>
+            <div class="col-sm-8">
+              <input id="date" class="form-control" required="true">
             </div>
           </div>
           <div id="dvSaler" class="form-group">
@@ -250,6 +348,18 @@
                   </option>
                 <% }); %>
               </select>
+            </div>
+          </div>
+          <div id="dvClient" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">客户</label>
+            <div class="col-sm-8">
+              <input id="client" class="form-control" required="true">
+            </div>
+          </div>
+          <div id="dvContacter" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">联系人</label>
+            <div class="col-sm-8">
+              <input id="contacter" class="form-control" required="true">
             </div>
           </div>
           <div id="dvDetail1" class="form-group">
@@ -300,6 +410,21 @@
                 <option value="expense">支出</option>
                 <option value="income">收入</option>
               </select>
+            </div>
+          </div>
+          <div id="dvDetail4" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">项目</label>
+            <div class="col-sm-8">
+              <select id="detail4" class="form-control">
+                <option value="income">预存</option>
+                <option value="expense">冲抵</option>
+              </select>
+            </div>
+          </div>
+          <div id="dvInvoiceNumber" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">发票号码/单号</label>
+            <div class="col-sm-8">
+              <input id="invoice_number" class="form-control">
             </div>
           </div>
           <div class="form-group">
