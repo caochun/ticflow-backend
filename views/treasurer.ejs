@@ -4,10 +4,12 @@
       <title>新建财报</title>
       <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
       <link rel='stylesheet' href='/stylesheets/style.css'/>
+      <link rel='stylesheet' href='/stylesheets/datepicker.css'>
 
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
       <script src="/javascripts/bootbox.js"></script>
+      <script src="/javascripts/bootstrap-datepicker.js"></script>
 
       <script>
         $(document).ready(function(){
@@ -43,6 +45,12 @@
                 this.selected = (this.text == "支出");
               });
             }
+          });
+
+          $('#month').datepicker({
+            format: 'yyyy-mm',
+            viewMode: "months", 
+            minViewMode: "months"
           });
 
           $("#btnCreate").click(function (e) {

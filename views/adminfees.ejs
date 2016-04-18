@@ -4,10 +4,12 @@
       <title>行政管理费用统计</title>
       <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
       <link rel='stylesheet' href='/stylesheets/style.css'/>
+      <link rel='stylesheet' href='/stylesheets/datepicker.css'>
 
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
       <script src="/javascripts/bootbox.js"></script>
+      <script src="/javascripts/bootstrap-datepicker.js"></script>
 
       <script>
         $(document).ready(function(){
@@ -22,6 +24,12 @@
               return;
             }
             window.location.href = "/adminfees?month=" + month;
+          });
+
+          $('#month').datepicker({
+            format: 'yyyy-mm',
+            viewMode: "months", 
+            minViewMode: "months"
           });
 
           var myTable = document.getElementById("myTable");

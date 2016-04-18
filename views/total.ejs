@@ -4,9 +4,11 @@
       <title>毛利统计</title>
       <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
       <link rel='stylesheet' href='/stylesheets/style.css'/>
+      <link rel='stylesheet' href='/stylesheets/datepicker.css'>
 
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
+      <script src="/javascripts/bootstrap-datepicker.js"></script>
 
       <script>
         $(document).ready(function(){
@@ -22,6 +24,12 @@
               return;
             }
             window.location.href = "/total?month=" + month + "&factor=" + factor;
+          });
+
+          $('#month').datepicker({
+            format: 'yyyy-mm',
+            viewMode: "months", 
+            minViewMode: "months"
           });
         });
       </script>
