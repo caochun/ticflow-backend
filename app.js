@@ -10,6 +10,7 @@ var flash = require('connect-flash');
 //web router
 var routes = require('./routes/index');
 var manager = require('./routes/manager');
+var myexport = require('./routes/export');
 var treasurer = require('./routes/treasurer');
 var profits = require('./routes/profits');
 var adminfees = require('./routes/adminfees');
@@ -70,6 +71,7 @@ app.use(function (req,res,next) {
 
 app.use('/', routes);
 app.use('/manager', manager);
+app.use('/export', myexport);
 app.use('/treasurer', treasurer);
 app.use('/profits', profits);
 app.use('/adminfees', adminfees);

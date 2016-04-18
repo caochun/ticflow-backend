@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>导出已审核报修单</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/bootbox.js"></script>
+
+    <script>
+      $(document).ready(function(){
+        $("#btnExport").click(function (e) {
+          var month = $("#month").val();
+          if (!month) {
+            bootbox.alert("请输入月份！");
+            return;
+          }
+          if (!/^(\d{4}-\d{2})$/.test(month)) {
+            bootbox.alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+            return;
+          }
+
+          $.get("/lists/checked?month=" + month, function (lists) {
+            var dvHtml = "<table>" + 
+              "<tr>" + 
+                "<th>" + "审核时间" + "</th>" +
+                "<th>" + "客户单位" + "</th>" +
+                "<th>" + "客户姓名" + "</th>" +
+                "<th>" + "客户电话" + "</th>" +
+                "<th>" + "客户地址" + "</th>" +
+                "<th>" + "送货服务" + "</th>" +
+                "<th>" + "安装调试" + "</th>" +
+                "<th>" + "上门服务" + "</th>" +
+                "<th>" + "安装单" + "</th>" +
+                "<th>" + "库房安装" + "</th>" +
+                "<th>" + "出库单号" + "</th>" +
+                "<th>" + "序列号" + "</th>" +
+                "<th>" + "反馈信息" + "</th>" +
+                "<th>" + "销售员" + "</th>" +
+                "<th>" + "工程师" + "</th>" +
+                "<th>" + "分值" + "</th>" +
+              "</tr>";
+            lists.forEach(function (entry) {
+              dvHtml += "<tr>" + 
+                "<td>" + entry.checkTime.substring(0, 10) + "</td>" +
+                "<td>" + entry.client.unit + "</td>" + 
+                "<td>" + entry.client.name + "</td>" + 
+                "<td>" + entry.client.phone_no + "</td>" + 
+                "<td>" + entry.client.address + "</td>" + 
+                "<td>" + entry.deliver + "</td>" + 
+                "<td>" + entry.debug + "</td>" + 
+                "<td>" + entry.visit + "</td>" + 
+                "<td>" + entry.install + "</td>" + 
+                "<td>" + entry.warehouse + "</td>" + 
+                "<td>" + entry.outgoing + "</td>" + 
+                "<td>" + entry.serial_no + "</td>" + 
+                "<td>" + entry.feedback + "</td>" + 
+                "<td>" + entry.saler + "</td>" + 
+                "<td>" + entry.engineer + "</td>" + 
+                "<td>" + entry.value + "</td>" + 
+              "</tr>";
+            });
+            dvHtml += "</table>";
+            window.open('data:application/vnd.ms-excel,' + dvHtml);
+          })
+        });
+      });
+    </script>
+  </head>
+
+  <header>
+    <nav class="navbar navbar-fixed-top navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand">
+            <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            <span>&nbsp杰世欣Online&nbsp</span>
+          </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/manager">新建报修单</a></li>
+            <li><a href="/export">导出已审核报修单</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">派单员 (<%= user.id %>)<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/logout">登出</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <body>
+    <div class="container-fluid">
+      <form class="form-inline" style="text-align: center">
+        <div class="form-group">
+          <label><h4>月份 : &nbsp; </h4></label>
+          <input id="month" type="text" class="form-control" value=<%= month %>>
+          <button type="button" class="btn btn-primary" id="btnExport">导出</button>
+        </div>
+      </form>
+      
+      <br>
+
+      <p class="text-center text-muted">
+        © 版权所有 南京杰世欣计算机科技有限公司
+      </p>
+    </div>
+  </body>
+</html>
