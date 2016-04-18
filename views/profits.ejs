@@ -194,54 +194,54 @@
             <td><%= saler %></td>
 
             <% if (flags[i][0]) { %>
-            <td style="background-color:#d9edf7"><%= cells[i][0] %></td>
+            <td style="background-color:#d9edf7"><%= cells[i][0].toFixed(2) %></td>
             <% } else { %>
-            <td><%= cells[i][0] %></td>
+            <td><%= cells[i][0].toFixed(2) %></td>
             <% } %>
 
             <% if (flags[i][1]) { %>
-            <td style="background-color:#d9edf7"><%= cells[i][1] %></td>
+            <td style="background-color:#d9edf7"><%= cells[i][1].toFixed(2) %></td>
             <% } else { %>
-            <td><%= cells[i][1] %></td>
+            <td><%= cells[i][1].toFixed(2) %></td>
             <% } %>
 
             <% if (flags[i][2]) { %>
-            <td style="background-color:#d9edf7"><%= cells[i][2] %></td>
+            <td style="background-color:#d9edf7"><%= cells[i][2].toFixed(2) %></td>
             <% } else { %>
-            <td><%= cells[i][2] %></td>
+            <td><%= cells[i][2].toFixed(2) %></td>
             <% } %>
 
             <% if (flags[i][3]) { %>
-            <td style="background-color:#d9edf7"><%= cells[i][3] %></td>
+            <td style="background-color:#d9edf7"><%= cells[i][3].toFixed(2) %></td>
             <% } else { %>
-            <td><%= cells[i][3] %></td>
+            <td><%= cells[i][3].toFixed(2) %></td>
             <% } %>
 
             <% if (flags[i][4]) { %>
-            <td style="background-color:#d9edf7"><%= cells[i][4] %></td>
+            <td style="background-color:#d9edf7"><%= cells[i][4].toFixed(2) %></td>
             <% } else { %>
-            <td><%= cells[i][4] %></td>
+            <td><%= cells[i][4].toFixed(2) %></td>
             <% } %>
 
             <% if (flags[i][5]) { %>
-            <td style="background-color:#d9edf7"><%= cells[i][5] %></td>
+            <td style="background-color:#d9edf7"><%= cells[i][5].toFixed(2) %></td>
             <% } else { %>
-            <td><%= cells[i][5] %></td>
+            <td><%= cells[i][5].toFixed(2) %></td>
             <% } %>
 
-            <td><%= cells[i][6] %></td>
+            <td><%= cells[i][6].toFixed(2) %></td>
             <td><%= cells[i][7].toFixed(2) %></td>
           </tr>
           <% }); %>
           <tr>
             <td>合计</td>
-            <td><%= total[0] %></td>
-            <td><%= total[1] %></td>
-            <td><%= total[2] %></td>
-            <td><%= total[3] %></td>
-            <td><%= total[4] %></td>
-            <td><%= total[5] %></td>
-            <td><%= total[6] %></td>
+            <td><%= total[0].toFixed(2) %></td>
+            <td><%= total[1].toFixed(2) %></td>
+            <td><%= total[2].toFixed(2) %></td>
+            <td><%= total[3].toFixed(2) %></td>
+            <td><%= total[4].toFixed(2) %></td>
+            <td><%= total[5].toFixed(2) %></td>
+            <td><%= total[6].toFixed(2) %></td>
             <td><%= total[7].toFixed(2) %></td>
           </tr>
         </table>

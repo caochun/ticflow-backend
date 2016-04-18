@@ -107,7 +107,7 @@
             <td><%= month %></td>
             <td><%= entry.serial_number %></td>
             <td><%= detail %></td>
-            <td><%= entry.money %></td>
+            <td><%= entry.money.toFixed(2) %></td>
             <td><%= entry.comment %></td>
             <td><%= dateStr %></td>
             <% if (user.role === 'treasurer' && !entry.dlt) { %>

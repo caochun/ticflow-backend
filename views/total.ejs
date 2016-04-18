@@ -7,6 +7,24 @@
 
       <script src="/javascripts/jquery.js"></script>
       <script src="/javascripts/bootstrap.js"></script>
+
+      <script>
+        $(document).ready(function(){
+          $("#btnGenerate").click(function (e) {
+            var month = $("#month").val();
+            var factor = $("#factor").val();
+            if (!month) {
+              bootbox.alert("请输入月份！");
+              return;
+            }
+            if (!/^(\d{4}-\d{2})$/.test(month)) {
+              bootbox.alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+              return;
+            }
+            window.location.href = "/total?month=" + month + "&factor=" + factor;
+          });
+        });
+      </script>
     </head>
 
     <header>
@@ -57,8 +75,8 @@
 
             <div class="form-group pull-right">
               <label><h4>利润系数 : &nbsp; </h4></label>
-              <input id="factor" type="text" class="form-control" value=<%= factor %>>
-              <!-- <button type="button" class="btn btn-primary" id="btnGenerate">生成</button> -->
+              <input id="factor" type="text" class="form-control" disabled value=<%= factor %>>
+              <button type="button" class="btn btn-primary" id="btnGenerate">生成</button>
             </div>
           </form>
         </div>
@@ -69,9 +87,9 @@
             <th>月度利润</th>
           </tr>
           <tr>
-            <td><%= gross %></td>
-            <td><%= expend %></td>
-            <td><%= gross - expend %></td>
+            <td><%= gross.toFixed(2) %></td>
+            <td><%= expend.toFixed(2) %></td>
+            <td><%= (gross - expend).toFixed(2) %></td>
           </tr>
         </table>
         <p class="text-center text-muted">

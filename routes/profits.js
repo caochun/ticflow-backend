@@ -71,7 +71,10 @@ router.get('/', function (req, res, next) {
               }
             });
             cell.push(cell[0] - cell[1] - cell[2] - cell[3] - cell[4] - cell[5]);
-            cell.push(cell[6] * req.query.factor);
+            if (cell[6] < 0)
+              cell.push(cell[6]);
+            else
+              cell.push(cell[6] * req.query.factor);
             cells.push(cell);
             for (var j = 0; j < 6; j ++) {
               flag[j] = flag[j] && (req.session.user.role === 'admin');

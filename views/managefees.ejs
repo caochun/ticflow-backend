@@ -106,7 +106,7 @@
             <td><%= month %></td>
             <td><%= managefee.serial_number %></td>
             <td><%= managefee.usage %></td>
-            <td><%= managefee.money %></td>
+            <td><%= managefee.money.toFixed(2) %></td>
             <td><%= managefee.comment %></td>
             <td><%= dateStr %></td>
             <% if (user.role === 'treasurer' && !managefee.dlt) { %>
