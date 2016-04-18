@@ -14,6 +14,11 @@ var UserSchema = new mongoose.Schema({
 		type: String,
 		enum: ['treasurer', 'saler', 'engineer', 'manager', 'admin'],
 	},
+
+	frozen: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 module.exports = mongoose.model('User', UserSchema);

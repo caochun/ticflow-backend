@@ -18,6 +18,9 @@ router.post('/login', function (req, res, next) {
     if (user === null) {
       req.flash('error', "用户名或密码错误！");
       return res.redirect('/login');
+    } else if (user.frozen) {
+      req.flash('error', "用户已被冻结！");
+      return res.redirect('/login');
     } else if (user.role === 'manager') {
       req.session.user = user;
       return res.redirect('/manager');
