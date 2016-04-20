@@ -34,18 +34,32 @@
                   prestore.forEach(function (entry) {
                     var date = new Date(entry.create_at);
                     var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-                    var detail = entry.detail == "income" ? "预存" : "<span style=\"color: #d9534f;\">冲抵</span>";
-                    dvHtml += "<tr>" + 
+                    if (entry.detail == "income") {
+                      dvHtml += "<tr>" + 
                       "<td>" + entry.date + "</td>" +
                       "<td>" + entry.serial_number + "</td>" +
                       "<td>" + entry.saler + "</td>" + 
                       "<td>" + entry.client + "</td>" + 
                       "<td>" + entry.contacter + "</td>" + 
-                      "<td>" + detail + "</td>" + 
+                      "<td>" + "预存" + "</td>" + 
                       "<td>" + entry.invoice_number + "</td>" + 
                       "<td>" + entry.money.toFixed(2) + "</td>" + 
                       "<td>" + entry.comment + "</td>" + 
                       "<td>" + dateStr + "</td>";
+                    } else {
+                      dvHtml += "<tr>" + 
+                      "<td><span style=\"color: #d9534f;\">" + entry.date + "</span></td>" +
+                      "<td><span style=\"color: #d9534f;\">" + entry.serial_number + "</span></td>" +
+                      "<td><span style=\"color: #d9534f;\">" + entry.saler + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + entry.client + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + entry.contacter + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + "冲抵" + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + entry.invoice_number + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + entry.money.toFixed(2) + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + entry.comment + "</span></td>" + 
+                      "<td><span style=\"color: #d9534f;\">" + dateStr + "</span></td>";
+                    }
+                    
                     if ('<%= user.role %>' === 'treasurer') {
                       dvHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
                     } else {
