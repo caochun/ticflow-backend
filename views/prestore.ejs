@@ -11,68 +11,99 @@
 
       <script>
         $(document).ready(function(){
-          var myTable = document.getElementById("myTable");
-          for (var i = 1; i < myTable.rows.length; i++) {
-            myTable.rows[i].onclick = (function (i) {
-              return function () {
-                var query = {saler: myTable.rows[i].cells[0].innerHTML, client: myTable.rows[i].cells[1].innerHTML,
-                  contacter: myTable.rows[i].cells[2].innerHTML};
-                $.get("/prestore/detail", query, function (prestore) {
-                  var dvHtml = "<tr class=\"info\">" +
-                    "<th>日期</th>" +
-                    "<th>编号</th>" +
-                    "<th>销售人员</th>" +
-                    "<th>客户</th>" +
-                    "<th>联系人</th>" +
-                    "<th>项目</th>" +
-                    "<th>发票号码/单号</th>" +
-                    "<th>金额</th>" +
-                    "<th>备注</th>" +
-                    "<th>创建时间</th>" +
-                    "<th>操作</th>" +
+          $("#saler").change(function () {
+            var myHtml = "<tr class=\"info\">" + 
+              "<th>销售人员</th>" + 
+              "<th>客户</th>" + 
+              "<th>联系人</th>" + 
+              "<th>余额</th>" + 
+              "</tr>";
+
+            $.get("/prestore/detail", {saler: $("#saler").val()}, function (prestore) {
+              var data = [];
+              prestore.forEach(function (entry) {
+                var i;
+                for (i = 0; i < data.length; i++) {
+                  if (data[i].saler == entry.saler && data[i].client == entry.client && data[i].contacter == entry.contacter) {
+                    if (entry.detail == "income") data[i].account += entry.money;
+                    else data[i].account -= entry.money;
+                    break;
+                  }
+                }
+                if (i == data.length) {
+                  var account = (entry.detail == "income") ? entry.money : (- entry.money);
+                  data[i] = {saler: entry.saler, client: entry.client, contacter: entry.contacter, account: account};
+                }
+              });
+              
+              data.forEach(function (entry) {
+                myHtml += "<tr onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">" +
+                  "<td>" + entry.saler + "</td>" + 
+                  "<td>" + entry.client + "</td>" + 
+                  "<td>" + entry.contacter + "</td>" + 
+                  "<td>" + entry.account + "</td>" + 
                   "</tr>";
-                  prestore.forEach(function (entry) {
-                    var date = new Date(entry.create_at);
-                    var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-                    if (entry.detail == "income") {
-                      dvHtml += "<tr>" + 
-                      "<td>" + entry.date + "</td>" +
-                      "<td>" + entry.serial_number + "</td>" +
-                      "<td>" + entry.saler + "</td>" + 
-                      "<td>" + entry.client + "</td>" + 
-                      "<td>" + entry.contacter + "</td>" + 
-                      "<td>" + "预存" + "</td>" + 
-                      "<td>" + entry.invoice_number + "</td>" + 
-                      "<td>" + entry.money.toFixed(2) + "</td>" + 
-                      "<td>" + entry.comment + "</td>" + 
-                      "<td>" + dateStr + "</td>";
-                    } else {
-                      dvHtml += "<tr>" + 
-                      "<td><span style=\"color: #d9534f;\">" + entry.date + "</span></td>" +
-                      "<td><span style=\"color: #d9534f;\">" + entry.serial_number + "</span></td>" +
-                      "<td><span style=\"color: #d9534f;\">" + entry.saler + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + entry.client + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + entry.contacter + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + "冲抵" + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + entry.invoice_number + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + entry.money.toFixed(2) + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + entry.comment + "</span></td>" + 
-                      "<td><span style=\"color: #d9534f;\">" + dateStr + "</span></td>";
-                    }
-                    
-                    if ('<%= user.role %>' === 'treasurer') {
-                      dvHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
-                    } else {
-                      dvHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
-                    }
-                    dvHtml += "</tr>";
-                  });
-                  $("#detailTable").html(dvHtml);
-                });
-              };
-            }(i));
-          }
+              });
+              $("#myTable").html(myHtml);
+            });
+          });
         });
+
+        function myFunction(saler, client, contacter) {
+          var query = {saler: saler, client: client, contacter: contacter};
+          $.get("/prestore/detail", query, function (prestore) {
+            var dvHtml = "<tr class=\"info\">" +
+              "<th>日期</th>" +
+              "<th>编号</th>" +
+              "<th>销售人员</th>" +
+              "<th>客户</th>" +
+              "<th>联系人</th>" +
+              "<th>项目</th>" +
+              "<th>发票号码/单号</th>" +
+              "<th>金额</th>" +
+              "<th>备注</th>" +
+              "<th>创建时间</th>" +
+              "<th>操作</th>" +
+              "</tr>";
+            prestore.forEach(function (entry) {
+              var date = new Date(entry.create_at);
+              var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+              if (entry.detail == "income") {
+                dvHtml += "<tr>" + 
+                "<td>" + entry.date + "</td>" +
+                "<td>" + entry.serial_number + "</td>" +
+                "<td>" + entry.saler + "</td>" + 
+                "<td>" + entry.client + "</td>" + 
+                "<td>" + entry.contacter + "</td>" + 
+                "<td>" + "预存" + "</td>" + 
+                "<td>" + entry.invoice_number + "</td>" + 
+                "<td>" + entry.money.toFixed(2) + "</td>" + 
+                "<td>" + entry.comment + "</td>" + 
+                "<td>" + dateStr + "</td>";
+              } else {
+                dvHtml += "<tr>" + 
+                "<td><span style=\"color: #d9534f;\">" + entry.date + "</span></td>" +
+                "<td><span style=\"color: #d9534f;\">" + entry.serial_number + "</span></td>" +
+                "<td><span style=\"color: #d9534f;\">" + entry.saler + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + entry.client + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + entry.contacter + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + "冲抵" + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + entry.invoice_number + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + entry.money.toFixed(2) + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + entry.comment + "</span></td>" + 
+                "<td><span style=\"color: #d9534f;\">" + dateStr + "</span></td>";
+              }
+              
+              if ('<%= user.role %>' === 'treasurer') {
+                dvHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
+              } else {
+                dvHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
+              }
+              dvHtml += "</tr>";
+            });
+            $("#detailTable").html(dvHtml);
+          });
+        };
 
         function myDelete(_id) {
           $.post("/prestore/delete/" + _id, function (prestore) {
@@ -125,6 +156,23 @@
 
     <body>
       <div class="container-fluid">
+        <div class="page-header">
+          <form class="form-inline">
+            <div class="form-group">
+              <label><h4>销售人员 : &nbsp; </h4></label>
+              <select id="saler" class="form-control">
+                <option value="">请选择</option>
+                <% salers.forEach(function (saler) { %>
+                  <option value=
+                    <%= saler %>
+                  >
+                    <%= saler %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+          </form>
+        </div>
         <table class="table table-bordered" id="myTable">
           <tr class="info">
             <th>销售人员</th>
@@ -132,14 +180,6 @@
             <th>联系人</th>
             <th>余额</th>
           </tr>
-          <% data.forEach(function (entry) { %>
-          <tr>
-            <td><%= entry.saler %></td>
-            <td><%= entry.client %></td>
-            <td><%= entry.contacter %></td>
-            <td><%= entry.account.toFixed(2) %></td>
-          </tr>
-          <% }); %>
         </table>
 
         <table class="table table-bordered" id="detailTable">

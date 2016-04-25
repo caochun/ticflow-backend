@@ -69,7 +69,7 @@ Factor.remove(function (err) {
       if (err) {
         console.log(err);
       } else {
-        console.log(factor);
+        console.log(JSON.stringify(factor));
         ep.emit('factor');
       }
     });

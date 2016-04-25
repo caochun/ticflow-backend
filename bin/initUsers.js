@@ -37,7 +37,7 @@ User.remove(function (err) {
         if (err) {
           console.log(err);
         } else {
-          console.log(createdUser);
+          console.log(JSON.stringify(createdUser));
           ep.emit('createUser', createdUser);
         }
       });

@@ -3,7 +3,8 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-var Prestore = require ('../models/Prestore.js');
+var User = require('../models/User.js');
+var Prestore = require('../models/Prestore.js');
 var SerialNumber = require('../models/SerialNumber.js');
 
 router.get('/', function (req, res, next) {
@@ -11,23 +12,20 @@ router.get('/', function (req, res, next) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
-  Prestore.find().sort({create_at: -1}).exec(function (err, prestore) {
-    var data = [];
-    prestore.forEach(function (entry) {
-      var i;
-      for (i = 0; i < data.length; i++) {
-        if (data[i].saler == entry.saler && data[i].client == entry.client && data[i].contacter == entry.contacter) {
-          if (entry.detail == "income") data[i].account += entry.money;
-          else data[i].account -= entry.money;
-          break;
-        }
-      }
-      if (i == data.length) {
-        var account = (entry.detail == "income") ? entry.money : (- entry.money);
-        data[i] = {saler: entry.saler, client: entry.client, contacter: entry.contacter, account: account};
-      }
+
+  var ep = new eventproxy();
+
+  var salers = [];
+  User.find({role: 'saler'}).sort({id: -1}).exec(function (err, users) {
+    users.forEach(function (entry) {
+      if (salers.indexOf(entry.id) == -1)
+        salers.push(entry.id);
     });
-    res.render('prestore', {data: data});
+    ep.emit('saler');
+  });
+
+  ep.on('saler', function () {
+    res.render('prestore', {salers: salers});
   });
 });
 
