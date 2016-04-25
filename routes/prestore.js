@@ -73,13 +73,23 @@ router.post('/', function (req, res, next) {
 });
 
 router.post('/delete/:_id', function (req, res, next) {
-  Prestore.findByIdAndRemove(req.params._id, function (err, prestore) {
-    if (err) {
-      return res.status(400).send("err in post /prestore/delete/:_id");
-    } else {
-      return res.status(200).json(prestore);
-    }
-  });
+  if (req.session.user.role === 'treasurer') {
+    Prestore.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, prestore) {
+      if (err) {
+        return res.status(400).send("err in post /prestore/delete/:_id");
+      } else {
+        return res.status(200).json(prestore);
+      }
+    });
+  } else {
+    Prestore.findByIdAndRemove(req.params._id, function (err, prestore) {
+      if (err) {
+        return res.status(400).send("err in post /prestore/delete/:_id");
+      } else {
+        return res.status(200).json(prestore);
+      }
+    });
+  }
 });
 
 module.exports = router;

@@ -24,27 +24,32 @@
               prestore.forEach(function (entry) {
                 var i;
                 for (i = 0; i < data.length; i++) {
-                  if (data[i].saler == entry.saler && data[i].client == entry.client && data[i].contacter == entry.contacter) {
+                  if (data[i].client == entry.client && data[i].contacter == entry.contacter) {
                     if (entry.detail == "income") data[i].account += entry.money;
                     else data[i].account -= entry.money;
+                    data[i].dlt = data[i].dlt || entry.dlt;
                     break;
                   }
                 }
                 if (i == data.length) {
                   var account = (entry.detail == "income") ? entry.money : (- entry.money);
-                  data[i] = {saler: entry.saler, client: entry.client, contacter: entry.contacter, account: account};
+                  data[i] = {saler: entry.saler, client: entry.client, contacter: entry.contacter, account: account, dlt: entry.dlt};
                 }
               });
               
               data.forEach(function (entry) {
-                myHtml += "<tr onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">" +
-                  "<td>" + entry.saler + "</td>" + 
+                if (entry.dlt && '<%= user.role %>' === 'admin')
+                  myHtml += "<tr style=\"background-color:#d9edf7\" onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">";
+                else
+                  myHtml += "<tr onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">";
+                myHtml += "<td>" + entry.saler + "</td>" + 
                   "<td>" + entry.client + "</td>" + 
                   "<td>" + entry.contacter + "</td>" + 
                   "<td>" + entry.account + "</td>" + 
                   "</tr>";
               });
               $("#myTable").html(myHtml);
+              $("#detailTable").html("");
             });
           });
         });
@@ -94,10 +99,14 @@
                 "<td><span style=\"color: #d9534f;\">" + dateStr + "</span></td>";
               }
               
-              if ('<%= user.role %>' === 'treasurer') {
+              if ('<%= user.role %>' === 'treasurer' && !entry.dlt) {
                 dvHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
-              } else {
+              } else if ('<%= user.role %>' === 'treasurer' && entry.dlt) {
                 dvHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
+              } else if ('<%= user.role %>' === 'admin' && entry.dlt) {
+                dvHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">通过</button></td>";
+              } else {
+                dvHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>通过</button></td>";
               }
               dvHtml += "</tr>";
             });
@@ -107,7 +116,12 @@
 
         function myDelete(_id) {
           $.post("/prestore/delete/" + _id, function (prestore) {
-            bootbox.alert("删除成功！", function () {
+            var str;
+            if ('<%= user.role %>' === 'treasurer')
+              str = "已发送删除申请！";
+            else
+              str = "删除成功！";
+            bootbox.alert(str, function () {
               window.location.href = "/prestore";
             });
           });
