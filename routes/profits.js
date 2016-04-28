@@ -8,11 +8,23 @@ var Profit = require('../models/Profit.js');
 var Factor = require('../models/Factor.js');
 var SerialNumber = require('../models/SerialNumber.js');
 
-router.get('/', function (req, res, next) {
+function checkIdTreasurerOrAdmin(req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
+  next();
+}
+
+function checkIdTreasurer(req, res, next) {
+  if (!req.session.user || req.session.user.role !== 'treasurer') {
+    req.flash('error', "请先登录！");
+    return res.redirect('/login');
+  }
+  next();
+}
+
+router.get('/', checkIdTreasurerOrAdmin, function (req, res, next) {
   if (!req.query.month && !req.query.factor) {
     var now = new Date();
     var month = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2);
@@ -105,7 +117,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/detail', function (req, res, next) {
+router.get('/detail', checkIdTreasurerOrAdmin, function (req, res, next) {
   Profit.find(req.query).sort({create_at: -1}).exec(function (err, profits) {
     if (err) {
       return res.status(400).send("err in get /profits/detail");
@@ -115,7 +127,7 @@ router.get('/detail', function (req, res, next) {
   });
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', checkIdTreasurer, function (req, res, next) {
   var now = new Date();
   var date = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2);
 
@@ -148,7 +160,7 @@ router.post('/', function (req, res, next) {
   });
 });
 
-router.post('/delete/:_id', function (req, res, next) {
+router.post('/delete/:_id', checkIdTreasurerOrAdmin, function (req, res, next) {
   if (req.session.user.role === 'treasurer') {
     Profit.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, profit) {
       if (err) {

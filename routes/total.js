@@ -10,11 +10,15 @@ var Factor = require('../models/Factor.js');
 var AdminFee = require('../models/AdminFee.js');
 var ManageFee = require ('../models/ManageFee.js');
 
-router.get('/', function (req, res, next) {
+function checkIdTreasurerOrAdmin(req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
+  next();
+}
+
+router.get('/', checkIdTreasurerOrAdmin, function (req, res, next) {
   if (!req.query.month && !req.query.factor) {
     var now = new Date();
     var month = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2);

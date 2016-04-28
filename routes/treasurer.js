@@ -5,11 +5,15 @@ var eventproxy = require('eventproxy');
 
 var User = require('../models/User.js');
 
-router.get('/', function (req, res, next) {
+function checkIdTreasurer(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'treasurer') {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
+  next();
+}
+
+router.get('/', checkIdTreasurer, function (req, res, next) {
   var ep = new eventproxy();
   var salers = [];
   User.find({role: 'saler'}).sort({id: -1}).exec(function (err, users) {

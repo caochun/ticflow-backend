@@ -7,12 +7,15 @@ var User = require('../models/User.js');
 var List = require('../models/List.js');
 var SerialNumber = require('../models/SerialNumber.js');
 
-router.get('/', function (req, res, next) {
+function checkIdManager(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'manager') {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
+  next();
+}
 
+router.get('/', checkIdManager, function (req, res, next) {
   var ep = new eventproxy();
 
   var units = [];
@@ -57,7 +60,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', checkIdManager, function (req, res, next) {
   var now = new Date();
   var date = now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2) + ('0' + now.getDate()).slice(-2);
 

@@ -3,11 +3,15 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-router.get('/', function (req, res, next) {
+function checkIdManager(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'manager') {
     req.flash('error', "请先登录！");
     return res.redirect('/login');
   }
+  next();
+}
+
+router.get('/', checkIdManager, function (req, res, next) {
 
   if (!req.query.month) {
     var now = new Date();
