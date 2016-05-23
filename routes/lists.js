@@ -41,7 +41,7 @@ router.post('/', function (req, res) {
 
 router.get('/', function (req, res) {
 	var page = (req.query.page === undefined) ? 0 : req.query.page;
-	var limit = (req.query.limit === undefined) ? 10 : req.query.limit;
+	var limit = (req.query.limit === undefined) ? 10 : parseInt(req.query.limit);
 
 	delete req.query.page;
 	delete req.query.limit;
