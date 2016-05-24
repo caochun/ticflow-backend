@@ -3,8 +3,8 @@ var router = express.Router();
 var eventproxy = require('eventproxy');
 
 var mongoose = require('mongoose');
-var List = require('../models/List.js');
-var SerialNumber = require('../models/SerialNumber.js');
+var List = require('../../models/List.js');
+var SerialNumber = require('../../models/SerialNumber.js');
 
 router.post('/', function (req, res) {
 	var now = new Date();

@@ -8,22 +8,22 @@ var cors = require('cors');
 var flash = require('connect-flash');
 
 //web router
-var routes = require('./routes/index');
-var manager = require('./routes/manager');
-var myexport = require('./routes/export');
-var treasurer = require('./routes/treasurer');
-var profits = require('./routes/profits');
-var adminfees = require('./routes/adminfees');
-var managefees = require('./routes/managefees');
-var total = require('./routes/total');
-var cashflow = require('./routes/cashflow');
-var prestore = require('./routes/prestore');
+var routes = require('./routes/web/index');
+var manager = require('./routes/web/manager');
+var myexport = require('./routes/web/export');
+var treasurer = require('./routes/web/treasurer');
+var profits = require('./routes/web/profits');
+var adminfees = require('./routes/web/adminfees');
+var managefees = require('./routes/web/managefees');
+var total = require('./routes/web/total');
+var cashflow = require('./routes/web/cashflow');
+var prestore = require('./routes/web/prestore');
 
 //app router
-var users = require('./routes/users');
-var lists = require('./routes/lists');
-var valuechanges = require('./routes/valuechanges');
-var upload = require('./routes/upload');
+var users = require('./routes/app/users');
+var lists = require('./routes/app/lists');
+var valuechanges = require('./routes/app/valuechanges');
+var upload = require('./routes/app/upload');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ticflow', function(err) {

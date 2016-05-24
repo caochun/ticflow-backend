@@ -3,9 +3,9 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-var User = require('../models/User.js');
-var List = require('../models/List.js');
-var SerialNumber = require('../models/SerialNumber.js');
+var User = require('../../models/User.js');
+var List = require('../../models/List.js');
+var SerialNumber = require('../../models/SerialNumber.js');
 
 function checkIdManager(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'manager') {

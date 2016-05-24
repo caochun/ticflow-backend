@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
-var User = require('../models/User.js');
-var List = require('../models/List.js');
+var User = require('../../models/User.js');
+var List = require('../../models/List.js');
 
 router.post('/signin', function (req, res) {
 	User.findOne(req.body, function (err, user) {

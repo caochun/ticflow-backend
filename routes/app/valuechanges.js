@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose');
-var ValueChange = require('../models/ValueChange.js');
+var ValueChange = require('../../models/ValueChange.js');
 
 router.post('/', function (req, res) {
   ValueChange.create(req.body, function (err, valuechange) {

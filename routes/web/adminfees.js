@@ -3,9 +3,9 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-var AdminFee = require('../models/AdminFee.js');
-var ManageFee = require ('../models/ManageFee.js');
-var SerialNumber = require('../models/SerialNumber.js');
+var AdminFee = require('../../models/AdminFee.js');
+var ManageFee = require ('../../models/ManageFee.js');
+var SerialNumber = require('../../models/SerialNumber.js');
 
 function checkIdTreasurerOrAdmin(req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {

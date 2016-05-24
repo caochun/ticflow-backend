@@ -3,7 +3,7 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-var User = require('../models/User.js');
+var User = require('../../models/User.js');
 
 function checkIdTreasurer(req, res, next) {
   if (!req.session.user || req.session.user.role !== 'treasurer') {

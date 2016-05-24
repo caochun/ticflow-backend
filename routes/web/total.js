@@ -3,12 +3,12 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-var User = require('../models/User.js');
-var List = require('../models/List.js');
-var Profit = require('../models/Profit.js');
-var Factor = require('../models/Factor.js');
-var AdminFee = require('../models/AdminFee.js');
-var ManageFee = require ('../models/ManageFee.js');
+var User = require('../../models/User.js');
+var List = require('../../models/List.js');
+var Profit = require('../../models/Profit.js');
+var Factor = require('../../models/Factor.js');
+var AdminFee = require('../../models/AdminFee.js');
+var ManageFee = require ('../../models/ManageFee.js');
 
 function checkIdTreasurerOrAdmin(req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {

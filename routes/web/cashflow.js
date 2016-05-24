@@ -3,8 +3,8 @@ var router = express.Router();
 var ejs = require('ejs');
 var eventproxy = require('eventproxy');
 
-var CashFlow = require ('../models/CashFlow.js');
-var SerialNumber = require('../models/SerialNumber.js');
+var CashFlow = require ('../../models/CashFlow.js');
+var SerialNumber = require('../../models/SerialNumber.js');
 
 function checkIdTreasurerOrAdmin(req, res, next) {
   if (!req.session.user || (req.session.user.role !== 'treasurer' && req.session.user.role !== 'admin')) {
