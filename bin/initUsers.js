@@ -7,25 +7,25 @@ mongoose.connect('mongodb://localhost/ticflow');
 var User = require('../models/User.js');
 
 var users = [
-  {id: "关婷", password: "123", role: "treasurer"},
-  {id:"余文林", password: "123", role: "saler"},
-  {id:"周坚", password: "123", role:"saler"},
-  {id:"宋菁", password: "123", role:"saler"},
-  {id:"朱鸣", password: "123", role:"saler"},
-  {id:"李倍铭", password: "123", role:"saler"},
-  {id:"沈红扬", password: "123", role:"saler"},
-  {id:"苏井", password: "123", role:"saler"},
-  {id:"许万羽", password: "123", role:"saler"},
-  {id:"钱昊", password: "123", role:"saler"},
-  {id:"陆珺", password: "123", role:"saler"},
-  {id:"陈传玮", password: "123", role:"saler"},
-  {id:"王萍", password: "123", role:"manager"},
-  {id:"周志宇", password: "123", role:"engineer"},
-  {id:"姜国洲", password: "123", role:"engineer"},
-  {id:"彭维锋", password: "123", role:"engineer"},
-  {id:"徐飞", password: "123", role:"engineer"},
-  {id:"施海涛", password: "123", role:"engineer"},
-  {id:"周强", password: "123", role:"admin"}
+  {id: "关婷", password: "gt001002", role: "treasurer"},
+  {id: "陈传玮", password: "123", role: "saler"},
+  {id: "陆珺", password: "821208", role: "saler"},
+  {id: "钱昊", password: "123", role: "saler"},
+  {id: "许万羽", password: "jsx123xwy", role: "saler"},
+  {id: "苏井", password: "123456", role: "saler"},
+  {id: "沈红扬", password: "198778", role: "saler"},
+  {id: "李倍铭", password: "123321", role: "saler"},
+  {id: "朱鸣", password: "10010", role: "saler"},
+  {id: "宋菁", password: "1234", role: "saler"},
+  {id: "周坚", password: "121513", role: "saler"},
+  {id: "余文林", password: "400388", role: "saler", frozen:true},
+  {id: "王萍", password: "wp12345", role: "manager"},
+  {id: "施海涛", password: "313720", role: "engineer"},
+  {id: "徐飞", password: "456", role: "engineer"},
+  {id: "彭维锋", password: "123", role: "engineer"},
+  {id: "姜国洲", password: "123", role: "engineer"},
+  {id: "周志宇", password: "007300", role: "engineer"},
+  {id: "周强", password: "zhouqiang001002", role: "admin"}
 ];
 
 User.remove(function (err) {
