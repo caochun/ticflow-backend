@@ -30,7 +30,7 @@
             return;
           }
 
-          $.get("/lists/checked?month=" + month, function (lists) {
+          $.get("/export/lists?month=" + month, function (lists) {
             var dvHtml = "<table>" + 
               "<tr>" + 
                 "<th>" + "审核时间" + "</th>" +

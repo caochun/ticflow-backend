@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var flash = require('connect-flash');
 
+var mongoose = require('mongoose');
+var User = require('./models/User.js');
+
 //web router
 var routes = require('./routes/web/index');
 var manager = require('./routes/web/manager');
@@ -20,6 +23,7 @@ var cashflow = require('./routes/web/cashflow');
 var prestore = require('./routes/web/prestore');
 
 //app router
+var auth = require('./routes/app/auth');
 var users = require('./routes/app/users');
 var lists = require('./routes/app/lists');
 var valuechanges = require('./routes/app/valuechanges');
@@ -70,6 +74,7 @@ app.use(function (req,res,next) {
     next();
 });
 
+//web router
 app.use('/', routes);
 app.use('/manager', manager);
 app.use('/export', myexport);
@@ -80,6 +85,18 @@ app.use('/managefees', managefees);
 app.use('/total', total);
 app.use('/cashflow', cashflow);
 app.use('/prestore', prestore);
+
+//app router
+app.use('/auth', auth);
+
+app.use(function (req, res, next) {
+  User.findOne({token: req.headers.token}, function (err, user) {
+    if (user === null)
+      return res.status(401).send("Unauthorized!");
+    else
+      next();
+  });
+});
 
 app.use('/users', users);
 app.use('/lists', lists);

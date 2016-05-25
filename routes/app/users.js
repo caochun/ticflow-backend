@@ -5,16 +5,6 @@ var mongoose = require('mongoose');
 var User = require('../../models/User.js');
 var List = require('../../models/List.js');
 
-router.post('/signin', function (req, res) {
-	User.findOne(req.body, function (err, user) {
-		if (err) {
-			return res.status(400).send("err in post /users/signin");
-		} else {
-			return res.status(200).json(user);
-		}
-	});
-});
-
 router.post('/create', function (req, res) {
 	User.create(req.body, function (err, user) {
 		if (err) {

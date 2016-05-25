@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var eventproxy = require('eventproxy');
+var uuid = require("node-uuid");
 
 mongoose.connect('mongodb://localhost/ticflow');
 
@@ -33,6 +34,7 @@ User.remove(function (err) {
   } else {
     var ep = new eventproxy();
     for (var i = 0, length = users.length; i < length; i++) {
+      users[i].token = uuid.v4();
       User.create(users[i], function (err, createdUser) {
         if (err) {
           console.log(err);

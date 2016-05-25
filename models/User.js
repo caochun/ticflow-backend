@@ -19,6 +19,8 @@ var UserSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+
+	token: String,
 });
 
 module.exports = mongoose.model('User', UserSchema);
