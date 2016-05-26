@@ -69,6 +69,11 @@
               <li><a href="/total">合计</a></li>
               <li><a href="/cashflow">现金流水</a></li>
               <li><a href="/prestore">预存记录</a></li>
+              <li><a href="/bidbond">投标保证金</a></li>
+              <% if (user.role === 'admin') { %>
+              <li><a href="/salesreport">销售报表</a></li>
+              <li><a href="/bidmanagement">投标管理</a></li>
+              <% } %>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -95,6 +100,11 @@
               <label><h4>月份 : &nbsp; </h4></label>
               <input id="month" type="text" class="form-control" value=<%= month %>>
               <button type="button" class="btn btn-primary" id="btnGenerate">生成</button>
+            </div>
+
+            <div class="form-group pull-right">
+              <label><h4>余额 : &nbsp; </h4></label>
+              <input id="account" type="text" class="form-control" disabled value=<%= account %>>
             </div>
           </form>
         </div>

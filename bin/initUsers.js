@@ -25,7 +25,8 @@ var users = [
   {id: "彭维锋", password: "123", role: "engineer"},
   {id: "姜国洲", password: "123", role: "engineer"},
   {id: "周志宇", password: "007300", role: "engineer"},
-  {id: "周强", password: "zhouqiang001002", role: "admin"}
+  {id: "周强", password: "zhouqiang001002", role: "admin"},
+  {id: "汪敏", password: "123", role: "salerassistant"}
 ];
 
 User.remove(function (err) {

@@ -21,6 +21,10 @@ var managefees = require('./routes/web/managefees');
 var total = require('./routes/web/total');
 var cashflow = require('./routes/web/cashflow');
 var prestore = require('./routes/web/prestore');
+var bidbond = require('./routes/web/bidbond');
+var salerassistant = require('./routes/web/salerassistant');
+var salesreport = require('./routes/web/salesreport');
+var bidmanagement = require('./routes/web/bidmanagement');
 
 //app router
 var auth = require('./routes/app/auth');
@@ -85,6 +89,10 @@ app.use('/managefees', managefees);
 app.use('/total', total);
 app.use('/cashflow', cashflow);
 app.use('/prestore', prestore);
+app.use('/bidbond', bidbond);
+app.use('/salerassistant', salerassistant);
+app.use('/salesreport', salesreport);
+app.use('/bidmanagement', bidmanagement);
 
 //app router
 app.use('/auth', auth);

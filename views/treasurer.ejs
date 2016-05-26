@@ -17,6 +17,7 @@
             if ($(this).val() === "profit") {
               $("#dvMonth").show();
               $("#dvDate").hide();
+              $("#dvDate1").hide();
               $("#dvSaler").show();
               $("#dvClient").hide();
               $("#dvContacter").hide();
@@ -29,9 +30,12 @@
               $("#dvDetail3").hide();
               $("#dvDetail4").hide();
               $("#dvInvoiceNumber").hide();
+              $("#dvProjectName").hide();
+              $("#dvExpectWithdrawTime").hide();
             } else if ($(this).val() === "admin") {
               $("#dvMonth").show();
               $("#dvDate").hide();
+              $("#dvDate1").hide();
               $("#dvSaler").hide();
               $("#dvClient").hide();
               $("#dvContacter").hide();
@@ -41,9 +45,12 @@
               $("#dvDetail3").hide();
               $("#dvDetail4").hide();
               $("#dvInvoiceNumber").hide();
+              $("#dvProjectName").hide();
+              $("#dvExpectWithdrawTime").hide();
             } else if ($(this).val() === "manager") {
               $("#dvMonth").show();
               $("#dvDate").hide();
+              $("#dvDate1").hide();
               $("#dvSaler").hide();
               $("#dvClient").hide();
               $("#dvContacter").hide();
@@ -53,9 +60,12 @@
               $("#dvDetail3").hide();
               $("#dvDetail4").hide();
               $("#dvInvoiceNumber").hide();
+              $("#dvProjectName").hide();
+              $("#dvExpectWithdrawTime").hide();
             } else if ($(this).val() === "cashflow") {
               $("#dvMonth").show();
               $("#dvDate").hide();
+              $("#dvDate1").hide();
               $("#dvSaler").hide();
               $("#dvClient").hide();
               $("#dvContacter").hide();
@@ -68,9 +78,12 @@
               });
               $("#dvDetail4").hide();
               $("#dvInvoiceNumber").hide();
-            } else { //prestore
+              $("#dvProjectName").hide();
+              $("#dvExpectWithdrawTime").hide();
+            } else if ($(this).val() === "prestore") {
               $("#dvMonth").hide();
               $("#dvDate").show();
+              $("#dvDate1").hide();
               $("#dvSaler").show();
               $("#dvClient").show();
               $("#dvContacter").show();
@@ -83,6 +96,23 @@
                 this.selected = (this.text == "预存");
               });
               $("#dvInvoiceNumber").show();
+              $("#dvProjectName").hide();
+              $("#dvExpectWithdrawTime").hide();
+            } else { //bidbond
+              $("#dvMonth").hide();
+              $("#dvDate").hide();
+              $("#dvDate1").show();
+              $("#dvSaler").show();
+              $("#dvClient").show();
+              $("#dvContacter").hide();
+              $("#dvDetail1").hide();
+              $("#dvDetail2").hide();
+              $("#dvUsage").hide();
+              $("#dvDetail3").hide();
+              $("#dvDetail4").hide();
+              $("#dvInvoiceNumber").hide();
+              $("#dvProjectName").show();
+              $("#dvExpectWithdrawTime").show();
             }
           });
 
@@ -93,6 +123,14 @@
           });
 
           $('#date').datepicker({
+            format: 'yyyy-mm-dd'
+          });
+
+          $('#date1').datepicker({
+            format: 'yyyy-mm-dd'
+          });
+
+          $('#expectWithdrawTime').datepicker({
             format: 'yyyy-mm-dd'
           });
 
@@ -222,7 +260,7 @@
                 $("#comment").val("");
                 bootbox.alert("创建成功！ 编号： " + cashflow.serial_number);
               });
-            } else { //prestore
+            } else if ($("#type").val() === "prestore") {
               var date = $("#date").val();
               var saler = $("#saler").val();
               var client = $("#client").val();
@@ -269,6 +307,55 @@
                 $("#comment").val("");
                 bootbox.alert("创建成功！ 编号： " + prestore.serial_number);
               });
+            } else { //bidbond
+              var date = $("#date1").val();
+              var saler = $("#saler").val();
+              var client = $("#client").val();
+              var projectName = $("#projectName").val();
+              var money = $("#money").val();
+              var expectWithdrawTime = $("#expectWithdrawTime").val();
+              var comment = $("#comment").val();
+
+              if (!date) {
+                bootbox.alert("请输入申请时间！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2}-\d{2})$/.test(date)) {
+                bootbox.alert("申请时间格式不正确！请按\"yyyy-mm-dd\"格式填写");
+                return;
+              }
+              if (!saler) {
+                bootbox.alert("请选择销售人员！");
+                return;
+              }
+              if (!client) {
+                bootbox.alert("请输入客户！");
+                return;
+              }
+              if (!projectName) {
+                bootbox.alert("请输入项目名称！");
+                return;
+              }
+              if (!money) {
+                bootbox.alert("请输入金额");
+                return;
+              }
+              if (!expectWithdrawTime) {
+                bootbox.alert("请输入预计收回时间！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2}-\d{2})$/.test(expectWithdrawTime)) {
+                bootbox.alert("预计收回时间格式不正确！请按\"yyyy-mm-dd\"格式填写");
+                return;
+              }
+
+              $.post("/bidbond", {date: date, saler: saler, client: client, projectName: projectName, money: money, expectWithdrawTime: expectWithdrawTime, withdrawTime: "", withdrawMoney: "", comment: comment}, function (bidbond) {
+                $("#projectName").val("");
+                $("#money").val("");
+                $("#expectWithdrawTime").val("");
+                $("#comment").val("");
+                bootbox.alert("创建成功！ 编号： " + bidbond.serial_number);
+              });
             }
           });
         });
@@ -294,6 +381,7 @@
               <li><a href="/total">合计</a></li>
               <li><a href="/cashflow">现金流水</a></li>
               <li><a href="/prestore">预存记录</a></li>
+              <li><a href="/bidbond">投标保证金</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -320,6 +408,7 @@
                 <option value="manager">总经办支出</option>
                 <option value="cashflow">现金流水</option>
                 <option value="prestore">预存记录</option>
+                <option value="bidbond">投标保证金</option>
               </select>
             </div>
           </div>
@@ -333,6 +422,12 @@
             <label class="col-sm-4 control-label">日期</label>
             <div class="col-sm-8">
               <input id="date" class="form-control" required="true">
+            </div>
+          </div>
+          <div id="dvDate1" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">申请时间</label>
+            <div class="col-sm-8">
+              <input id="date1" class="form-control" required="true">
             </div>
           </div>
           <div id="dvSaler" class="form-group">
@@ -427,10 +522,22 @@
               <input id="invoice_number" class="form-control">
             </div>
           </div>
+          <div id="dvProjectName" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">项目名称</label>
+            <div class="col-sm-8">
+              <input id="projectName" class="form-control">
+            </div>
+          </div>
           <div class="form-group">
             <label class="col-sm-4 control-label">金额</label>
             <div class="col-sm-8">
               <input id="money" class="form-control">
+            </div>
+          </div>
+          <div id="dvExpectWithdrawTime" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">预计收回时间</label>
+            <div class="col-sm-8">
+              <input id="expectWithdrawTime" class="form-control" required="true">
             </div>
           </div>
           <div class="form-group">

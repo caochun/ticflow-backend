@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>投标保证金</title>
+      <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+      <link rel='stylesheet' href='/stylesheets/style.css'/>
+      <link rel='stylesheet' href='/stylesheets/datepicker.css'>
+
+      <script src="/javascripts/jquery.js"></script>
+      <script src="/javascripts/bootstrap.js"></script>
+      <script src="/javascripts/bootbox.js"></script>
+      <script src="/javascripts/bootstrap-datepicker.js"></script>
+
+      <script>
+        $(document).ready(function(){
+          $("#saler").change(function () {
+            var myHtml = "<tr class=\"info\">" + 
+              "<th>申请时间</th>" + 
+              "<th>编号</th>" + 
+              "<th>销售人员</th>" + 
+              "<th>客户</th>" + 
+              "<th>项目名称</th>" + 
+              "<th>金额</th>" + 
+              "<th>预计收回时间</th>" + 
+              "<th>收回时间</th>" + 
+              "<th>收回金额</th>" + 
+              "<th>备注</th>" + 
+              "<th>操作</th>" + 
+              "</tr>";
+
+            $.get("/bidbond/detail", {saler: $("#saler").val()}, function (bidbond) {
+              bidbond.forEach(function (entry) {
+                myHtml += "<tr>"
+                if (entry.withdraw)
+                  myHtml += "<td>" + entry.date + "</td>" + 
+                    "<td>" + entry.serial_number + "</td>" + 
+                    "<td>" + entry.saler + "</td>" + 
+                    "<td>" + entry.client + "</td>" + 
+                    "<td>" + entry.projectName + "</td>" + 
+                    "<td>" + entry.money + "</td>" + 
+                    "<td>" + entry.expectWithdrawTime + "</td>" + 
+                    "<td>" + entry.withdrawTime + "</td>" + 
+                    "<td>" + entry.withdrawMoney + "</td>" + 
+                    "<td>" + entry.comment + "</td>";
+                else 
+                  myHtml += "<td>" + entry.date + "</td>" + 
+                    "<td>" + entry.serial_number + "</td>" + 
+                    "<td>" + entry.saler + "</td>" + 
+                    "<td>" + entry.client + "</td>" + 
+                    "<td>" + entry.projectName + "</td>" + 
+                    "<td>" + entry.money + "</td>" + 
+                    "<td>" + entry.expectWithdrawTime + "</td>" + 
+                    "<td>" + entry.withdrawTime + "</td>" + 
+                    "<td>" + entry.withdrawMoney + "</td>" + 
+                    "<td>" + entry.comment + "</td>";
+                if ('<%= user.role %>' === 'treasurer' && !entry.dlt) {
+                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
+                } else if ('<%= user.role %>' === 'treasurer' && entry.dlt) {
+                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
+                } else if ('<%= user.role %>' === 'admin' && entry.dlt) {
+                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">通过</button></td>";
+                } else {
+                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>通过</button></td>";
+                }
+                myHtml += "</tr>";
+              });
+              $("#myTable").html(myHtml);
+            });
+          });
+        });
+
+        function myDelete(_id) {
+          $.post("/bidbond/delete/" + _id, function (bidbond) {
+            var str;
+            if ('<%= user.role %>' === 'treasurer')
+              str = "已发送删除申请！";
+            else
+              str = "删除成功！";
+            bootbox.alert(str, function () {
+              window.location.href = "/bidbond";
+            });
+          });
+        }
+      </script>
+
+    </head>
+
+    <header>
+      <nav class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand">
+                <span>&nbsp杰世欣Online&nbsp</span>
+                <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <% if (user.role === 'treasurer') { %>
+              <li><a href="/treasurer">新建财报</a></li>
+              <% } %>
+              <li><a href="/profits">毛利统计</a></li>
+              <li><a href="/adminfees">行政管理费用统计</a></li>
+              <li><a href="/managefees">总经办支出</a></li>
+              <li><a href="/total">合计</a></li>
+              <li><a href="/cashflow">现金流水</a></li>
+              <li><a href="/prestore">预存记录</a></li>
+              <li><a href="/bidbond">投标保证金</a></li>
+              <% if (user.role === 'admin') { %>
+              <li><a href="/salesreport">销售报表</a></li>
+              <li><a href="/bidmanagement">投标管理</a></li>
+              <% } %>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <% if (user.role === 'treasurer') { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">财务 (<%= user.id %>)<span class="caret"></span></a>
+                <% } else { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理员 (<%= user.id %>)<span class="caret"></span></a>
+                <% } %>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">登出</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <body>
+      <div class="container-fluid">
+        <div class="page-header">
+          <form class="form-inline">
+            <div class="form-group">
+              <label><h4>销售人员 : &nbsp; </h4></label>
+              <select id="saler" class="form-control">
+                <option value="">请选择</option>
+                <% salers.forEach(function (saler) { %>
+                  <option value=
+                    <%= saler %>
+                  >
+                    <%= saler %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+          </form>
+        </div>
+        <table class="table table-bordered" id="myTable">
+          <tr class="info">
+            <th>申请时间</th>
+            <th>编号</th>
+            <th>销售人员</th>
+            <th>客户</th>
+            <th>项目名称</th>
+            <th>金额</th>
+            <th>预计收回时间</th>
+            <th>收回时间</th>
+            <th>收回金额</th>
+            <th>备注</th>
+            <th>操作</th>
+          </tr>
+        </table>
+        <p class="text-center text-muted">
+          © 版权所有 南京杰世欣计算机科技有限公司
+        </p>
+      </div>
+    </body>
+</html>

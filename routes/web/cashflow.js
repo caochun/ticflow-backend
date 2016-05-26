@@ -29,7 +29,12 @@ router.get('/', checkIdTreasurerOrAdmin, function (req, res, next) {
     return res.redirect('/cashflow?month=' + month);
   }
   CashFlow.find({month: req.query.month}).sort({create_at: -1}).exec(function (err, cashflow) {
-    res.render('cashflow', {month: req.query.month, cashflow: cashflow});
+    var account = 0;
+    cashflow.forEach(function (entry) {
+      if (entry.detail === "expense") account -= entry.money;
+      else account += entry.money;
+    })
+    res.render('cashflow', {month: req.query.month, cashflow: cashflow, account: account});
   });
 });
 

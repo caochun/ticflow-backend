@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-      <title>总经办支出</title>
+      <title>销售报表</title>
       <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
       <link rel='stylesheet' href='/stylesheets/style.css'/>
       <link rel='stylesheet' href='/stylesheets/datepicker.css'>
@@ -23,7 +23,7 @@
               bootbox.alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
               return;
             }
-            window.location.href = "/managefees?month=" + month;
+            window.location.href = "/salesreport?month=" + month;
           });
 
           $('#month').datepicker({
@@ -34,14 +34,14 @@
         });
 
         function myDelete(_id) {
-          $.post("/managefees/delete/" + _id, function (managefee) {
+          $.post("/salesreport/delete/" + _id, function (salesreport) {
             var str;
-            if ('<%= user.role %>' === 'treasurer')
+            if ('<%= user.role %>' === 'salerassistant')
               str = "已发送删除申请！";
             else
               str = "删除成功！";
             bootbox.alert(str, function () {
-              window.location.href = "/managefees";
+              window.location.href = "/salesreport";
             });
           })
         }
@@ -60,9 +60,10 @@
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <% if (user.role === 'treasurer') { %>
-              <li><a href="/treasurer">新建财报</a></li>
+              <% if (user.role === 'salerassistant') { %>
+              <li><a href="/salerassistant">新建项目</a></li>
               <% } %>
+              <% if (user.role === 'admin') { %>
               <li><a href="/profits">毛利统计</a></li>
               <li><a href="/adminfees">行政管理费用统计</a></li>
               <li><a href="/managefees">总经办支出</a></li>
@@ -70,15 +71,14 @@
               <li><a href="/cashflow">现金流水</a></li>
               <li><a href="/prestore">预存记录</a></li>
               <li><a href="/bidbond">投标保证金</a></li>
-              <% if (user.role === 'admin') { %>
+              <% } %>
               <li><a href="/salesreport">销售报表</a></li>
               <li><a href="/bidmanagement">投标管理</a></li>
-              <% } %>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
-                <% if (user.role === 'treasurer') { %>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">财务 (<%= user.id %>)<span class="caret"></span></a>
+                <% if (user.role === 'salerassistant') { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">销售助理 (<%= user.id %>)<span class="caret"></span></a>
                 <% } else { %>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">管理员 (<%= user.id %>)<span class="caret"></span></a>
                 <% } %>
@@ -106,29 +106,32 @@
         <table class="table table-bordered">
           <tr class="info">
             <th>月份</th>
-            <th>编号</th>
-            <th>用途</th>
-            <th>金额</th>
+            <th>销售姓名</th>
+            <th>销售任务</th>
+            <th>实际完成</th>
+            <th>完成率</th>
             <th>备注</th>
             <th>创建时间</th>
             <th>操作</th>
           </tr>
-          <% managefees.forEach(function (managefee) { %>
-          <% var date = new Date(managefee.create_at);
-             var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2); %>
+          <% salesreport.forEach(function (entry) { %>
+          <% var date = new Date(entry.create_at);
+             var dateStr = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+             var percentage = (entry.complete * 100 / entry.task).toFixed(1) + "\%" %>
           <tr>
             <td><%= month %></td>
-            <td><%= managefee.serial_number %></td>
-            <td><%= managefee.usage %></td>
-            <td><%= managefee.money.toFixed(2) %></td>
-            <td><%= managefee.comment %></td>
+            <td><%= entry.saler %></td>
+            <td><%= entry.task %></td>
+            <td><%= entry.complete %></td>
+            <td><%= percentage %></td>
+            <td><%= entry.comment %></td>
             <td><%= dateStr %></td>
-            <% if (user.role === 'treasurer' && !managefee.dlt) { %>
-            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+managefee._id+"')"%>">删除</button></td>
-            <% } else if (user.role === 'treasurer' && managefee.dlt) { %>
+            <% if (user.role === 'salerassistant' && !entry.dlt) { %>
+            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+entry._id+"')"%>">删除</button></td>
+            <% } else if (user.role === 'salerassistant' && entry.dlt) { %>
             <td><button class="btn btn-danger btn-sm" disabled>删除</button></td>
-            <% } else if (user.role === 'admin' && managefee.dlt) { %>
-            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+managefee._id+"')"%>">通过</button></td>
+            <% } else if (user.role === 'admin' && entry.dlt) { %>
+            <td><button class="btn btn-danger btn-sm" onclick="<%-"myDelete('"+entry._id+"')"%>">通过</button></td>
             <% } else { %>
             <td><button class="btn btn-danger btn-sm" disabled>通过</button></td>
             <% } %>

@@ -30,6 +30,9 @@ router.post('/login', function (req, res, next) {
     } else if (user.role === 'admin') {
       req.session.user = user;
       return res.redirect('/profits');
+    } else if (user.role === 'salerassistant') {
+      req.session.user = user;
+      return res.redirect('/salerassistant')
     } else {
       req.flash('error', "仅派单员、管理员、财务可登陆");
       return res.redirect('/login');

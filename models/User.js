@@ -12,7 +12,7 @@ var UserSchema = new mongoose.Schema({
 
 	role: {
 		type: String,
-		enum: ['treasurer', 'saler', 'engineer', 'manager', 'admin'],
+		enum: ['treasurer', 'saler', 'engineer', 'manager', 'admin', 'salerassistant'],
 	},
 
 	frozen: {

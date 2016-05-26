@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>新建项目</title>
+      <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+      <link rel='stylesheet' href='/stylesheets/style.css'/>
+      <link rel='stylesheet' href='/stylesheets/datepicker.css'>
+
+      <script src="/javascripts/jquery.js"></script>
+      <script src="/javascripts/bootstrap.js"></script>
+      <script src="/javascripts/bootbox.js"></script>
+      <script src="/javascripts/bootstrap-datepicker.js"></script>
+
+      <script>
+        $(document).ready(function(){
+          $("#type").change(function () {
+            if ($(this).val() === "salesreport") {
+              $("#dvTask").show();
+              $("#dvClient").hide();
+              $("#dvProjectName").hide();
+              $("#dvLink").hide();
+              $("#dvWin").hide();
+              $("#dvCompetitor").hide();
+              $("#dvMoney").hide();
+            } else if ($(this).val() === "bidmanagement") {
+              $("#dvTask").hide();
+              $("#dvClient").show();
+              $("#dvProjectName").show();
+              $("#dvLink").show();
+              $("#dvWin").show();
+              $("#win option").each(function () {
+                this.selected = (this.text == "请选择");
+              });
+              $("#dvCompetitor").hide();
+              $("#dvMoney").show();
+            }
+          });
+
+          $("#win").change(function () {
+            if ($(this).val() === "no")
+              $("#dvCompetitor").show();
+            else
+              $("#dvCompetitor").hide();
+          });
+
+          $('#month').datepicker({
+            format: 'yyyy-mm',
+            viewMode: "months", 
+            minViewMode: "months"
+          });
+
+          $("#btnCreate").click(function (e) {
+            if ($("#type").val() === "salesreport") {
+              var month = $("#month").val();
+              var saler = $("#saler").val();
+              var task = $("#task").val();
+              var comment = $("#comment").val();
+              if (!month) {
+                bootbox.alert("请输入月份！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2})$/.test(month)) {
+                bootbox.alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+                return;
+              }
+              if (!saler) {
+                bootbox.alert("请选择销售人员！");
+                return;
+              }
+              if (!task) {
+                bootbox.alert("请输入销售任务（金额）！");
+                return;
+              }
+              if (isNaN(task)) {
+                bootbox.alert("销售任务（金额）不合法！");
+                return;
+              }
+              $.post("/salesreport", {month: month, saler: saler, task: task, complete: 0, comment: comment}, function (salesreport) {
+                $("#usage").val("");
+                $("#saler").val("");
+                $("#task").val("");
+                $("#comment").val("");
+                bootbox.alert("创建成功！");
+              });
+            } else if ($("#type").val() === "bidmanagement") {
+              var month = $("#month").val();
+              var saler = $("#saler").val();
+              var client = $("#client").val();
+              var projectName = $("#projectName").val();
+              var link = $("#link").val();
+              var win = $("#win").val();
+              var competitor = $("#competitor").val();
+              var money = $("#money").val();
+              var comment = $("#comment").val();
+              if (!month) {
+                bootbox.alert("请输入月份！");
+                return;
+              }
+              if (!/^(\d{4}-\d{2})$/.test(month)) {
+                bootbox.alert("月份格式不正确！请按\"yyyy-mm\"格式填写");
+                return;
+              }
+              if (!saler) {
+                bootbox.alert("请选择销售人员！");
+                return;
+              }
+              if (!client) {
+                bootbox.alert("请输入客户！");
+                return;
+              }
+              if (!projectName) {
+                bootbox.alert("请输入项目名称！");
+                return;
+              }
+              if (!win) {
+                bootbox.alert("请选择是否中标！");
+                return;
+              }
+              if (win === "no" && !competitor) {
+                bootbox.alert("请输入竞争对手！");
+                  return;
+              }
+              if (!money) {
+                bootbox.alert("请输入中标金额！");
+                return;
+              }
+              if (isNaN(money)) {
+                bootbox.alert("中标金额不合法！");
+                return;
+              }
+              if (win === "yes") {
+                $.post("/bidmanagement", {month: month, saler: saler, client: client, projectName: projectName, link: link, win: true, competitor: "", money: money, comment: comment}, function (bidmanagement) {
+                  $("#saler").val("");
+                  $("#client").val("");
+                  $("#projectName").val("");
+                  $("#link").val("");
+                  $("#win").val("");
+                  $("#money").val("");
+                  $("#comment").val("");
+                  bootbox.alert("创建成功！ 编号： " + bidmanagement.serial_number);
+                });
+              } else {
+                $.post("/bidmanagement", {month: month, saler: saler, client: client, projectName: projectName, link: link, win: false, competitor: competitor, money: money, comment: comment}, function (bidmanagement) {
+                  $("#saler").val("");
+                  $("#client").val("");
+                  $("#projectName").val("");
+                  $("#link").val("");
+                  $("#win").val("");
+                  $("#money").val("");
+                  $("#comment").val("");
+                  bootbox.alert("创建成功！ 编号： " + bidmanagement.serial_number);
+                });
+              }
+            }
+          });
+        });
+      </script>
+
+    </head>
+
+    <header>
+      <nav class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand">
+                <span>&nbsp杰世欣Online&nbsp</span>
+                <img src="/logo.png" class="pull-left" alt="logo" width="40" height="45" style="margin-top: -12px;">
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="/salerassistant">新建项目</a></li>
+              <li><a href="/salesreport">销售报表</a></li>
+              <li><a href="/bidmanagement">投标管理</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">销售助理 (<%= user.id %>)<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout">登出</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <body>
+      <div class="container-fluid">
+        <form class="form center-block form-horizontal" method="post" style="width:50%">
+          <div class="form-group">
+            <label class="col-sm-4 control-label">类型</label>
+            <div class="col-sm-8">
+              <select id="type" class="form-control" required="true">
+                <option value="salesreport">销售报表</option>
+                <option value="bidmanagement">投标管理</option>
+              </select>
+            </div>
+          </div>
+          <div id="dvMonth" class="form-group">
+            <label class="col-sm-4 control-label">月份</label>
+            <div class="col-sm-8">
+              <input id="month" class="form-control" value=<%= month%> required="true">
+            </div>
+          </div>
+          <div id="dvSaler" class="form-group">
+            <label class="col-sm-4 control-label">销售人员</label>
+            <div class="col-sm-8">
+              <select id="saler" class="form-control">
+                <option value="">请选择</option>
+                <% salers.forEach(function (saler) { %>
+                  <option value=
+                    <%= saler %>
+                  >
+                    <%= saler %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+          <div id="dvTask" class="form-group">
+            <label class="col-sm-4 control-label">销售任务</label>
+            <div class="col-sm-8">
+              <input id="task" class="form-control">
+            </div>
+          </div>
+          <div id="dvClient" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">客户</label>
+            <div class="col-sm-8">
+              <input id="client" class="form-control" required="true">
+            </div>
+          </div>
+          <div id="dvProjectName" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">项目名称</label>
+            <div class="col-sm-8">
+              <input id="projectName" class="form-control">
+            </div>
+          </div>
+          <div id="dvLink" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">公告链接</label>
+            <div class="col-sm-8">
+              <input id="link" class="form-control">
+            </div>
+          </div>
+          <div id="dvWin" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">是否中标</label>
+            <div class="col-sm-8">
+              <select id="win" class="form-control">
+                <option value="">请选择</option>
+                <option value="yes">是</option>
+                <option value="no">否</option>
+              </select>
+            </div>
+          </div>
+          <div id="dvCompetitor" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">竞争对手</label>
+            <div class="col-sm-8">
+              <input id="competitor" class="form-control">
+            </div>
+          </div>
+          <div id="dvMoney" class="form-group" style="display: none">
+            <label class="col-sm-4 control-label">中标金额</label>
+            <div class="col-sm-8">
+              <input id="money" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">备注</label>
+            <div class="col-sm-8">
+              <input id="comment" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-8">
+              <button type="button" class="btn btn-primary" id="btnCreate">创建</button>
+            </div>
+          </div>
+          <p class="col-sm-offset-3 text-center text-muted">
+            © 版权所有 南京杰世欣计算机科技有限公司
+          </p>
+        </form>
+      </div>
+    </body>
+</html>

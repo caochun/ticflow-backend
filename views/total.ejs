@@ -55,6 +55,11 @@
               <li><a href="/total">合计</a></li>
               <li><a href="/cashflow">现金流水</a></li>
               <li><a href="/prestore">预存记录</a></li>
+              <li><a href="/bidbond">投标保证金</a></li>
+              <% if (user.role === 'admin') { %>
+              <li><a href="/salesreport">销售报表</a></li>
+              <li><a href="/bidmanagement">投标管理</a></li>
+              <% } %>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
