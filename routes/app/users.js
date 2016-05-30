@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var uuid = require("node-uuid");
 
 var mongoose = require('mongoose');
 var User = require('../../models/User.js');
 var List = require('../../models/List.js');
 
 router.post('/create', function (req, res) {
+	req.body.token = uuid.v4();
 	User.create(req.body, function (err, user) {
 		if (err) {
 			return res.status(400).send("err in post /users/create");
