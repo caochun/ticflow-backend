@@ -14,6 +14,7 @@ var SalesReportSchema = new mongoose.Schema({ //销售报表
     type: Boolean,
     default: false,
   },
+  comment: String,
 });
 
 module.exports = mongoose.model('SalesReport', SalesReportSchema);

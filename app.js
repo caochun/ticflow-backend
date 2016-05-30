@@ -34,6 +34,7 @@ var valuechanges = require('./routes/app/valuechanges');
 var upload = require('./routes/app/upload');
 var app_profits = require('./routes/app/profits');
 var app_prestore = require('./routes/app/prestore');
+var app_salesreport = require('./routes/app/salesreport');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ticflow', function(err) {
@@ -114,6 +115,7 @@ app.use('/valuechanges', valuechanges);
 app.use('/upload', upload);
 app.use('/app_profits', app_profits);
 app.use('/app_prestore', app_prestore);
+app.use('/app_salesreport', app_salesreport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
