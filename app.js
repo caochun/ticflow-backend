@@ -36,6 +36,8 @@ var app_profits = require('./routes/app/profits');
 var app_prestore = require('./routes/app/prestore');
 var app_salesreport = require('./routes/app/salesreport');
 var app_bidmanagement = require('./routes/app/bidmanagement');
+var visiting = require('./routes/app/visiting');
+var tracing = require('./routes/app/tracing');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ticflow', function(err) {
@@ -118,6 +120,8 @@ app.use('/app_profits', app_profits);
 app.use('/app_prestore', app_prestore);
 app.use('/app_salesreport', app_salesreport);
 app.use('/app_bidmanagement', app_bidmanagement);
+app.use('visiting', visiting);
+app.use('tracing', tracing);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
