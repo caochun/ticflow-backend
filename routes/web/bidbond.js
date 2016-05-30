@@ -83,6 +83,16 @@ router.post('/', checkIdTreasurer, function (req, res, next) {
   });
 });
 
+router.post('/update/:_id', checkIdTreasurer, function (req, res, next) {
+  BidBond.findByIdAndUpdate(req.params._id, req.body, function (err, bidbond) {
+    if (err) {
+      return res.status(400).send("err in post /bidbond/update/:_id");
+    } else {
+      return res.status(200).json(bidbond);
+    }
+  });
+});
+
 router.post('/delete/:_id', checkIdTreasurerOrAdmin, function (req, res, next) {
   if (req.session.user.role === 'treasurer') {
     BidBond.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, bidbond) {

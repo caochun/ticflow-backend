@@ -30,29 +30,21 @@
 
             $.get("/bidbond/detail", {saler: $("#saler").val()}, function (bidbond) {
               bidbond.forEach(function (entry) {
-                myHtml += "<tr>"
-                if (entry.withdraw)
-                  myHtml += "<td>" + entry.date + "</td>" + 
-                    "<td>" + entry.serial_number + "</td>" + 
-                    "<td>" + entry.saler + "</td>" + 
-                    "<td>" + entry.client + "</td>" + 
-                    "<td>" + entry.projectName + "</td>" + 
-                    "<td>" + entry.money + "</td>" + 
-                    "<td>" + entry.expectWithdrawTime + "</td>" + 
-                    "<td>" + entry.withdrawTime + "</td>" + 
-                    "<td>" + entry.withdrawMoney + "</td>" + 
-                    "<td>" + entry.comment + "</td>";
+                myHtml += "<tr>" +
+                  "<td>" + entry.date + "</td>" + 
+                  "<td>" + entry.serial_number + "</td>" + 
+                  "<td>" + entry.saler + "</td>" + 
+                  "<td>" + entry.client + "</td>" + 
+                  "<td>" + entry.projectName + "</td>" + 
+                  "<td>" + entry.money + "</td>" + 
+                  "<td>" + entry.expectWithdrawTime + "</td>";
+                if ('<%= user.role %>' === 'treasurer')
+                  myHtml += "<td onclick=\"myUpdateTime('" + entry._id + "')\">" + entry.withdrawTime + "</td>" + 
+                  "<td onclick=\"myUpdateMoney('" + entry._id + "')\">" + entry.withdrawMoney + "</td>";
                 else 
-                  myHtml += "<td>" + entry.date + "</td>" + 
-                    "<td>" + entry.serial_number + "</td>" + 
-                    "<td>" + entry.saler + "</td>" + 
-                    "<td>" + entry.client + "</td>" + 
-                    "<td>" + entry.projectName + "</td>" + 
-                    "<td>" + entry.money + "</td>" + 
-                    "<td>" + entry.expectWithdrawTime + "</td>" + 
-                    "<td>" + entry.withdrawTime + "</td>" + 
-                    "<td>" + entry.withdrawMoney + "</td>" + 
-                    "<td>" + entry.comment + "</td>";
+                  myHtml += "<td>" + entry.withdrawTime + "</td>" + 
+                  "<td>" + entry.withdrawMoney + "</td>";
+                myHtml += "<td>" + entry.comment + "</td>";
                 if ('<%= user.role %>' === 'treasurer' && !entry.dlt) {
                   myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
                 } else if ('<%= user.role %>' === 'treasurer' && entry.dlt) {
@@ -68,6 +60,40 @@
             });
           });
         });
+
+        function myUpdateTime(_id) {
+          bootbox.prompt("收回时间：", function (withdrawTime) {
+            if (withdrawTime) {
+              if (!/^(\d{4}-\d{2}-\d{2})$/.test(withdrawTime)) {
+                bootbox.alert("输入格式不正确！请按\"yyyy-mm-dd\"格式填写");
+                return;
+              } else {
+                $.post("/bidbond/update/" + _id, {withdrawTime: withdrawTime}, function (bidbond) {
+                  bootbox.alert("操作成功！", function () {
+                    window.location.href = "/bidbond";
+                  });
+                });
+              }
+            }
+          });
+        }
+
+        function myUpdateMoney(_id) {
+          bootbox.prompt("收回金额：", function (withdrawMoney) {
+            if (withdrawMoney) {
+              if (isNaN(withdrawMoney)) {
+                bootbox.alert("输入不合法！");
+                return;
+              } else {
+                $.post("/bidbond/update/" + _id, {withdrawMoney: withdrawMoney}, function (bidbond) {
+                  bootbox.alert("操作成功！", function () {
+                    window.location.href = "/bidbond";
+                  });
+                });
+              }
+            }
+          });
+        }
 
         function myDelete(_id) {
           $.post("/bidbond/delete/" + _id, function (bidbond) {

@@ -12,10 +12,6 @@ var BidBondSchema = new mongoose.Schema({ //投标保证金
     type: Date,
     default: Date.now,
   },
-  withdraw: {
-    type: Boolean,
-    default: false,
-  },
   withdrawTime: String,
   withdrawMoney: String,
   comment: String,

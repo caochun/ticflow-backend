@@ -66,6 +66,16 @@ router.post('/', checkIdSalerassistant, function (req, res, next) {
   });
 });
 
+router.post('/update/:_id', checkIdSalerassistant, function (req, res, next) {
+  SalesReport.findByIdAndUpdate(req.params._id, req.body, function (err, salesreport) {
+    if (err) {
+      return res.status(400).send("err in post /salesreport/update/:_id");
+    } else {
+      return res.status(200).json(salesreport);
+    }
+  });
+});
+
 router.post('/delete/:_id', checkIdSalerassistantOrAdmin, function (req, res, next) {
   if (req.session.user.role === 'salerassistant') {
     SalesReport.findByIdAndUpdate(req.params._id, {dlt: true}, function (err, salesreport) {

@@ -33,6 +33,23 @@
           });
         });
 
+        function myUpdate(_id) {
+          bootbox.prompt("实际完成：", function (complete) {
+            if (complete) {
+              if (isNaN(complete)) {
+                bootbox.alert("输入不合法！");
+                return;
+              } else {
+                $.post("/salesreport/update/" + _id, {complete: complete}, function (salesreport) {
+                  bootbox.alert("操作成功！", function () {
+                    window.location.href = "/salesreport";
+                  });
+                });
+              }
+            }
+          });
+        }
+
         function myDelete(_id) {
           $.post("/salesreport/delete/" + _id, function (salesreport) {
             var str;
@@ -122,7 +139,11 @@
             <td><%= month %></td>
             <td><%= entry.saler %></td>
             <td><%= entry.task %></td>
+            <% if (user.role === 'salerassistant') { %>
+            <td onclick="myUpdate('<%= entry._id %>')"><%= entry.complete %></td>
+            <% } else { %>
             <td><%= entry.complete %></td>
+            <% } %>
             <td><%= percentage %></td>
             <td><%= entry.comment %></td>
             <td><%= dateStr %></td>
