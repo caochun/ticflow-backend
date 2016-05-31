@@ -120,8 +120,8 @@ app.use('/app_profits', app_profits);
 app.use('/app_prestore', app_prestore);
 app.use('/app_salesreport', app_salesreport);
 app.use('/app_bidmanagement', app_bidmanagement);
-app.use('visiting', visiting);
-app.use('tracing', tracing);
+app.use('/visiting', visiting);
+app.use('/tracing', tracing);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

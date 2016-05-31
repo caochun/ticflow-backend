@@ -14,12 +14,12 @@ var VisitingSchema = new mongoose.Schema({ //客户拜访
     type: String,
     enum: ['A', 'B', 'C'],
   },
-  new: Boolean, //新、老客户
+  new: String, //新、老客户
   department: String,
   name: String,
   phone: String,
   result: String,
-  opportunity: Boolean, //有商机
+  opportunity: String, //有、无商机
   money: Number,
   attached1: String,
   attached2: String,
