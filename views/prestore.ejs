@@ -11,48 +11,60 @@
 
       <script>
         $(document).ready(function(){
-          $("#saler").change(function () {
-            var myHtml = "<tr class=\"info\">" + 
-              "<th>销售人员</th>" + 
-              "<th>客户</th>" + 
-              "<th>联系人</th>" + 
-              "<th>余额</th>" + 
-              "</tr>";
+          $("#saler option").each(function () {
+            this.selected = (this.text == '<%= saler %>');
+          });
+          mySalerChange();
 
-            $.get("/prestore/detail", {saler: $("#saler").val()}, function (prestore) {
-              var data = [];
-              prestore.forEach(function (entry) {
-                var i;
-                for (i = 0; i < data.length; i++) {
-                  if (data[i].client == entry.client && data[i].contacter == entry.contacter) {
-                    if (entry.detail == "income") data[i].account += entry.money;
-                    else data[i].account -= entry.money;
-                    data[i].dlt = data[i].dlt || entry.dlt;
-                    break;
-                  }
-                }
-                if (i == data.length) {
-                  var account = (entry.detail == "income") ? entry.money : (- entry.money);
-                  data[i] = {saler: entry.saler, client: entry.client, contacter: entry.contacter, account: account, dlt: entry.dlt};
-                }
-              });
-              
-              data.forEach(function (entry) {
-                if (entry.dlt && '<%= user.role %>' === 'admin')
-                  myHtml += "<tr style=\"background-color:#d9edf7\" onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">";
-                else
-                  myHtml += "<tr onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">";
-                myHtml += "<td>" + entry.saler + "</td>" + 
-                  "<td>" + entry.client + "</td>" + 
-                  "<td>" + entry.contacter + "</td>" + 
-                  "<td>" + entry.account + "</td>" + 
-                  "</tr>";
-              });
-              $("#myTable").html(myHtml);
-              $("#detailTable").html("");
-            });
+          $("#saler").change(function () {
+            if ($("#saler").val())
+              window.location.href = "/prestore?saler=" + $("#saler").val();
+            else
+              window.location.href = "/prestore";
           });
         });
+
+        function mySalerChange() {
+          var myHtml = "<tr class=\"info\">" + 
+            "<th>销售人员</th>" + 
+            "<th>客户</th>" + 
+            "<th>联系人</th>" + 
+            "<th>余额</th>" + 
+            "</tr>";
+
+          $.get("/prestore/detail", {saler: $("#saler").val()}, function (prestore) {
+            var data = [];
+            prestore.forEach(function (entry) {
+              var i;
+              for (i = 0; i < data.length; i++) {
+                if (data[i].client == entry.client && data[i].contacter == entry.contacter) {
+                  if (entry.detail == "income") data[i].account += entry.money;
+                  else data[i].account -= entry.money;
+                  data[i].dlt = data[i].dlt || entry.dlt;
+                  break;
+                }
+              }
+              if (i == data.length) {
+                var account = (entry.detail == "income") ? entry.money : (- entry.money);
+                data[i] = {saler: entry.saler, client: entry.client, contacter: entry.contacter, account: account, dlt: entry.dlt};
+              }
+            });
+            
+            data.forEach(function (entry) {
+              if (entry.dlt && '<%= user.role %>' === 'admin')
+                myHtml += "<tr style=\"background-color:#d9edf7\" onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">";
+              else
+                myHtml += "<tr onclick=\"myFunction ('" + entry.saler + "','" + entry.client + "','" + entry.contacter + "')\">";
+              myHtml += "<td>" + entry.saler + "</td>" + 
+                "<td>" + entry.client + "</td>" + 
+                "<td>" + entry.contacter + "</td>" + 
+                "<td>" + entry.account + "</td>" + 
+                "</tr>";
+            });
+            $("#myTable").html(myHtml);
+            $("#detailTable").html("");
+          });
+        }
 
         function myFunction(saler, client, contacter) {
           var query = {saler: saler, client: client, contacter: contacter};
@@ -122,7 +134,7 @@
             else
               str = "删除成功！";
             bootbox.alert(str, function () {
-              window.location.href = "/prestore";
+              window.location.href = "/prestore?saler=" + $("#saler").val();
             });
           });
         }

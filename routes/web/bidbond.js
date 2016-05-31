@@ -36,7 +36,10 @@ router.get('/', checkIdTreasurerOrAdmin, function (req, res, next) {
   });
 
   ep.on('saler', function () {
-    res.render('bidbond', {salers: salers});
+    if (!req.query.saler)
+      res.render('bidbond', {salers: salers, saler: "请选择"});
+    else 
+      res.render('bidbond', {salers: salers, saler: req.query.saler})
   });
 });
 

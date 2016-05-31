@@ -37,7 +37,7 @@
             if (j == 13) continue; //总经理支出
             myTable.rows[1].cells[j].onclick = (function (j) {
               return function () {
-                var query = {month: window.location.href.split('?')[1].substring(6, 13)};
+                var query = {month: '<%= month %>'};
                 var ch;
                 switch (j) {
                   case 0:

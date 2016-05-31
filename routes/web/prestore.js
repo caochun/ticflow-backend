@@ -36,7 +36,10 @@ router.get('/', checkIdTreasurerOrAdmin, function (req, res, next) {
   });
 
   ep.on('saler', function () {
-    res.render('prestore', {salers: salers});
+    if (!req.query.saler)
+      res.render('prestore', {salers: salers, saler: "请选择"});
+    else
+      res.render('prestore', {salers: salers, saler: req.query.saler});
   });
 });
 

@@ -13,53 +13,65 @@
 
       <script>
         $(document).ready(function(){
+          $("#saler option").each(function () {
+            this.selected = (this.text == '<%= saler %>');
+          });
+          mySalerChange();
+          
           $("#saler").change(function () {
-            var myHtml = "<tr class=\"info\">" + 
-              "<th>申请时间</th>" + 
-              "<th>编号</th>" + 
-              "<th>销售人员</th>" + 
-              "<th>客户</th>" + 
-              "<th>项目名称</th>" + 
-              "<th>金额</th>" + 
-              "<th>预计收回时间</th>" + 
-              "<th>收回时间</th>" + 
-              "<th>收回金额</th>" + 
-              "<th>备注</th>" + 
-              "<th>操作</th>" + 
-              "</tr>";
-
-            $.get("/bidbond/detail", {saler: $("#saler").val()}, function (bidbond) {
-              bidbond.forEach(function (entry) {
-                myHtml += "<tr>" +
-                  "<td>" + entry.date + "</td>" + 
-                  "<td>" + entry.serial_number + "</td>" + 
-                  "<td>" + entry.saler + "</td>" + 
-                  "<td>" + entry.client + "</td>" + 
-                  "<td>" + entry.projectName + "</td>" + 
-                  "<td>" + entry.money + "</td>" + 
-                  "<td>" + entry.expectWithdrawTime + "</td>";
-                if ('<%= user.role %>' === 'treasurer')
-                  myHtml += "<td onclick=\"myUpdateTime('" + entry._id + "')\">" + entry.withdrawTime + "</td>" + 
-                  "<td onclick=\"myUpdateMoney('" + entry._id + "')\">" + entry.withdrawMoney + "</td>";
-                else 
-                  myHtml += "<td>" + entry.withdrawTime + "</td>" + 
-                  "<td>" + entry.withdrawMoney + "</td>";
-                myHtml += "<td>" + entry.comment + "</td>";
-                if ('<%= user.role %>' === 'treasurer' && !entry.dlt) {
-                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
-                } else if ('<%= user.role %>' === 'treasurer' && entry.dlt) {
-                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
-                } else if ('<%= user.role %>' === 'admin' && entry.dlt) {
-                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">通过</button></td>";
-                } else {
-                  myHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>通过</button></td>";
-                }
-                myHtml += "</tr>";
-              });
-              $("#myTable").html(myHtml);
-            });
+            if ($("#saler").val())
+              window.location.href = "/bidbond?saler=" + $("#saler").val();
+            else
+              window.location.href = "/bidbond";
           });
         });
+
+        function mySalerChange() {
+          var myHtml = "<tr class=\"info\">" + 
+            "<th>申请时间</th>" + 
+            "<th>编号</th>" + 
+            "<th>销售人员</th>" + 
+            "<th>客户</th>" + 
+            "<th>项目名称</th>" + 
+            "<th>金额</th>" + 
+            "<th>预计收回时间</th>" + 
+            "<th>收回时间</th>" + 
+            "<th>收回金额</th>" + 
+            "<th>备注</th>" + 
+            "<th>操作</th>" + 
+            "</tr>";
+
+          $.get("/bidbond/detail", {saler: $("#saler").val()}, function (bidbond) {
+            bidbond.forEach(function (entry) {
+              myHtml += "<tr>" +
+                "<td>" + entry.date + "</td>" + 
+                "<td>" + entry.serial_number + "</td>" + 
+                "<td>" + entry.saler + "</td>" + 
+                "<td>" + entry.client + "</td>" + 
+                "<td>" + entry.projectName + "</td>" + 
+                "<td>" + entry.money + "</td>" + 
+                "<td>" + entry.expectWithdrawTime + "</td>";
+              if ('<%= user.role %>' === 'treasurer')
+                myHtml += "<td onclick=\"myUpdateTime('" + entry._id + "')\">" + entry.withdrawTime + "</td>" + 
+                "<td onclick=\"myUpdateMoney('" + entry._id + "')\">" + entry.withdrawMoney + "</td>";
+              else 
+                myHtml += "<td>" + entry.withdrawTime + "</td>" + 
+                "<td>" + entry.withdrawMoney + "</td>";
+              myHtml += "<td>" + entry.comment + "</td>";
+              if ('<%= user.role %>' === 'treasurer' && !entry.dlt) {
+                myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">删除</button></td>";
+              } else if ('<%= user.role %>' === 'treasurer' && entry.dlt) {
+                myHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>删除</button></td>";
+              } else if ('<%= user.role %>' === 'admin' && entry.dlt) {
+                myHtml += "<td><button class=\"btn btn-danger btn-sm\" onclick=\"myDelete('" + entry._id + "')\">通过</button></td>";
+              } else {
+                myHtml += "<td><button class=\"btn btn-danger btn-sm\" disabled>通过</button></td>";
+              }
+              myHtml += "</tr>";
+            });
+            $("#myTable").html(myHtml);
+          });
+        }
 
         function myUpdateTime(_id) {
           bootbox.prompt("收回时间：", function (withdrawTime) {
@@ -70,7 +82,7 @@
               } else {
                 $.post("/bidbond/update/" + _id, {withdrawTime: withdrawTime}, function (bidbond) {
                   bootbox.alert("操作成功！", function () {
-                    window.location.href = "/bidbond";
+                    window.location.href = "/bidbond?saler=" + $("#saler").val();
                   });
                 });
               }
@@ -87,7 +99,7 @@
               } else {
                 $.post("/bidbond/update/" + _id, {withdrawMoney: withdrawMoney}, function (bidbond) {
                   bootbox.alert("操作成功！", function () {
-                    window.location.href = "/bidbond";
+                    window.location.href = "/bidbond?saler=" + $("#saler").val();
                   });
                 });
               }
@@ -103,7 +115,7 @@
             else
               str = "删除成功！";
             bootbox.alert(str, function () {
-              window.location.href = "/bidbond";
+              window.location.href = "/bidbond?saler=" + $("#saler").val();
             });
           });
         }

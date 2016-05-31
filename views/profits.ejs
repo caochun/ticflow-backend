@@ -46,7 +46,7 @@
             for (var j = 1; j < myTable.rows[i].cells.length - 2; j++) {
               myTable.rows[i].cells[j].onclick = (function (i, j) {
                 return function () {
-                  var query = {month: window.location.href.split('?')[1].substring(6, 13),
+                  var query = {month: '<%= month %>',
                     saler: myTable.rows[i].cells[0].innerHTML};
                   var ch;
                   switch (j) {
