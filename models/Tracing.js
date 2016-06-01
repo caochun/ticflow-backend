@@ -17,6 +17,16 @@ var TracingSchema = new mongoose.Schema({ //项目跟踪
   projectName: String,
   budget: Number,
   fund: Number,
+  plan: String,
+  percent: String,
+
+  product: String,
+  competitor: String,
+  result: String,
+
+  overview: String,
+  summary: String,
+  comment: String,
   
 });
 
