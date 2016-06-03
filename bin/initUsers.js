@@ -26,7 +26,7 @@ var users = [
   {id: "姜国洲", password: "123", role: "engineer"},
   {id: "周志宇", password: "007300", role: "engineer"},
   {id: "周强", password: "zhouqiang001002", role: "admin"},
-  {id: "汪敏", password: "123", role: "salerassistant"}
+  {id: "汪敏", password: "123", role: "salerassistant"},
 ];
 
 User.remove(function (err) {
@@ -50,12 +50,3 @@ User.remove(function (err) {
     });
   }
 });
-
-// User.create({id: "关婷", password: "123", role: "treasurer"}, function (err, createdUser) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log(createdUser);
-//     mongoose.connection.close();
-//   }
-// });
