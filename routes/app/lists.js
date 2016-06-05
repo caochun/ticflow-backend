@@ -90,16 +90,12 @@ router.post('/:_id', function (req, res) {
 	});
 });
 
-router.get('/totalvalue', function (req, res) {
+router.get('/totalnumber', function (req, res) {
 	List.find(req.query, function (err, lists) {
 		if (err) {
-			return res.status(400).send("err in get /lists/totalValue");
+			return res.status(400).send("err in get /lists/totalnumber");
 		} else {
-			var totalValue = 0;
-			lists.forEach(function (entry) {
-				totalValue += entry.value;
-			});
-			return res.status(200).json(totalValue);
+			return res.status(200).json(lists.length);
 		}
 	});
 });

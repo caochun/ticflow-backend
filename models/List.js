@@ -20,8 +20,6 @@ var ListSchema = new mongoose.Schema({
 	serial_no: String, //序列号
 
 	saler: String, //报修人（销售）
-
-	value: Number, //分值
 	
 	engineer: String, //工程师
 
