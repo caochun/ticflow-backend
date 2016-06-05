@@ -8,7 +8,7 @@ var User = require('../models/User.js');
 
 var users = [
   {id: "关婷", password: "gt001002", role: "treasurer"},
-  {id: "陈传玮", password: "123", role: "saler"},
+  {id: "陈传玮", password: "123321", role: "saler"},
   {id: "陆珺", password: "821208", role: "saler"},
   {id: "钱昊", password: "123", role: "saler"},
   {id: "许万羽", password: "jsx123xwy", role: "saler"},

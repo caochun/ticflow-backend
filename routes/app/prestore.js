@@ -37,7 +37,7 @@ router.get('/detail', function (req, res) {
   delete req.query.page;
   delete req.query.limit;
   
-  Prestore.find(req.query).sort({create_at: -1}).exec(function (err, prestore) {
+  Prestore.find(req.query).skip(page * limit).limit(limit).sort({create_at: -1}).exec(function (err, prestore) {
     if (err) {
       return res.status(400).send("err in get /prestore/detail");
     } else {
