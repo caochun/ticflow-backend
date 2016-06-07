@@ -21,6 +21,16 @@ router.get('/', function (req, res) {
 	});
 });
 
+router.get('/months', function (req, res) {
+	Visiting.find({}).distinct('month', function (err, months) {
+		if (err) {
+			return res.status(400).send("err in get /visiting/months");
+		} else {
+			return res.status(200).json(months);
+		}
+	});
+});
+
 router.post('/', function (req, res) {
 	Visiting.create(req.body, function (err, visiting) {
       	if (err) {

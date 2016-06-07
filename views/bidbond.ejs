@@ -41,7 +41,11 @@
             "<th>操作</th>" + 
             "</tr>";
 
-          $.get("/bidbond/detail", {saler: $("#saler").val()}, function (bidbond) {
+          var query = {};
+          if ($("#saler").val())
+            query.saler = $("#saler").val();
+
+          $.get("/bidbond/detail", query, function (bidbond) {
             bidbond.forEach(function (entry) {
               myHtml += "<tr>" +
                 "<td>" + entry.date + "</td>" + 
@@ -173,7 +177,7 @@
             <div class="form-group">
               <label><h4>销售人员 : &nbsp; </h4></label>
               <select id="saler" class="form-control">
-                <option value="">请选择</option>
+                <option value="">全部</option>
                 <% salers.forEach(function (saler) { %>
                   <option value=
                     <%= saler %>

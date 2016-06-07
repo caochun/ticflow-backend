@@ -21,6 +21,17 @@ router.get('/', function (req, res) {
 	});
 });
 
+router.get('/months', function (req, res) {
+	Tracing.find({}).distinct('month', function (err, months) {
+		if (err) {
+			return res.status(400).send("err in get /tracing/months");
+		} else {
+			return res.status(200).json(months);
+		}
+	});
+});
+
+
 router.post('/', function (req, res) {
 	Tracing.create(req.body, function (err, tracing) {
       	if (err) {

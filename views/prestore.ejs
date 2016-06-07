@@ -32,12 +32,16 @@
             "<th>余额</th>" + 
             "</tr>";
 
-          $.get("/prestore/detail", {saler: $("#saler").val()}, function (prestore) {
+          var query = {};
+          if ($("#saler").val())
+            query.saler = $("#saler").val();
+
+          $.get("/prestore/detail", query, function (prestore) {
             var data = [];
             prestore.forEach(function (entry) {
               var i;
               for (i = 0; i < data.length; i++) {
-                if (data[i].client == entry.client && data[i].contacter == entry.contacter) {
+                if (data[i].saler == entry.saler && data[i].client == entry.client && data[i].contacter == entry.contacter) {
                   if (entry.detail == "income") data[i].account += entry.money;
                   else data[i].account -= entry.money;
                   data[i].dlt = data[i].dlt || entry.dlt;
@@ -192,7 +196,7 @@
             <div class="form-group">
               <label><h4>销售人员 : &nbsp; </h4></label>
               <select id="saler" class="form-control">
-                <option value="">请选择</option>
+                <option value="">全部</option>
                 <% salers.forEach(function (saler) { %>
                   <option value=
                     <%= saler %>

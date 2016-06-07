@@ -8,6 +8,7 @@ var VisitingSchema = new mongoose.Schema({ //客户拜访
     type: Date,
     default: Date.now,
   },
+  month: String,
   saler: String,
   school: String,
   client_sort: {

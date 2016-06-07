@@ -8,6 +8,7 @@ var TracingSchema = new mongoose.Schema({ //项目跟踪
     type: Date,
     default: Date.now,
   },
+  month: String,
   saler: String,
   school: String,
   department: String,
